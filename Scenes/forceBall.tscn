@@ -1,20 +1,18 @@
 [gd_scene load_steps=5 format=3 uid="uid://s8k33qq4wjre"]
 
+[ext_resource type="Script" uid="uid://c6ju8l04xbwch" path="res://Scenes/force_ball.gd" id="1_65q5m"]
+[ext_resource type="PackedScene" uid="uid://bvlr2qb0wnb5" path="res://Scenes/forceDiagComponent.tscn" id="1_b17vh"]
+
 [sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_b17vh"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_65q5m"]
-top_radius = 0.1
-bottom_radius = 0.1
-height = 1.0
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_14oug"]
-top_radius = 0.0
-bottom_radius = 0.15
-height = 0.5
-
 [node name="ForceBall" type="RigidBody3D"]
+script = ExtResource("1_65q5m")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="."]
+remote_path = NodePath("../ArrowRoot")
+update_rotation = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_1d3fa")
@@ -22,12 +20,6 @@ shape = SubResource("SphereShape3D_1d3fa")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_b17vh")
 
-[node name="ArrowRoot" type="Node3D" parent="."]
-
-[node name="VelocityCompX" type="MeshInstance3D" parent="ArrowRoot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6157426, 0)
-mesh = SubResource("CylinderMesh_65q5m")
-
-[node name="ArrowHead" type="MeshInstance3D" parent="ArrowRoot/VelocityCompX"]
-transform = Transform3D(1, 0, 0, 0, 0.99999976, 0, 0, 0, 0.99999964, 0, 0.75, 0)
-mesh = SubResource("CylinderMesh_14oug")
+[node name="ArrowRoot" parent="." instance=ExtResource("1_b17vh")]
+length_scale = 0.5
+distance_from_center = 0.75

@@ -1,3 +1,43 @@
-[gd_scene format=3 uid="uid://bjrth7jbmslq0"]
+[gd_scene load_steps=7 format=3 uid="uid://bjrth7jbmslq0"]
+
+[ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_maban"]
+[ext_resource type="PackedScene" uid="uid://s8k33qq4wjre" path="res://Scenes/forceBall.tscn" id="1_nbdxk"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_nbdxk"]
+size = Vector2(200, 200)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_maban"]
+albedo_color = Color(0.22352941, 1, 0.28627452, 1)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_nbdxk"]
+
+[sub_resource type="Environment" id="Environment_maban"]
+background_mode = 1
+background_color = Color(0.23529412, 0.6431373, 0.6431373, 1)
+background_energy_multiplier = 1.2
+ambient_light_source = 3
+ambient_light_color = Color(0.7666196, 0.76661956, 0.76661956, 1)
 
 [node name="Test" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.39256424, 0.69436973, -0.60311234, 0.37879035, 0.7196186, 0.58195096, 0.83809996, 0, -0.545517, 0, 16.050179, 0)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3433404, 3.2469878, 7.3400917)
+script = ExtResource("1_maban")
+
+[node name="ForceBall" parent="." instance=ExtResource("1_nbdxk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.478694, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("PlaneMesh_nbdxk")
+surface_material_override/0 = SubResource("StandardMaterial3D_maban")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_nbdxk")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_maban")
