@@ -1,37 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvlr2qb0wnb5"]
+[gd_scene load_steps=3 format=3 uid="uid://bvlr2qb0wnb5"]
 
 [ext_resource type="Script" uid="uid://ce476wim3fnx1" path="res://Scenes/force_diag_component.gd" id="1_4iem0"]
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_4iem0"]
-top_radius = 0.1
-bottom_radius = 0.1
-height = 1.0
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_14oug"]
-top_radius = 0.0
-bottom_radius = 0.15
-height = 0.5
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_65q5m"]
-top_radius = 0.1
-bottom_radius = 0.1
-height = 1.0
+[ext_resource type="PackedScene" uid="uid://dn3b1uerd80e8" path="res://Scenes/forceArrow.tscn" id="2_kkuxl"]
 
 [node name="ArrowRoot" type="Node3D"]
 top_level = true
 script = ExtResource("1_4iem0")
+distance_from_center = 1.0
 
-[node name="VelocityCompX" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
-mesh = SubResource("CylinderMesh_4iem0")
+[node name="VelocityCompX" parent="." instance=ExtResource("2_kkuxl")]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 1.5, 0, 0)
 
-[node name="ArrowHead" type="MeshInstance3D" parent="VelocityCompX"]
-transform = Transform3D(1, 0, 0, 0, 0.99999976, 0, 0, 0, 0.99999964, 0, 0.75, 0)
-mesh = SubResource("CylinderMesh_14oug")
-
-[node name="VelocityCompY" type="MeshInstance3D" parent="."]
-mesh = SubResource("CylinderMesh_65q5m")
-
-[node name="ArrowHead" type="MeshInstance3D" parent="VelocityCompY"]
-transform = Transform3D(1, 0, 0, 0, 0.99999976, 0, 0, 0, 0.99999964, 0, 0.75, 0)
-mesh = SubResource("CylinderMesh_14oug")
+[node name="VelocityCompY" parent="." instance=ExtResource("2_kkuxl")]

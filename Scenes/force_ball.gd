@@ -14,4 +14,3 @@ func _process(delta: float) -> void:
 	
 	force_diag.vel_x = linear_velocity.x
 	force_diag.vel_y = linear_velocity.y
-	pass
