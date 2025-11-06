@@ -6,9 +6,9 @@
 [node name="ArrowRoot" type="Node3D"]
 top_level = true
 script = ExtResource("1_4iem0")
-distance_from_center = 1.0
 
 [node name="VelocityCompX" parent="." instance=ExtResource("2_kkuxl")]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 1.5, 0, 0)
 
 [node name="VelocityCompY" parent="." instance=ExtResource("2_kkuxl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)

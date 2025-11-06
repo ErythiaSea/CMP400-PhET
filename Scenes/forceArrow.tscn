@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://b3nuuii6fiipd" path="res://Scenes/force_arrow.gd" id="1_y0ay8"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_4iem0"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_y0ay8"]
+resource_local_to_scene = true
 top_radius = 0.1
 bottom_radius = 0.1
 height = 1.0
@@ -14,9 +15,11 @@ height = 0.5
 
 [node name="VelocityComp" type="MeshInstance3D"]
 layers = 2
-mesh = SubResource("CylinderMesh_4iem0")
+sorting_offset = 300.0
+mesh = SubResource("CylinderMesh_y0ay8")
 script = ExtResource("1_y0ay8")
 
 [node name="ArrowHead" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.99999976, 0, 0, 0, 0.99999964, 0, 0.75, 0)
+sorting_offset = 300.0
 mesh = SubResource("CylinderMesh_14oug")

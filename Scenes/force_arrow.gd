@@ -1,3 +1,5 @@
+@tool
+
 class_name ForceArrow
 extends MeshInstance3D
 

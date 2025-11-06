@@ -1,7 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://bjrth7jbmslq0"]
+[gd_scene load_steps=8 format=3 uid="uid://bjrth7jbmslq0"]
 
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_maban"]
 [ext_resource type="PackedScene" uid="uid://s8k33qq4wjre" path="res://Scenes/forceBall.tscn" id="1_nbdxk"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_maban"]
+friction = 30.0
+rough = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_nbdxk"]
 size = Vector2(200, 200)
@@ -31,6 +35,7 @@ script = ExtResource("1_maban")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.478694, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
+physics_material_override = SubResource("PhysicsMaterial_maban")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
 mesh = SubResource("PlaneMesh_nbdxk")

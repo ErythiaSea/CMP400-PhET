@@ -1,13 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://s8k33qq4wjre"]
+[gd_scene load_steps=8 format=3 uid="uid://s8k33qq4wjre"]
 
 [ext_resource type="Script" uid="uid://c6ju8l04xbwch" path="res://Scenes/force_ball.gd" id="1_65q5m"]
 [ext_resource type="PackedScene" uid="uid://bvlr2qb0wnb5" path="res://Scenes/forceDiagComponent.tscn" id="1_b17vh"]
+[ext_resource type="Texture2D" uid="uid://d1m22d2jq0h1m" path="res://GFX/icon.svg" id="2_14oug"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65q5m"]
+friction = 0.2
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_b17vh"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unano"]
+albedo_texture = ExtResource("2_14oug")
+
 [node name="ForceBall" type="RigidBody3D"]
+mass = 3.0
+physics_material_override = SubResource("PhysicsMaterial_65q5m")
 script = ExtResource("1_65q5m")
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="."]
@@ -19,6 +28,7 @@ shape = SubResource("SphereShape3D_1d3fa")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_b17vh")
+surface_material_override/0 = SubResource("StandardMaterial3D_unano")
 
 [node name="ArrowRoot" parent="." instance=ExtResource("1_b17vh")]
 length_scale = 0.5
