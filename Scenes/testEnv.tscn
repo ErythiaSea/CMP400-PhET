@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://bjrth7jbmslq0"]
+[gd_scene load_steps=10 format=3 uid="uid://bjrth7jbmslq0"]
 
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_maban"]
 [ext_resource type="PackedScene" uid="uid://s8k33qq4wjre" path="res://Scenes/forceBall.tscn" id="1_nbdxk"]
+[ext_resource type="Script" uid="uid://c1l5soefw1mvj" path="res://Scenes/gui_root.gd" id="3_s4j54"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_maban"]
 friction = 30.0
@@ -22,10 +23,23 @@ background_energy_multiplier = 1.2
 ambient_light_source = 3
 ambient_light_color = Color(0.7666196, 0.76661956, 0.76661956, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_maban"]
+bg_color = Color(0.24477634, 0.24477643, 0.24477628, 0.49411765)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [node name="Test" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.39256424, 0.69436973, -0.60311234, 0.37879035, 0.7196186, 0.58195096, 0.83809996, 0, -0.545517, 0, 16.050179, 0)
+shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.3433404, 3.2469878, 7.3400917)
@@ -46,3 +60,46 @@ shape = SubResource("WorldBoundaryShape3D_nbdxk")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_maban")
+
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_coefficient_slider", "air_resistance_toggle", "air_resistance_coefficient_label", "force_ball")]
+script = ExtResource("3_s4j54")
+air_resistance_coefficient_slider = NodePath("PanelContainer/VBoxContainer/HSliderContainer/ARCSlider")
+air_resistance_toggle = NodePath("PanelContainer/VBoxContainer/ButtonContainer/AirResistanceButton")
+air_resistance_coefficient_label = NodePath("PanelContainer/VBoxContainer/HSliderContainer/SliderLabel")
+force_ball = NodePath("../ForceBall")
+
+[node name="PanelContainer" type="PanelContainer" parent="GUIRoot"]
+offset_right = 407.0
+offset_bottom = 59.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_maban")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUIRoot/PanelContainer"]
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Simulate Air Resistance"
+
+[node name="AirResistanceButton" type="CheckButton" parent="GUIRoot/PanelContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="HSliderContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="SliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/HSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Air Resistance Coefficient: 0.03"
+
+[node name="ARCSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/HSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.5
+max_value = 1.0
+step = 0.01
+value = 0.03

@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 		else:
 			_vel_comp_y.visible = false
 			
-		if (vel.length_squared() > 0.05):
+		if (vel.length_squared() > 0.05 and _vel_comp_x.visible and _vel_comp_y.visible):
 			_vel_comp_t.body_mesh.height = vel.length()*length_scale
 			_vel_comp_t.visible = true
 			
