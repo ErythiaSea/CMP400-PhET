@@ -17,5 +17,4 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		linear_velocity.y = 10.0
 	
-	force_diag.vel_x = linear_velocity.x
-	force_diag.vel_y = linear_velocity.y
+	force_diag.vel = linear_velocity

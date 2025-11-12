@@ -6,12 +6,12 @@ extends Node3D
 
 @onready var _vel_comp_x: ForceArrow = $VelocityCompX
 @onready var _vel_comp_y: ForceArrow = $VelocityCompY
-@onready var arrows: Array[ForceArrow] = [_vel_comp_x, _vel_comp_y]
+@onready var _vel_comp_t: ForceArrow = $VelocityCompT
+@onready var arrows: Array[ForceArrow] = [_vel_comp_x, _vel_comp_y, _vel_comp_t]
 # @onready var _vel_total: MeshInstance3D = $VelocityTotal
 
 # The parent should modify these with appropriate values
-var vel_x: float = 1.0
-var vel_y: float = 1.0
+var vel: Vector3 = Vector3.UP
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -22,33 +22,48 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	var x_mul: float = 1.0
 	var y_mul: float = 1.0
+	
+	var fwd = vel.normalized()
 		
 	if !Engine.is_editor_hint():
 	## todo: i need to reduce duplicate code here this gets messy fast
-		if (abs(vel_x) > 0):
-			_vel_comp_x.body_mesh.height = abs(vel_x)*length_scale
+		if (abs(vel.x) > 0.05):
+			_vel_comp_x.body_mesh.height = abs(vel.x)*length_scale
 			_vel_comp_x.visible = true
+			if vel.x > 0:
+				_vel_comp_x.rotation.y = 0
+			else:
+				x_mul = -1.0
+				_vel_comp_x.rotation_degrees.y = 180
 		else:
-			_vel_comp_x.body_mesh.height = abs(vel_x)*length_scale
 			_vel_comp_x.visible = false
-		if (abs(vel_y) > 0.05):
-			_vel_comp_y.body_mesh.height = abs(vel_y)*length_scale
+			
+		if (abs(vel.y) > 0.05):
+			_vel_comp_y.body_mesh.height = abs(vel.y)*length_scale
 			_vel_comp_y.visible = true
+			if vel.y > 0:
+				_vel_comp_y.rotation.x = 0
+			else:
+				y_mul = -1.0
+				_vel_comp_y.rotation_degrees.x = 180
 		else:
 			_vel_comp_y.visible = false
-		
-		## todo: i need to get the actual forward vector but this works for now
-		if vel_x > 0:
-			_vel_comp_x.rotation.y = 0
+			
+		if (vel.length_squared() > 0.05):
+			_vel_comp_t.body_mesh.height = vel.length()*length_scale
+			_vel_comp_t.visible = true
+			
+			# construct basis from side and up vectors relative to forward direction
+			var side: Vector3 = Vector3.UP.cross(fwd).normalized()
+			var new_up: Vector3 = fwd.cross(side).normalized()
+			var new_basis: Basis = Basis(side, new_up, fwd)
+			# rotate basis by x -90 to account for arrow facing up and not forward
+			new_basis = new_basis * Basis.from_euler(Vector3(TAU/4, 0, 0))
+			_vel_comp_t.basis = new_basis
+			
 		else:
-			x_mul = -1.0
-			_vel_comp_x.rotation_degrees.y = 180
-
-		if vel_y > 0:
-			_vel_comp_y.rotation.x = 0
-		else:
-			y_mul = -1.0
-			_vel_comp_y.rotation_degrees.x = 180
+			_vel_comp_t.visible = false
 	
 	_vel_comp_x.position.x = (distance_from_center + _vel_comp_x.body_mesh.height/2) * x_mul
 	_vel_comp_y.position.y = (distance_from_center +_vel_comp_y.body_mesh.height/2) * y_mul
+	_vel_comp_t.position = (distance_from_center + _vel_comp_t.body_mesh.height/2) * vel.normalized()

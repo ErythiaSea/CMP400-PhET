@@ -1,7 +1,34 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvlr2qb0wnb5"]
+[gd_scene load_steps=9 format=3 uid="uid://bvlr2qb0wnb5"]
 
 [ext_resource type="Script" uid="uid://ce476wim3fnx1" path="res://Scenes/force_diag_component.gd" id="1_4iem0"]
 [ext_resource type="PackedScene" uid="uid://dn3b1uerd80e8" path="res://Scenes/forceArrow.tscn" id="2_kkuxl"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_kkuxl"]
+resource_local_to_scene = true
+top_radius = 0.1
+bottom_radius = 0.1
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kkuxl"]
+albedo_color = Color(0.7015089, 0, 0.135411, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_wnm10"]
+resource_local_to_scene = true
+top_radius = 0.1
+bottom_radius = 0.1
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wnm10"]
+albedo_color = Color(0.4400552, 0.742938, 1.1551381e-06, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_efwwu"]
+resource_local_to_scene = true
+top_radius = 0.1
+bottom_radius = 0.1
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efwwu"]
+albedo_color = Color(0.33505142, 0.40292385, 1, 1)
 
 [node name="ArrowRoot" type="Node3D"]
 top_level = true
@@ -9,6 +36,15 @@ script = ExtResource("1_4iem0")
 
 [node name="VelocityCompX" parent="." instance=ExtResource("2_kkuxl")]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 1.5, 0, 0)
+mesh = SubResource("CylinderMesh_kkuxl")
+surface_material_override/0 = SubResource("StandardMaterial3D_kkuxl")
 
 [node name="VelocityCompY" parent="." instance=ExtResource("2_kkuxl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+mesh = SubResource("CylinderMesh_wnm10")
+surface_material_override/0 = SubResource("StandardMaterial3D_wnm10")
+
+[node name="VelocityCompT" parent="." instance=ExtResource("2_kkuxl")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1.5, 0)
+mesh = SubResource("CylinderMesh_efwwu")
+surface_material_override/0 = SubResource("StandardMaterial3D_efwwu")
