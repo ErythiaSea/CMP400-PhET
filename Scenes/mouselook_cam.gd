@@ -8,10 +8,6 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if (Input.is_action_just_pressed("ui_cancel")):
-		mlook = !mlook
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE
-	
 	if (Input.is_action_pressed("camera_fwd")):
 		position += basis * Vector3.FORWARD * delta * 5
 	if (Input.is_action_pressed("camera_bck")):
@@ -30,4 +26,9 @@ func _input(event):
 		rotation_degrees.y -= (event.relative.x * 0.2)
 		rotation_degrees.x -= (event.relative.y * 0.2)
 		rotation_degrees.x = clamp(rotation_degrees.x, -80, 90)
+		
+	if event is InputEventKey:
+		if event.is_action_pressed("cursor_toggle"):
+			mlook = !mlook
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE
 		

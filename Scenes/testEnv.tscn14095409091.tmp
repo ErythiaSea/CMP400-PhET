@@ -163,9 +163,9 @@ step = 0.01
 value = 3.0
 exp_edit = true
 
-[node name="ControlsLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer"]
+[node name="Label" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "
-Tab to toggle cursor/camera mouselook
+ESC to toggle cursor/camera mouselook
 WASD to move camera, Q/E for up/down
 Z/C to push ball left/right, Space to jump"
