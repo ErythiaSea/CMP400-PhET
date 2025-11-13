@@ -1,8 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bjrth7jbmslq0"]
+[gd_scene load_steps=14 format=3 uid="uid://bjrth7jbmslq0"]
 
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_maban"]
 [ext_resource type="PackedScene" uid="uid://s8k33qq4wjre" path="res://Scenes/forceBall.tscn" id="1_nbdxk"]
+[ext_resource type="Texture2D" uid="uid://cqmyxlq4qmlh8" path="res://GFX/grid.png" id="3_8u6ba"]
 [ext_resource type="Script" uid="uid://c1l5soefw1mvj" path="res://Scenes/gui_root.gd" id="3_s4j54"]
+[ext_resource type="Texture2D" uid="uid://c606rf1fe35sf" path="res://GFX/lcsky.png" id="4_08gmi"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_maban"]
 friction = 30.0
@@ -12,16 +14,29 @@ rough = true
 size = Vector2(200, 200)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_maban"]
-albedo_color = Color(0.22352941, 1, 0.28627452, 1)
+albedo_color = Color(0.19694135, 0.5756562, 0, 1)
+albedo_texture = ExtResource("3_8u6ba")
+uv1_scale = Vector3(100, 100, 100)
+uv2_scale = Vector3(100, 100, 100)
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_nbdxk"]
 
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_p7in2"]
+panorama = ExtResource("4_08gmi")
+energy_multiplier = 2.0
+
+[sub_resource type="Sky" id="Sky_vl7ro"]
+sky_material = SubResource("PanoramaSkyMaterial_p7in2")
+process_mode = 3
+
 [sub_resource type="Environment" id="Environment_maban"]
-background_mode = 1
+background_mode = 2
 background_color = Color(0.23529412, 0.6431373, 0.6431373, 1)
 background_energy_multiplier = 1.2
-ambient_light_source = 3
+sky = SubResource("Sky_vl7ro")
+ambient_light_source = 2
 ambient_light_color = Color(0.7666196, 0.76661956, 0.76661956, 1)
+reflected_light_source = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_maban"]
 bg_color = Color(0.24477634, 0.24477643, 0.24477628, 0.49411765)
@@ -61,11 +76,16 @@ shape = SubResource("WorldBoundaryShape3D_nbdxk")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_maban")
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_coefficient_slider", "air_resistance_toggle", "air_resistance_coefficient_label", "force_ball")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "force_ball")]
 script = ExtResource("3_s4j54")
-air_resistance_coefficient_slider = NodePath("PanelContainer/VBoxContainer/HSliderContainer/ARCSlider")
 air_resistance_toggle = NodePath("PanelContainer/VBoxContainer/ButtonContainer/AirResistanceButton")
-air_resistance_coefficient_label = NodePath("PanelContainer/VBoxContainer/HSliderContainer/SliderLabel")
+air_resistance_slider_container = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer")
+air_resistance_coefficient_slider = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer/ARCSlider")
+air_resistance_coefficient_label = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer/ARCSliderLabel")
+mass_slider = NodePath("PanelContainer/VBoxContainer/MassSliderContainer/MassSlider")
+mass_label = NodePath("PanelContainer/VBoxContainer/MassSliderContainer/MassSliderLabel")
+push_strength_slider = NodePath("PanelContainer/VBoxContainer/PSSliderContainer/PushStrengthSlider")
+push_strength_label = NodePath("PanelContainer/VBoxContainer/PSSliderContainer/PSSliderLabel")
 force_ball = NodePath("../ForceBall")
 
 [node name="PanelContainer" type="PanelContainer" parent="GUIRoot"]
@@ -87,19 +107,65 @@ text = "Simulate Air Resistance"
 [node name="AirResistanceButton" type="CheckButton" parent="GUIRoot/PanelContainer/VBoxContainer/ButtonContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
+focus_mode = 0
 
-[node name="HSliderContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+[node name="ARCSliderContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+visible = false
 layout_mode = 2
 
-[node name="SliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/HSliderContainer"]
+[node name="ARCSliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/ARCSliderContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
 text = "Air Resistance Coefficient: 0.03"
 
-[node name="ARCSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/HSliderContainer"]
+[node name="ARCSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/ARCSliderContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 4
 size_flags_stretch_ratio = 0.5
-max_value = 1.0
+max_value = 2.0
 step = 0.01
 value = 0.03
+
+[node name="PSSliderContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PSSliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/PSSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Push Strength: 7.50"
+
+[node name="PushStrengthSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/PSSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+max_value = 1000.0
+step = 0.01
+value = 7.5
+exp_edit = true
+
+[node name="MassSliderContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="MassSliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/MassSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Ball Mass: 3.00"
+
+[node name="MassSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/MassSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+max_value = 300.0
+step = 0.01
+value = 3.0
+exp_edit = true
+
+[node name="Label" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "
+ESC to toggle cursor/camera mouselook
+WASD to move camera, Q/E for up/down
+Z/C to push ball left/right, Space to jump"

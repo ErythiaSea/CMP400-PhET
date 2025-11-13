@@ -18,7 +18,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		
 	if (apply_air_resistance):
 		# force = -C * v^2
-		state.apply_force(-air_resistance_coeff * state.linear_velocity * state.linear_velocity)
+		state.apply_force(-air_resistance_coeff * abs(state.linear_velocity) * state.linear_velocity)
 		print("applying air resistance of ", air_resistance_coeff)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

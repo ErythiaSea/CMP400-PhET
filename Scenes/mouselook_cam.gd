@@ -12,9 +12,6 @@ func _process(delta: float) -> void:
 		mlook = !mlook
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE
 	
-	if !mlook:
-		return
-	
 	if (Input.is_action_pressed("camera_fwd")):
 		position += basis * Vector3.FORWARD * delta * 5
 	if (Input.is_action_pressed("camera_bck")):
