@@ -17,7 +17,7 @@ albedo_texture = ExtResource("2_14oug")
 [node name="ForceBall" type="RigidBody3D"]
 mass = 3.0
 physics_material_override = SubResource("PhysicsMaterial_65q5m")
-linear_damp_mode = 1
+can_sleep = false
 script = ExtResource("1_65q5m")
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="."]
