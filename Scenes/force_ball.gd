@@ -6,23 +6,44 @@ extends RigidBody3D
 
 @onready var force_diag = $ArrowRoot
 
+var _force_array: Array[Vector3] = []
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
+	var push_vector: Vector3 = Vector3.ZERO
+	
 	if Input.is_action_pressed("ball_left"):
-		state.apply_force(Vector3.LEFT * push_strength)
+		push_vector += (Vector3.LEFT * push_strength)
 	if Input.is_action_pressed("ball_right"):
-		state.apply_force(Vector3.RIGHT * push_strength)
+		push_vector += (Vector3.RIGHT * push_strength)
+	if Input.is_action_pressed("ball_forward"):
+		push_vector += (Vector3.FORWARD * push_strength)
+	if Input.is_action_pressed("ball_backward"):
+		push_vector += (Vector3.BACK * push_strength)
+		
+	if (push_vector != Vector3.ZERO):
+		state.apply_force(push_vector)
+		_force_array.push_back(push_vector)
 		
 	if (apply_air_resistance):
 		# force = -C * v^2
-		state.apply_force(-air_resistance_coeff * abs(state.linear_velocity) * state.linear_velocity)
-		print("applying air resistance of ", air_resistance_coeff)
+		var air_resistance: Vector3 = (-air_resistance_coeff * abs(state.linear_velocity) * state.linear_velocity)
+		state.apply_force(air_resistance)
+		_force_array.push_back(air_resistance)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
+	var total_accel: Vector3 = get_gravity()
+	for force in _force_array:
+		total_accel += force
+		
+	force_diag.accel = total_accel
+	_force_array.clear()
+	
+	# jump
 	if Input.is_action_just_pressed("ui_accept"):
 		linear_velocity.y = 10.0
 	

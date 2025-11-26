@@ -7,11 +7,13 @@ extends Node3D
 @onready var _vel_comp_x: ForceArrow = $VelocityCompX
 @onready var _vel_comp_y: ForceArrow = $VelocityCompY
 @onready var _vel_comp_t: ForceArrow = $VelocityCompT
-@onready var arrows: Array[ForceArrow] = [_vel_comp_x, _vel_comp_y, _vel_comp_t]
+@onready var _accel_comp_t: ForceArrow = $AccelCompT
+@onready var arrows: Array[ForceArrow] = [_vel_comp_x, _vel_comp_y, _vel_comp_t, _accel_comp_t]
 # @onready var _vel_total: MeshInstance3D = $VelocityTotal
 
 # The parent should modify these with appropriate values
 var vel: Vector3 = Vector3.UP
+var accel: Vector3 = Vector3.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -24,17 +26,16 @@ func _process(delta: float) -> void:
 	var y_mul: float = 1.0
 	
 	var fwd = vel.normalized()
+	var accel_dir = accel.normalized()
+	var horizontal_vel: Vector2 = Vector2(vel.x, vel.z)
 		
 	if !Engine.is_editor_hint():
 	## todo: i need to reduce duplicate code here this gets messy fast
-		if (abs(vel.x) > 0.05):
-			_vel_comp_x.body_mesh.height = abs(vel.x)*length_scale
+		if (horizontal_vel.length_squared() > 0.05):
+			_vel_comp_x.body_mesh.height = horizontal_vel.length()*length_scale
 			_vel_comp_x.visible = true
-			if vel.x > 0:
-				_vel_comp_x.rotation.y = 0
-			else:
-				x_mul = -1.0
-				_vel_comp_x.rotation_degrees.y = 180
+
+			_vel_comp_x.rotation.y = atan2(-horizontal_vel.y, horizontal_vel.x)
 		else:
 			_vel_comp_x.visible = false
 			
@@ -48,7 +49,7 @@ func _process(delta: float) -> void:
 				_vel_comp_y.rotation_degrees.x = 180
 		else:
 			_vel_comp_y.visible = false
-			
+					
 		if (vel.length_squared() > 0.05 and _vel_comp_x.visible and _vel_comp_y.visible):
 			_vel_comp_t.body_mesh.height = vel.length()*length_scale
 			_vel_comp_t.visible = true
@@ -60,10 +61,25 @@ func _process(delta: float) -> void:
 			# rotate basis by x -90 to account for arrow facing up and not forward
 			new_basis = new_basis * Basis.from_euler(Vector3(TAU/4, 0, 0))
 			_vel_comp_t.basis = new_basis
-			
 		else:
 			_vel_comp_t.visible = false
+			
+		if (accel.length_squared() > 0.05):
+			_accel_comp_t.body_mesh.height = accel.length()*length_scale
+			_accel_comp_t.visible = true;
+			
+			var side: Vector3 = Vector3.UP.cross(accel_dir).normalized()
+			if (side == Vector3.ZERO): # if accel_dir == Vector3.DOWN
+				side = Vector3.FORWARD
+			var new_up: Vector3 = accel_dir.cross(side).normalized()
+			var new_basis: Basis = Basis(side, new_up, accel_dir)
+			# rotate basis by x -90 to account for arrow facing up and not forward
+			new_basis = new_basis * Basis.from_euler(Vector3(TAU/4, 0, 0))
+			_accel_comp_t.basis = new_basis
+		else:
+			_accel_comp_t.visible = false
 	
-	_vel_comp_x.position.x = (distance_from_center + _vel_comp_x.body_mesh.height/2) * x_mul
+	_vel_comp_x.position = (distance_from_center + _vel_comp_x.body_mesh.height/2) * Vector3(horizontal_vel.x, 0, horizontal_vel.y).normalized()
 	_vel_comp_y.position.y = (distance_from_center +_vel_comp_y.body_mesh.height/2) * y_mul
-	_vel_comp_t.position = (distance_from_center + _vel_comp_t.body_mesh.height/2) * vel.normalized()
+	_vel_comp_t.position = (distance_from_center + _vel_comp_t.body_mesh.height/2) * fwd
+	_accel_comp_t.position = (distance_from_center + _accel_comp_t.body_mesh.height/2) * accel_dir

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bvlr2qb0wnb5"]
+[gd_scene load_steps=11 format=3 uid="uid://bvlr2qb0wnb5"]
 
 [ext_resource type="Script" uid="uid://ce476wim3fnx1" path="res://Scenes/force_diag_component.gd" id="1_4iem0"]
 [ext_resource type="PackedScene" uid="uid://dn3b1uerd80e8" path="res://Scenes/forceArrow.tscn" id="2_kkuxl"]
@@ -30,6 +30,15 @@ height = 1.0
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_efwwu"]
 albedo_color = Color(0.33505142, 0.40292385, 1, 1)
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_vfyqu"]
+resource_local_to_scene = true
+top_radius = 0.1
+bottom_radius = 0.1
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gi1qx"]
+albedo_color = Color(1, 1, 0, 1)
+
 [node name="ArrowRoot" type="Node3D"]
 top_level = true
 script = ExtResource("1_4iem0")
@@ -48,3 +57,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_wnm10")
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1.5, 0)
 mesh = SubResource("CylinderMesh_efwwu")
 surface_material_override/0 = SubResource("StandardMaterial3D_efwwu")
+
+[node name="AccelCompT" parent="." instance=ExtResource("2_kkuxl")]
+mesh = SubResource("CylinderMesh_vfyqu")
+surface_material_override/0 = SubResource("StandardMaterial3D_gi1qx")
