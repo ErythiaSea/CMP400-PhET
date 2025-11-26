@@ -168,4 +168,4 @@ layout_mode = 2
 text = "
 Tab to toggle cursor/camera mouselook
 WASD to move camera, Q/E for up/down
-Z/C to push ball left/right, Space to jump"
+IJKL to push ball, Space to jump		"

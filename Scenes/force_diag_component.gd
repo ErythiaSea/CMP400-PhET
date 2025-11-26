@@ -22,7 +22,6 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	var x_mul: float = 1.0
 	var y_mul: float = 1.0
 	
 	var fwd = vel.normalized()
