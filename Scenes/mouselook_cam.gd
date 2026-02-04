@@ -3,7 +3,6 @@ var mlook: bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	pass # Replace with function body.
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -36,10 +35,8 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if event.is_action_pressed("mouselook_hold"):
 			mlook = true
-			print("you did it!")
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE
 			
 		elif event.is_action_released("mouselook_hold"):
 			mlook = false
-			print("you undid it!")
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE

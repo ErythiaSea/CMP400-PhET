@@ -4,9 +4,13 @@ extends RigidBody3D
 @export var air_resistance_coeff: float = 0.03
 
 @onready var force_diag = $ArrowRoot
+@export var traj_line: Node3D
 
 var fired: bool = false
 var fire_impulse_strength: float = 50
+
+var last_pos: Vector3 = Vector3(0, 1, 0)
+var last_rot: Vector3 = Vector3.ZERO
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -34,14 +38,20 @@ func _process(delta: float) -> void:
 		move_and_collide(Vector3.DOWN * 3 * delta)
 		
 	if Input.is_action_just_pressed("ball_fire"):
+		last_pos = position
+		last_rot = rotation
 		freeze = false
 		linear_velocity = Vector3.ZERO
 		angular_velocity = Vector3.ZERO
-		apply_central_impulse(Vector3.FORWARD * 50)
+		apply_central_impulse(-transform.basis.z * 50)
 		fired = true
+		
+	traj_line.expected_init_vel = fire_impulse_strength / mass
+	traj_line.show_aim = !fired
 
 
 func _reset() -> void:
 	fired = false
-	position = Vector3(0, 1, 0)
+	position = last_pos
+	rotation = last_rot
 	freeze = true

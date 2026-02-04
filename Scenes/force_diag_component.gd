@@ -23,7 +23,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !visible:
-		scale = Vector3.ZERO
+		scale = Vector3(0.0001, 0.0001, 0.0001)
 		return
 	else:
 		scale = Vector3.ONE

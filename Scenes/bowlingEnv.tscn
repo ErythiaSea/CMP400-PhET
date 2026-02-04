@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=21 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d1m22d2jq0h1m" path="res://GFX/icon.svg" id="3_wp4vv"]
 [ext_resource type="PackedScene" uid="uid://bvlr2qb0wnb5" path="res://Scenes/forceDiagComponent.tscn" id="4_0fhea"]
 [ext_resource type="Script" uid="uid://e3f1ox6y6cvg" path="res://addons/Gizmo3DScript/gizmo3D.gd" id="6_wp4vv"]
+[ext_resource type="Script" uid="uid://cigrabbeusvkm" path="res://Scenes/trajectory_line.gd" id="8_hymiy"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
 panorama = ExtResource("1_deeac")
@@ -25,6 +26,8 @@ ambient_light_source = 2
 ambient_light_color = Color(0.7666196, 0.76661956, 0.76661956, 1)
 reflected_light_source = 1
 
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_lt5hn"]
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65q5m"]
 friction = 0.2
 
@@ -39,7 +42,7 @@ height = 0.214
 albedo_texture = ExtResource("3_wp4vv")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hymiy"]
-friction = 0.0
+friction = 0.08
 bounce = 0.25
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w56ka"]
@@ -62,6 +65,7 @@ size = 50.206
 show_rotation_line = false
 show_rotation_arc = false
 _opacity = 0.8
+_selection_box_color = Color(1, 0.5019608, 0, 0)
 metadata/_custom_type_script = "uid://e3f1ox6y6cvg"
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -75,13 +79,21 @@ script = ExtResource("1_08dfx")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lt5hn")
 
-[node name="ForceBall" type="RigidBody3D" parent="."]
+[node name="TrajectoryLine" type="MeshInstance3D" parent="." node_paths=PackedStringArray("projectile")]
+top_level = true
+mesh = SubResource("ImmediateMesh_lt5hn")
+skeleton = NodePath("../ForceBall")
+script = ExtResource("8_hymiy")
+projectile = NodePath("../ForceBall")
+
+[node name="ForceBall" type="RigidBody3D" parent="." node_paths=PackedStringArray("traj_line")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mass = 7.0
 physics_material_override = SubResource("PhysicsMaterial_65q5m")
 can_sleep = false
 freeze = true
 script = ExtResource("3_0fhea")
+traj_line = NodePath("../TrajectoryLine")
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="ForceBall"]
 remote_path = NodePath("../ArrowRoot")
@@ -95,7 +107,7 @@ mesh = SubResource("SphereMesh_b17vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_unano")
 
 [node name="ArrowRoot" parent="ForceBall" instance=ExtResource("4_0fhea")]
-transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0)
+transform = Transform3D(0.0001, 0, 0, 0, 0.0001, 0, 0, 0, 0.0001, 0, 1, 0)
 visible = false
 length_scale = 0.5
 distance_from_center = 0.75
