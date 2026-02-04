@@ -19,14 +19,11 @@ var accel: Vector3 = Vector3.ZERO
 func _ready() -> void:
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !visible:
 		scale = Vector3(0.0001, 0.0001, 0.0001)
 		return
-	else:
-		scale = Vector3.ONE
 		
 	var y_mul: float = 1.0
 	

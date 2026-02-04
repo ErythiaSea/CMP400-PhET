@@ -44,7 +44,7 @@ top_level = true
 script = ExtResource("1_4iem0")
 
 [node name="VelocityCompX" parent="." instance=ExtResource("2_kkuxl")]
-transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 1.5, 0, 0)
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("CylinderMesh_kkuxl")
 surface_material_override/0 = SubResource("StandardMaterial3D_kkuxl")
 

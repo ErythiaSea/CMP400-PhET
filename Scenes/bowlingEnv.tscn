@@ -124,6 +124,7 @@ traj_line = NodePath("../TrajectoryLine")
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="ForceBall"]
 remote_path = NodePath("../ArrowRoot")
 update_rotation = false
+update_scale = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ForceBall"]
 shape = SubResource("SphereShape3D_1d3fa")
@@ -134,7 +135,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_unano")
 
 [node name="ArrowRoot" parent="ForceBall" instance=ExtResource("4_0fhea")]
 transform = Transform3D(0.0001, 0, 0, 0, 0.0001, 0, 0, 0, 0.0001, 0, 1, 0)
-visible = false
 length_scale = 0.5
 distance_from_center = 0.75
 
@@ -197,14 +197,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122710645, 0.287, -21.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -21.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "force_ball")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "push_strength_slider", "push_strength_label", "force_ball")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("PanelContainer/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer")
 air_resistance_coefficient_slider = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer/ARCSlider")
 air_resistance_coefficient_label = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer/ARCSliderLabel")
-mass_slider = NodePath("")
-mass_label = NodePath("")
 push_strength_slider = NodePath("PanelContainer/VBoxContainer/PSSliderContainer/PushStrengthSlider")
 push_strength_label = NodePath("PanelContainer/VBoxContainer/PSSliderContainer/PSSliderLabel")
 force_ball = NodePath("../ForceBall")
@@ -254,17 +252,16 @@ layout_mode = 2
 [node name="PSSliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/PSSliderContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
-text = "Throw Impulse: 7.50"
+text = "Throw Impulse: 50"
 
 [node name="PushStrengthSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/PSSliderContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.5
-max_value = 1000.0
+max_value = 300.0
 step = 0.01
-value = 7.5
-exp_edit = true
+value = 50.0
 
 [node name="ControlsLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer"]
 layout_mode = 2

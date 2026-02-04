@@ -22,8 +22,11 @@ func fire() -> void:
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
 	apply_central_impulse(-transform.basis.z * fire_impulse_strength)
+	force_diag.show()
+	force_diag.scale = Vector3(0.25, 0.25, 0.25)
 
 func reset() -> void:
+	force_diag.hide()
 	position = last_pos
 	rotation = last_rot
 	freeze = true
@@ -31,6 +34,8 @@ func reset() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !freeze:
+		force_diag.accel = get_gravity()/mass
+		force_diag.vel = linear_velocity
 		return
 	
 	if Input.is_action_pressed("ball_left"):

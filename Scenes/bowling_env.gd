@@ -20,8 +20,10 @@ func _process(delta: float) -> void:
 		_traj_line.toggle_aim(!fired)
 		if fired:
 			_bowling_ball.fire()
+			_gizmo.deselect(_bowling_ball)
 		else:
 			_bowling_ball.reset()
+			_gizmo.select(_bowling_ball)
 			for pin in $Pins.get_children() as Array[RigidBody3D]:
 				pin.position = pin_pos[pin]
 				pin.linear_velocity = Vector3.ZERO
