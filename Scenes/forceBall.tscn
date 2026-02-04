@@ -8,8 +8,11 @@
 friction = 0.2
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
+radius = 0.107
 
 [sub_resource type="SphereMesh" id="SphereMesh_b17vh"]
+radius = 0.107
+height = 0.214
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unano"]
 albedo_texture = ExtResource("2_14oug")

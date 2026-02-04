@@ -1,0 +1,111 @@
+[gd_scene load_steps=19 format=3 uid="uid://dg0lyw2wu0nwg"]
+
+[ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
+[ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
+[ext_resource type="Texture2D" uid="uid://c606rf1fe35sf" path="res://GFX/lcsky.png" id="1_deeac"]
+[ext_resource type="Script" uid="uid://d2vpsis0wq81n" path="res://Scenes/bowling_ball.gd" id="3_0fhea"]
+[ext_resource type="Texture2D" uid="uid://d1m22d2jq0h1m" path="res://GFX/icon.svg" id="3_wp4vv"]
+[ext_resource type="PackedScene" uid="uid://bvlr2qb0wnb5" path="res://Scenes/forceDiagComponent.tscn" id="4_0fhea"]
+[ext_resource type="Script" uid="uid://e3f1ox6y6cvg" path="res://addons/Gizmo3DScript/gizmo3D.gd" id="6_wp4vv"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
+panorama = ExtResource("1_deeac")
+energy_multiplier = 2.0
+
+[sub_resource type="Sky" id="Sky_vl7ro"]
+sky_material = SubResource("PanoramaSkyMaterial_hymiy")
+process_mode = 3
+
+[sub_resource type="Environment" id="Environment_lt5hn"]
+background_mode = 2
+background_color = Color(0.23529412, 0.6431373, 0.6431373, 1)
+background_energy_multiplier = 1.2
+sky = SubResource("Sky_vl7ro")
+ambient_light_source = 2
+ambient_light_color = Color(0.7666196, 0.76661956, 0.76661956, 1)
+reflected_light_source = 1
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65q5m"]
+friction = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
+radius = 0.107
+
+[sub_resource type="SphereMesh" id="SphereMesh_b17vh"]
+radius = 0.107
+height = 0.214
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unano"]
+albedo_texture = ExtResource("3_wp4vv")
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hymiy"]
+friction = 0.0
+bounce = 0.25
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w56ka"]
+albedo_color = Color(0.49833453, 0.27897835, 4.3317675e-07, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aomcl"]
+material = SubResource("StandardMaterial3D_w56ka")
+size = Vector3(25, 0.185, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fxcs8"]
+size = Vector3(25, 0.185, 1.1)
+
+[node name="BowlingEnv" type="Node3D"]
+script = ExtResource("1_0fhea")
+
+[node name="Gizmo3D" type="Node3D" parent="."]
+script = ExtResource("6_wp4vv")
+mode = 3
+size = 50.206
+show_rotation_line = false
+show_rotation_arc = false
+_opacity = 0.8
+metadata/_custom_type_script = "uid://e3f1ox6y6cvg"
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.39256418, 0.6943696, -0.60311216, 0.3787903, 0.7196186, 0.581951, 0.83809984, 9.990927e-08, -0.5455169, 0, 16.050179, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.9228292)
+script = ExtResource("1_08dfx")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lt5hn")
+
+[node name="ForceBall" type="RigidBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mass = 7.0
+physics_material_override = SubResource("PhysicsMaterial_65q5m")
+can_sleep = false
+freeze = true
+script = ExtResource("3_0fhea")
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="ForceBall"]
+remote_path = NodePath("../ArrowRoot")
+update_rotation = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ForceBall"]
+shape = SubResource("SphereShape3D_1d3fa")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ForceBall"]
+mesh = SubResource("SphereMesh_b17vh")
+surface_material_override/0 = SubResource("StandardMaterial3D_unano")
+
+[node name="ArrowRoot" parent="ForceBall" instance=ExtResource("4_0fhea")]
+transform = Transform3D(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0)
+visible = false
+length_scale = 0.5
+distance_from_center = 0.75
+
+[node name="lane" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -10)
+physics_material_override = SubResource("PhysicsMaterial_hymiy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="lane"]
+mesh = SubResource("BoxMesh_aomcl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="lane"]
+shape = SubResource("BoxShape3D_fxcs8")

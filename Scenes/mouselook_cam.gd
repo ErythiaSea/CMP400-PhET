@@ -32,3 +32,14 @@ func _input(event):
 			mlook = !mlook
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE
 		
+
+	if event is InputEventMouseButton:
+		if event.is_action_pressed("mouselook_hold"):
+			mlook = true
+			print("you did it!")
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE
+			
+		elif event.is_action_released("mouselook_hold"):
+			mlook = false
+			print("you undid it!")
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE
