@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=27 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://bvlr2qb0wnb5" path="res://Scenes/forceDiagComponent.tscn" id="4_0fhea"]
 [ext_resource type="Script" uid="uid://e3f1ox6y6cvg" path="res://addons/Gizmo3DScript/gizmo3D.gd" id="6_wp4vv"]
 [ext_resource type="Script" uid="uid://cigrabbeusvkm" path="res://Scenes/trajectory_line.gd" id="8_hymiy"]
+[ext_resource type="PackedScene" uid="uid://4oeyivm4nvdn" path="res://Scenes/bowling_pin.tscn" id="9_lt5hn"]
+[ext_resource type="Script" uid="uid://c1l5soefw1mvj" path="res://Scenes/gui_root.gd" id="10_w56ka"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
 panorama = ExtResource("1_deeac")
@@ -48,12 +50,35 @@ bounce = 0.25
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w56ka"]
 albedo_color = Color(0.49833453, 0.27897835, 4.3317675e-07, 1)
 
+[sub_resource type="BoxMesh" id="BoxMesh_w56ka"]
+material = SubResource("StandardMaterial3D_w56ka")
+size = Vector3(25, 0.185, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fxcs8"]
+material = SubResource("StandardMaterial3D_w56ka")
+size = Vector3(25, 0.185, 0.1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_aomcl"]
 material = SubResource("StandardMaterial3D_w56ka")
 size = Vector3(25, 0.185, 1.1)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_fxcs8"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_lt5hn"]
 size = Vector3(25, 0.185, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fxcs8"]
+size = Vector3(25, 0.185, 0.1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aomcl"]
+bg_color = Color(0.24477634, 0.24477643, 0.24477628, 0.49411765)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="BowlingEnv" type="Node3D"]
 script = ExtResource("1_0fhea")
@@ -73,7 +98,7 @@ transform = Transform3D(-0.39256418, 0.6943696, -0.60311216, 0.3787903, 0.719618
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.9228292)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2.7170715, 1, -0.06402302)
 script = ExtResource("1_08dfx")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -92,6 +117,7 @@ mass = 7.0
 physics_material_override = SubResource("PhysicsMaterial_65q5m")
 can_sleep = false
 freeze = true
+continuous_cd = true
 script = ExtResource("3_0fhea")
 traj_line = NodePath("../TrajectoryLine")
 
@@ -116,8 +142,134 @@ distance_from_center = 0.75
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -10)
 physics_material_override = SubResource("PhysicsMaterial_hymiy")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="lane"]
+[node name="Rbarrier" type="MeshInstance3D" parent="lane"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
+mesh = SubResource("BoxMesh_w56ka")
+
+[node name="LBarrier" type="MeshInstance3D" parent="lane"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086381435, -0.565176)
+mesh = SubResource("BoxMesh_fxcs8")
+
+[node name="Floor" type="MeshInstance3D" parent="lane"]
 mesh = SubResource("BoxMesh_aomcl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="lane"]
+shape = SubResource("BoxShape3D_lt5hn")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="lane"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, -0.565)
 shape = SubResource("BoxShape3D_fxcs8")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="lane"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
+shape = SubResource("BoxShape3D_fxcs8")
+
+[node name="Pins" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+
+[node name="BowlingPin" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2874456, -21.155258)
+
+[node name="BowlingPin2" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11149472, 0.2874456, -21.320173)
+
+[node name="BowlingPin6" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111, 0.287, -21.32)
+
+[node name="BowlingPin3" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.287, -21.475)
+
+[node name="BowlingPin4" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22476788, 0.287, -21.475)
+
+[node name="BowlingPin7" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33107448, 0.287, -21.646578)
+
+[node name="BowlingPin8" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.118700385, 0.287, -21.646578)
+
+[node name="BowlingPin9" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.331, 0.287, -21.647)
+
+[node name="BowlingPin10" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122710645, 0.287, -21.647)
+
+[node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -21.475)
+
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "force_ball")]
+script = ExtResource("10_w56ka")
+air_resistance_toggle = NodePath("PanelContainer/VBoxContainer/ButtonContainer/AirResistanceButton")
+air_resistance_slider_container = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer")
+air_resistance_coefficient_slider = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer/ARCSlider")
+air_resistance_coefficient_label = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer/ARCSliderLabel")
+mass_slider = NodePath("")
+mass_label = NodePath("")
+push_strength_slider = NodePath("PanelContainer/VBoxContainer/PSSliderContainer/PushStrengthSlider")
+push_strength_label = NodePath("PanelContainer/VBoxContainer/PSSliderContainer/PSSliderLabel")
+force_ball = NodePath("../ForceBall")
+
+[node name="PanelContainer" type="PanelContainer" parent="GUIRoot"]
+offset_right = 407.0
+offset_bottom = 59.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_aomcl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUIRoot/PanelContainer"]
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Simulate Air Resistance"
+
+[node name="AirResistanceButton" type="CheckButton" parent="GUIRoot/PanelContainer/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+focus_mode = 0
+
+[node name="ARCSliderContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="ARCSliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/ARCSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Air Resistance Coefficient: 0.03"
+
+[node name="ARCSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/ARCSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+max_value = 2.0
+step = 0.01
+value = 0.03
+
+[node name="PSSliderContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="PSSliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/PSSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Throw Impulse: 7.50"
+
+[node name="PushStrengthSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/PSSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+max_value = 1000.0
+step = 0.01
+value = 7.5
+exp_edit = true
+
+[node name="ControlsLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "
+RMB to look with mouse
+LMB to adjust ball rotation/position
+WASD to move camera, Q/E for up/down
+Space to throw/reset ball"

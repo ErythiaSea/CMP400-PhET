@@ -6,7 +6,6 @@ extends RigidBody3D
 @onready var force_diag = $ArrowRoot
 @export var traj_line: Node3D
 
-var fired: bool = false
 var fire_impulse_strength: float = 50
 
 var last_pos: Vector3 = Vector3(0, 1, 0)
@@ -16,12 +15,22 @@ var last_rot: Vector3 = Vector3.ZERO
 func _ready() -> void:
 	pass # Replace with function body.
 
+func fire() -> void:
+	last_pos = position
+	last_rot = rotation
+	freeze = false
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	apply_central_impulse(-transform.basis.z * fire_impulse_strength)
+
+func reset() -> void:
+	position = last_pos
+	rotation = last_rot
+	freeze = true
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if fired:
-		if Input.is_action_just_pressed("ball_fire"):
-			_reset()
+	if !freeze:
 		return
 	
 	if Input.is_action_pressed("ball_left"):
@@ -37,21 +46,4 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("ball_down"):
 		move_and_collide(Vector3.DOWN * 3 * delta)
 		
-	if Input.is_action_just_pressed("ball_fire"):
-		last_pos = position
-		last_rot = rotation
-		freeze = false
-		linear_velocity = Vector3.ZERO
-		angular_velocity = Vector3.ZERO
-		apply_central_impulse(-transform.basis.z * 50)
-		fired = true
-		
 	traj_line.expected_init_vel = fire_impulse_strength / mass
-	traj_line.show_aim = !fired
-
-
-func _reset() -> void:
-	fired = false
-	position = last_pos
-	rotation = last_rot
-	freeze = true

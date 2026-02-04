@@ -1,8 +1,9 @@
+class_name TrajectoryLine
 extends MeshInstance3D
 
 @export var projectile: Node3D
 
-var show_aim = false
+var show_aim = true
 var base_line_thickness := 0.03
 
 var expected_init_vel: float
@@ -19,10 +20,6 @@ func _physics_process(_delta: float) -> void:
 
 func toggle_aim(is_aiming):
 	show_aim = is_aiming
-	
-	# Clear the mesh so it's no longer visible
-	if not is_aiming:
-		mesh = null
 
 func get_front_direction() -> Vector3:
 	return -projectile.get_global_transform().basis.z

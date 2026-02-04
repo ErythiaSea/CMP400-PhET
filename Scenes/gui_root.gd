@@ -14,7 +14,8 @@ extends CanvasLayer
 func _ready() -> void:
 	air_resistance_toggle.toggled.connect(_on_artoggle_toggled)
 	air_resistance_coefficient_slider.value_changed.connect(_on_arcslider_value_changed)
-	mass_slider.value_changed.connect(_on_mass_slider_value_changed)
+	if (mass_slider):
+		mass_slider.value_changed.connect(_on_mass_slider_value_changed)
 	push_strength_slider.value_changed.connect(_on_ps_slider_value_changed)
 	pass # Replace with function body.
 
@@ -32,8 +33,8 @@ func _on_mass_slider_value_changed(value: float) -> void:
 	mass_label.text = "Ball Mass: %.2f" % value
 	
 func _on_ps_slider_value_changed(value: float) -> void:
-	force_ball.push_strength = value
-	push_strength_label.text = "Push Strength: %.2f" % value
+	force_ball.fire_impulse_strength = value
+	push_strength_label.text = "Throw Impulse: %.2f" % value
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
