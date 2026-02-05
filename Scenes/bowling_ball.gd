@@ -8,8 +8,10 @@ extends RigidBody3D
 
 var fire_impulse_strength: float = 50
 
-var last_pos: Vector3 = Vector3(0, 1, 0)
-var last_rot: Vector3 = Vector3.ZERO
+var init_pos := Vector3(0, 1, 0)
+var last_pos := init_pos
+var init_rot: Vector3 = Vector3.ZERO
+var last_rot := init_rot
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -30,6 +32,11 @@ func reset() -> void:
 	position = last_pos
 	rotation = last_rot
 	freeze = true
+	
+func full_reset() -> void:
+	last_pos = init_pos
+	last_rot = init_rot
+	reset()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

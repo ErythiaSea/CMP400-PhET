@@ -197,7 +197,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122710645, 0.287, -21.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -21.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "push_strength_slider", "push_strength_label", "force_ball")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "ball_angle_label", "force_ball")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("PanelContainer/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer")
@@ -205,6 +205,9 @@ air_resistance_coefficient_slider = NodePath("PanelContainer/VBoxContainer/ARCSl
 air_resistance_coefficient_label = NodePath("PanelContainer/VBoxContainer/ARCSliderContainer/ARCSliderLabel")
 push_strength_slider = NodePath("PanelContainer/VBoxContainer/PSSliderContainer/PushStrengthSlider")
 push_strength_label = NodePath("PanelContainer/VBoxContainer/PSSliderContainer/PSSliderLabel")
+time_scale_slider = NodePath("PanelContainer/VBoxContainer/TSSliderContainer/TimeScaleSlider")
+time_scale_label = NodePath("PanelContainer/VBoxContainer/TSSliderContainer/TSSliderLabel")
+ball_angle_label = NodePath("PanelContainer/VBoxContainer/ResetBallContainer/AngleLabel")
 force_ball = NodePath("../ForceBall")
 
 [node name="PanelContainer" type="PanelContainer" parent="GUIRoot"]
@@ -263,6 +266,36 @@ max_value = 300.0
 step = 0.01
 value = 50.0
 
+[node name="TSSliderContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TSSliderLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/TSSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Simulation Speed: 100%"
+
+[node name="TimeScaleSlider" type="HSlider" parent="GUIRoot/PanelContainer/VBoxContainer/TSSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="ResetBallContainer" type="HBoxContainer" parent="GUIRoot/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="AngleLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer/ResetBallContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Ball Angle: 0°"
+
+[node name="Button" type="Button" parent="GUIRoot/PanelContainer/VBoxContainer/ResetBallContainer"]
+layout_mode = 2
+focus_mode = 0
+text = "Reset Ball"
+
 [node name="ControlsLabel" type="Label" parent="GUIRoot/PanelContainer/VBoxContainer"]
 layout_mode = 2
 text = "
@@ -270,3 +303,6 @@ RMB to look with mouse
 LMB to adjust ball rotation/position
 WASD to move camera, Q/E for up/down
 Space to throw/reset ball"
+
+[connection signal="value_changed" from="GUIRoot/PanelContainer/VBoxContainer/TSSliderContainer/TimeScaleSlider" to="GUIRoot" method="_on_time_scale_slider_value_changed"]
+[connection signal="pressed" from="GUIRoot/PanelContainer/VBoxContainer/ResetBallContainer/Button" to="ForceBall" method="full_reset"]

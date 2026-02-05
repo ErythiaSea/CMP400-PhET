@@ -7,6 +7,10 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if (Engine.time_scale > 0):
+		delta *= 1/Engine.time_scale
+	else:
+		delta = 1.0/60.0
 	if (Input.is_action_pressed("camera_fwd")):
 		position += basis * Vector3.FORWARD * delta * 5
 	if (Input.is_action_pressed("camera_bck")):

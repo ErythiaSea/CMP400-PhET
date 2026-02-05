@@ -8,6 +8,9 @@ extends CanvasLayer
 @export var mass_label: Label
 @export var push_strength_slider: HSlider
 @export var push_strength_label: Label
+@export var time_scale_slider: HSlider
+@export var time_scale_label: Label
+@export var ball_angle_label: Label
 @export var force_ball: RigidBody3D
 
 # Called when the node enters the scene tree for the first time.
@@ -35,7 +38,13 @@ func _on_mass_slider_value_changed(value: float) -> void:
 func _on_ps_slider_value_changed(value: float) -> void:
 	force_ball.fire_impulse_strength = value
 	push_strength_label.text = "Throw Impulse: %.2f" % value
+	
+func _on_time_scale_slider_value_changed(value: float) -> void:
+	Engine.time_scale = value
+	time_scale_label.text = "Simulation Speed: %d" % (int)(value*100)
+	time_scale_label.text += "%"
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if (force_ball.freeze):
+		ball_angle_label.text = "Ball Angle: %.2f°" % force_ball.rotation_degrees.x
