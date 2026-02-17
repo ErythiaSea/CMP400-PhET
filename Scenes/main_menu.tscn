@@ -1,0 +1,159 @@
+[gd_scene load_steps=6 format=3 uid="uid://dlgiq4w8u6an6"]
+
+[ext_resource type="Script" uid="uid://cgx51als5phaa" path="res://Scenes/main_menu.gd" id="1_1ehe0"]
+[ext_resource type="Texture2D" uid="uid://uiovn8h6xyro" path="res://GFX/menu_bg_temp.png" id="1_28flt"]
+[ext_resource type="Texture2D" uid="uid://d1m22d2jq0h1m" path="res://GFX/icon.svg" id="3_ce3w2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_48xlc"]
+font_size = 50
+
+[sub_resource type="LabelSettings" id="LabelSettings_1ehe0"]
+font_size = 32
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1ehe0")
+bowling_scene = "uid://dg0lyw2wu0nwg"
+
+[node name="TextureRect" type="TextureRect" parent="."]
+self_modulate = Color(0.80049086, 0.80049074, 0.80049074, 1)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_28flt")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -99.0
+offset_top = 74.0
+offset_right = 100.0
+offset_bottom = 97.0
+grow_horizontal = 2
+text = "Game Name/Logo"
+label_settings = SubResource("LabelSettings_48xlc")
+
+[node name="MainButtons" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -358.0
+offset_right = 125.0
+offset_bottom = -248.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Play" type="Button" parent="MainButtons"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "Play!"
+
+[node name="Options" type="Button" parent="MainButtons"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "Options"
+
+[node name="SceneSelect" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -208.0
+offset_top = -100.0
+offset_right = 208.0
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SceneSelect"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="SceneSelect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+size_flags_stretch_ratio = 1.05
+text = "Select a scene..."
+label_settings = SubResource("LabelSettings_1ehe0")
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="SceneSelect/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="SceneButtons" type="HBoxContainer" parent="SceneSelect/VBoxContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Bowling" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "Bowling"
+icon = ExtResource("3_ce3w2")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Siege" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "Siege"
+icon = ExtResource("3_ce3w2")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Pool" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "Pool"
+icon = ExtResource("3_ce3w2")
+icon_alignment = 1
+vertical_icon_alignment = 0
+
+[node name="Back" type="Button" parent="SceneSelect/VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[connection signal="pressed" from="MainButtons/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/Bowling" to="." method="_on_bowling_pressed"]
+[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/Siege" to="." method="_on_siege_pressed"]
+[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/Pool" to="." method="_on_pool_pressed"]
+[connection signal="pressed" from="SceneSelect/VBoxContainer/Back" to="." method="_on_back_pressed"]

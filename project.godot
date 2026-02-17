@@ -11,9 +11,15 @@ config_version=5
 [application]
 
 config/name="CMP400 PhET"
+config/version="v0.2.1"
 run/main_scene="uid://dg0lyw2wu0nwg"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 config/icon="res://GFX/icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [editor_plugins]
 
