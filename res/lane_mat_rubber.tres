@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://bdqpj5wm15e50"]
+
+[ext_resource type="Texture2D" uid="uid://cr77ua0vywjeh" path="res://GFX/rubber.png" id="1_0uvrp"]
+
+[resource]
+albedo_color = Color(0, 0.78630847, 0.48814082, 1)
+albedo_texture = ExtResource("1_0uvrp")
+roughness = 0.1
+uv1_scale = Vector3(3, 0.75, 1)
+uv1_offset = Vector3(0, 0.135, 0)

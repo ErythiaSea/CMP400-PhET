@@ -1,15 +1,18 @@
-[gd_scene load_steps=27 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=33 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
 [ext_resource type="Texture2D" uid="uid://c606rf1fe35sf" path="res://GFX/lcsky.png" id="1_deeac"]
 [ext_resource type="Script" uid="uid://d2vpsis0wq81n" path="res://Scenes/bowling_ball.gd" id="3_0fhea"]
-[ext_resource type="Texture2D" uid="uid://d1m22d2jq0h1m" path="res://GFX/icon.svg" id="3_wp4vv"]
 [ext_resource type="PackedScene" uid="uid://bvlr2qb0wnb5" path="res://Scenes/forceDiagComponent.tscn" id="4_0fhea"]
 [ext_resource type="Script" uid="uid://e3f1ox6y6cvg" path="res://addons/Gizmo3DScript/gizmo3D.gd" id="6_wp4vv"]
+[ext_resource type="Texture2D" uid="uid://b8ydn45666nk7" path="res://GFX/bowling_ball.png" id="7_fxcs8"]
 [ext_resource type="Script" uid="uid://cigrabbeusvkm" path="res://Scenes/trajectory_line.gd" id="8_hymiy"]
+[ext_resource type="PackedScene" uid="uid://dy1n73wqdiydt" path="res://Scenes/bowling_lane.tscn" id="9_aomcl"]
 [ext_resource type="PackedScene" uid="uid://4oeyivm4nvdn" path="res://Scenes/bowling_pin.tscn" id="9_lt5hn"]
+[ext_resource type="Material" uid="uid://i0skkgbqocpn" path="res://res/lane_mat_cloth.tres" id="10_fxcs8"]
 [ext_resource type="Script" uid="uid://c1l5soefw1mvj" path="res://Scenes/gui_root.gd" id="10_w56ka"]
+[ext_resource type="Material" uid="uid://bdqpj5wm15e50" path="res://res/lane_mat_rubber.tres" id="11_4hcwo"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
 panorama = ExtResource("1_deeac")
@@ -41,25 +44,21 @@ radius = 0.107
 height = 0.214
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unano"]
-albedo_texture = ExtResource("3_wp4vv")
+albedo_texture = ExtResource("7_fxcs8")
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hymiy"]
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fxcs8"]
 friction = 0.08
-bounce = 0.25
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w56ka"]
-albedo_color = Color(0.49833453, 0.27897835, 4.3317675e-07, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_w56ka"]
-material = SubResource("StandardMaterial3D_w56ka")
+[sub_resource type="BoxMesh" id="BoxMesh_4hcwo"]
+material = ExtResource("10_fxcs8")
 size = Vector3(25, 0.185, 0.1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_fxcs8"]
-material = SubResource("StandardMaterial3D_w56ka")
+[sub_resource type="BoxMesh" id="BoxMesh_3hgm0"]
+material = ExtResource("10_fxcs8")
 size = Vector3(25, 0.185, 0.1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_aomcl"]
-material = SubResource("StandardMaterial3D_w56ka")
+[sub_resource type="BoxMesh" id="BoxMesh_632io"]
+material = ExtResource("10_fxcs8")
 size = Vector3(25, 0.185, 1.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lt5hn"]
@@ -67,6 +66,22 @@ size = Vector3(25, 0.185, 1.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fxcs8"]
 size = Vector3(25, 0.185, 0.1)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4hcwo"]
+friction = 0.08
+bounce = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_fxvee"]
+material = ExtResource("11_4hcwo")
+size = Vector3(25, 0.185, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_d7l01"]
+material = ExtResource("11_4hcwo")
+size = Vector3(25, 0.185, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_glwuy"]
+material = ExtResource("11_4hcwo")
+size = Vector3(25, 0.185, 1.1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aomcl"]
 bg_color = Color(0.24477634, 0.24477643, 0.24477628, 0.49411765)
@@ -138,29 +153,58 @@ transform = Transform3D(0.0001, 0, 0, 0, 0.0001, 0, 0, 0, 0.0001, 0, 1, 0)
 length_scale = 0.5
 distance_from_center = 0.75
 
-[node name="lane" type="StaticBody3D" parent="."]
+[node name="laneWood" parent="." instance=ExtResource("9_aomcl")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -10)
-physics_material_override = SubResource("PhysicsMaterial_hymiy")
 
-[node name="Rbarrier" type="MeshInstance3D" parent="lane"]
+[node name="laneCloth" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1005538, 0, -10)
+physics_material_override = SubResource("PhysicsMaterial_fxcs8")
+
+[node name="Rbarrier" type="MeshInstance3D" parent="laneCloth"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
-mesh = SubResource("BoxMesh_w56ka")
+mesh = SubResource("BoxMesh_4hcwo")
 
-[node name="LBarrier" type="MeshInstance3D" parent="lane"]
+[node name="LBarrier" type="MeshInstance3D" parent="laneCloth"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086381435, -0.565176)
-mesh = SubResource("BoxMesh_fxcs8")
+mesh = SubResource("BoxMesh_3hgm0")
 
-[node name="Floor" type="MeshInstance3D" parent="lane"]
-mesh = SubResource("BoxMesh_aomcl")
+[node name="Floor" type="MeshInstance3D" parent="laneCloth"]
+mesh = SubResource("BoxMesh_632io")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="lane"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="laneCloth"]
 shape = SubResource("BoxShape3D_lt5hn")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="lane"]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="laneCloth"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, -0.565)
 shape = SubResource("BoxShape3D_fxcs8")
 
-[node name="CollisionShape3D3" type="CollisionShape3D" parent="lane"]
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="laneCloth"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
+shape = SubResource("BoxShape3D_fxcs8")
+
+[node name="laneRubber" type="StaticBody3D" parent="."]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.1756198, 0, -10)
+physics_material_override = SubResource("PhysicsMaterial_4hcwo")
+
+[node name="Rbarrier" type="MeshInstance3D" parent="laneRubber"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
+mesh = SubResource("BoxMesh_fxvee")
+
+[node name="LBarrier" type="MeshInstance3D" parent="laneRubber"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086381435, -0.565176)
+mesh = SubResource("BoxMesh_d7l01")
+
+[node name="Floor" type="MeshInstance3D" parent="laneRubber"]
+mesh = SubResource("BoxMesh_glwuy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="laneRubber"]
+shape = SubResource("BoxShape3D_lt5hn")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="laneRubber"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, -0.565)
+shape = SubResource("BoxShape3D_fxcs8")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="laneRubber"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
 shape = SubResource("BoxShape3D_fxcs8")
 

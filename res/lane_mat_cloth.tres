@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://i0skkgbqocpn"]
+
+[ext_resource type="Texture2D" uid="uid://cvhgd2vnm4q" path="res://GFX/cloth.png" id="1_746qm"]
+
+[resource]
+albedo_color = Color(0.99331325, 0.77187, 0.7095325, 1)
+albedo_texture = ExtResource("1_746qm")
+uv1_scale = Vector3(20, 1.5, 1)

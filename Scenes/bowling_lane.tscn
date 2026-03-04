@@ -1,0 +1,52 @@
+[gd_scene load_steps=8 format=3 uid="uid://dy1n73wqdiydt"]
+
+[ext_resource type="Material" uid="uid://dhv24qs0yiphl" path="res://res/lane_mat_wood.tres" id="1_aktxr"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hymiy"]
+friction = 0.08
+bounce = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_w56ka"]
+lightmap_size_hint = Vector2i(129, 132)
+material = ExtResource("1_aktxr")
+size = Vector3(25, 0.185, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fxcs8"]
+material = ExtResource("1_aktxr")
+size = Vector3(25, 0.185, 0.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_aomcl"]
+material = ExtResource("1_aktxr")
+size = Vector3(25, 0.185, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_lt5hn"]
+size = Vector3(25, 0.185, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fxcs8"]
+size = Vector3(25, 0.185, 0.1)
+
+[node name="lane" type="StaticBody3D"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+physics_material_override = SubResource("PhysicsMaterial_hymiy")
+
+[node name="Rbarrier" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
+mesh = SubResource("BoxMesh_w56ka")
+
+[node name="LBarrier" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086381435, -0.565176)
+mesh = SubResource("BoxMesh_fxcs8")
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_aomcl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_lt5hn")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, -0.565)
+shape = SubResource("BoxShape3D_fxcs8")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
+shape = SubResource("BoxShape3D_fxcs8")
