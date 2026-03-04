@@ -157,7 +157,7 @@ distance_from_center = 0.75
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -10)
 
 [node name="laneCloth" type="StaticBody3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2.1005538, 0, -10)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2, 0, -10)
 physics_material_override = SubResource("PhysicsMaterial_fxcs8")
 
 [node name="Rbarrier" type="MeshInstance3D" parent="laneCloth"]
@@ -183,7 +183,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
 shape = SubResource("BoxShape3D_fxcs8")
 
 [node name="laneRubber" type="StaticBody3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.1756198, 0, -10)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, -10)
 physics_material_override = SubResource("PhysicsMaterial_4hcwo")
 
 [node name="Rbarrier" type="MeshInstance3D" parent="laneRubber"]
