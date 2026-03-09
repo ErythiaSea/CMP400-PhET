@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dlgiq4w8u6an6"]
+[gd_scene load_steps=8 format=3 uid="uid://dlgiq4w8u6an6"]
 
 [ext_resource type="Script" uid="uid://cgx51als5phaa" path="res://Scenes/main_menu.gd" id="1_1ehe0"]
 [ext_resource type="Texture2D" uid="uid://uiovn8h6xyro" path="res://GFX/menu_bg_temp.png" id="1_28flt"]
-[ext_resource type="Texture2D" uid="uid://d1m22d2jq0h1m" path="res://GFX/icon.svg" id="3_ce3w2"]
+[ext_resource type="Texture2D" uid="uid://p72t8cc4rb3i" path="res://GFX/projmot_icon.png" id="3_n45e2"]
+[ext_resource type="Texture2D" uid="uid://btumcuxh4swo6" path="res://GFX/bounce_icon.png" id="4_opfnp"]
+[ext_resource type="Texture2D" uid="uid://bltmecxinqcfb" path="res://GFX/collision_icon.png" id="5_cp0ys"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_48xlc"]
 font_size = 50
@@ -106,33 +108,35 @@ theme_override_constants/margin_bottom = 5
 [node name="SceneButtons" type="HBoxContainer" parent="SceneSelect/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="Bowling" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+[node name="ProjMot" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 32
-text = "Bowling"
-icon = ExtResource("3_ce3w2")
+text = "Projectile
+Motion"
+icon = ExtResource("3_n45e2")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="Siege" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+[node name="COR" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 32
-text = "Siege"
-icon = ExtResource("3_ce3w2")
+text = "Coefficient
+of Restitution"
+icon = ExtResource("4_opfnp")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="Pool" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+[node name="Collision" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 32
-text = "Pool"
-icon = ExtResource("3_ce3w2")
+text = "Collision"
+icon = ExtResource("5_cp0ys")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
@@ -153,7 +157,7 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [connection signal="pressed" from="MainButtons/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/Bowling" to="." method="_on_bowling_pressed"]
-[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/Siege" to="." method="_on_siege_pressed"]
-[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/Pool" to="." method="_on_pool_pressed"]
+[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/ProjMot" to="." method="_on_projmot_pressed"]
+[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/COR" to="." method="_on_cor_pressed"]
+[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/Collision" to="." method="_on_collision_pressed"]
 [connection signal="pressed" from="SceneSelect/VBoxContainer/Back" to="." method="_on_back_pressed"]
