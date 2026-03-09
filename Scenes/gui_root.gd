@@ -11,7 +11,12 @@ extends CanvasLayer
 @export var time_scale_slider: HSlider
 @export var time_scale_label: Label
 @export var ball_angle_label: Label
+@export var ball_vel_label: Label
 @export var force_ball: RigidBody3D
+
+@export var ctrl_panel: PanelContainer
+@export var ball_panel: PanelContainer
+@export var world_panel: PanelContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -48,3 +53,20 @@ func _on_time_scale_slider_value_changed(value: float) -> void:
 func _process(delta: float) -> void:
 	if (force_ball.freeze):
 		ball_angle_label.text = "Ball Angle: %.2f°" % force_ball.rotation_degrees.x
+	else:
+		var vel = force_ball.linear_velocity
+		if (abs(vel.y) < 0.001):
+			vel.y = 0.0
+		ball_vel_label.text = "X: %.3fm/s\nY: %.3fm/s\nZ: %.3fm/s" % [abs(vel.x), vel.y, abs(vel.z)]
+
+func _on_ball_button_pressed() -> void:
+	ball_panel.visible = !ball_panel.visible
+
+func _on_info_button_pressed() -> void:
+	ctrl_panel.visible = !ctrl_panel.visible
+	
+func _on_world_button_pressed() -> void:
+	world_panel.visible = !world_panel.visible
+
+func _on_back_button_pressed() -> void:
+	get_tree().change_scene_to_file(GameManager.MAIN_MENU_SCENE)

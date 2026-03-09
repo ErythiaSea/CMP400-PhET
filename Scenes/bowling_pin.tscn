@@ -4,8 +4,9 @@
 radius = 0.03
 height = 0.38
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_va20v"]
-size = Vector3(0.06, 0.38, 0.06)
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_va20v"]
+radius = 0.029785156
+height = 0.37005615
 
 [node name="BowlingPin" type="RigidBody3D"]
 mass = 1.5
@@ -17,4 +18,4 @@ mesh = SubResource("CapsuleMesh_va20v")
 skeleton = NodePath("../CollisionShape3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("BoxShape3D_va20v")
+shape = SubResource("CapsuleShape3D_va20v")

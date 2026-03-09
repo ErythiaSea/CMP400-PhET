@@ -9,21 +9,21 @@ bounce = 0.4
 [sub_resource type="BoxMesh" id="BoxMesh_w56ka"]
 lightmap_size_hint = Vector2i(129, 132)
 material = ExtResource("1_aktxr")
-size = Vector3(25, 0.185, 0.1)
+size = Vector3(17.5, 0.185, 0.1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_fxcs8"]
 material = ExtResource("1_aktxr")
-size = Vector3(25, 0.185, 0.1)
+size = Vector3(17.5, 0.185, 0.1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_aomcl"]
 material = ExtResource("1_aktxr")
-size = Vector3(25, 0.185, 1.1)
+size = Vector3(17.5, 0.185, 1.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_lt5hn"]
-size = Vector3(25, 0.185, 1.1)
+size = Vector3(17.5, 0.185, 1.1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_fxcs8"]
-size = Vector3(25, 0.185, 0.1)
+size = Vector3(17.5, 0.185, 0.1)
 
 [node name="lane" type="StaticBody3D"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)

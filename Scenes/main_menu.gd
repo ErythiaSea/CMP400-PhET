@@ -1,7 +1,5 @@
 extends Control
 @export_file(".tscn") var bowling_scene
-@export_file(".tscn") var siege_scene
-@export_file(".tscn") var pool_scene
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

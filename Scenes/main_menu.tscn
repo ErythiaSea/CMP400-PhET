@@ -47,7 +47,6 @@ text = "Game Name/Logo"
 label_settings = SubResource("LabelSettings_48xlc")
 
 [node name="MainButtons" type="VBoxContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -74,6 +73,7 @@ theme_override_font_sizes/font_size = 32
 text = "Options"
 
 [node name="SceneSelect" type="PanelContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

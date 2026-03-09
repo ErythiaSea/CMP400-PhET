@@ -1,5 +1,7 @@
 extends Node
 
+const MAIN_MENU_SCENE = "res://Scenes/main_menu.tscn"
+
 enum {
 	freeplay,
 	e_coeff,
