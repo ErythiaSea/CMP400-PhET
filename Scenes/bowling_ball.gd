@@ -7,6 +7,9 @@ extends RigidBody3D
 @export var traj_line: Node3D
 
 var fire_impulse_strength: float = 50
+var bounces: int = 0
+var bounce_timer: float = 0
+const BOUNCE_WAIT: float = 0.03
 
 var init_pos := Vector3(0, 1, 0)
 var last_pos := init_pos
@@ -30,6 +33,8 @@ func fire() -> void:
 func reset() -> void:
 	force_diag.hide()
 	freeze = true
+	bounce_timer = BOUNCE_WAIT
+	bounces = 0
 	
 	# i cannot understand why this is necessary but it is
 	(func(): position = last_pos).call_deferred()
@@ -45,6 +50,7 @@ func _process(delta: float) -> void:
 	if !freeze:
 		force_diag.accel = get_gravity()/mass
 		force_diag.vel = linear_velocity
+		bounce_timer -= delta
 		return
 	
 	if Input.is_action_pressed("ball_left"):
@@ -61,3 +67,10 @@ func _process(delta: float) -> void:
 		move_and_collide(Vector3.DOWN * 3 * delta)
 		
 	traj_line.expected_init_vel = fire_impulse_strength / mass
+
+
+func _on_body_entered(body: Node) -> void:
+	if (body is StaticBody3D and bounce_timer < 0):
+		bounces += 1
+		print(bounces)
+		bounce_timer = BOUNCE_WAIT

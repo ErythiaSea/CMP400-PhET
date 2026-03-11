@@ -129,6 +129,8 @@ physics_material_override = SubResource("PhysicsMaterial_65q5m")
 can_sleep = false
 freeze = true
 continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 1
 script = ExtResource("3_0fhea")
 traj_line = NodePath("../TrajectoryLine")
 
@@ -237,17 +239,20 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122710645, 0.287, -21.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -21.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "ball_angle_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("WorldPanel/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer")
 air_resistance_coefficient_slider = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer/ARCSlider")
 air_resistance_coefficient_label = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer/ARCSliderLabel")
+mass_slider = NodePath("BallPanel/VBoxContainer/MassSliderContainer/MassSlider")
+mass_label = NodePath("BallPanel/VBoxContainer/MassSliderContainer/MassLabel")
 push_strength_slider = NodePath("BallPanel/VBoxContainer/PSSliderContainer/PushStrengthSlider")
 push_strength_label = NodePath("BallPanel/VBoxContainer/PSSliderContainer/PSSliderLabel")
 time_scale_slider = NodePath("WorldPanel/VBoxContainer/TSSliderContainer/TimeScaleSlider")
 time_scale_label = NodePath("WorldPanel/VBoxContainer/TSSliderContainer/TSSliderLabel")
 ball_angle_label = NodePath("BallPanel/VBoxContainer/ResetBallContainer/AngleLabel")
+ball_bounces_label = NodePath("BallPanel/VBoxContainer/BouncesLabel")
 ball_vel_label = NodePath("BallPanel/VBoxContainer/VelocityFoldable/VelocityLabel")
 force_ball = NodePath("../ForceBall")
 ctrl_panel = NodePath("ControlsPanel")
@@ -272,7 +277,6 @@ WASD to move camera, Q/E for up/down
 Space to throw/reset ball"
 
 [node name="BallPanel" type="PanelContainer" parent="GUIRoot"]
-visible = false
 offset_left = 850.0
 offset_top = 139.0
 offset_right = 1170.0
@@ -291,7 +295,7 @@ layout_mode = 2
 [node name="PSSliderLabel" type="Label" parent="GUIRoot/BallPanel/VBoxContainer/PSSliderContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
-text = "Throw Impulse: 50"
+text = "Throw Impulse: 50N/s"
 
 [node name="PushStrengthSlider" type="HSlider" parent="GUIRoot/BallPanel/VBoxContainer/PSSliderContainer"]
 layout_mode = 2
@@ -301,6 +305,24 @@ size_flags_stretch_ratio = 0.5
 max_value = 300.0
 step = 0.01
 value = 50.0
+
+[node name="MassSliderContainer" type="HBoxContainer" parent="GUIRoot/BallPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="MassLabel" type="Label" parent="GUIRoot/BallPanel/VBoxContainer/MassSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Mass: 7.5kg"
+
+[node name="MassSlider" type="HSlider" parent="GUIRoot/BallPanel/VBoxContainer/MassSliderContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+max_value = 50.0
+step = 0.01
+value = 7.5
+exp_edit = true
 
 [node name="ResetBallContainer" type="HBoxContainer" parent="GUIRoot/BallPanel/VBoxContainer"]
 layout_mode = 2
@@ -314,6 +336,10 @@ text = "Ball Angle: 0°"
 layout_mode = 2
 focus_mode = 0
 text = "Reset Ball"
+
+[node name="BouncesLabel" type="Label" parent="GUIRoot/BallPanel/VBoxContainer"]
+layout_mode = 2
+text = "Bounces: 0"
 
 [node name="VelocityFoldable" type="FoldableContainer" parent="GUIRoot/BallPanel/VBoxContainer"]
 layout_mode = 2
@@ -478,6 +504,7 @@ texture_normal = ExtResource("18_0liue")
 ignore_texture_size = true
 stretch_mode = 4
 
+[connection signal="body_entered" from="ForceBall" to="ForceBall" method="_on_body_entered"]
 [connection signal="pressed" from="GUIRoot/BallPanel/VBoxContainer/ResetBallContainer/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/TSSliderContainer/TimeScaleSlider" to="GUIRoot" method="_on_time_scale_slider_value_changed"]
 [connection signal="pressed" from="GUIRoot/InfoButton" to="GUIRoot" method="_on_info_button_pressed"]

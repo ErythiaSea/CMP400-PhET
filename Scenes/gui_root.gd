@@ -11,6 +11,7 @@ extends CanvasLayer
 @export var time_scale_slider: HSlider
 @export var time_scale_label: Label
 @export var ball_angle_label: Label
+@export var ball_bounces_label: Label
 @export var ball_vel_label: Label
 @export var force_ball: RigidBody3D
 
@@ -39,11 +40,11 @@ func _on_artoggle_toggled(toggled_on: bool) -> void:
 	
 func _on_mass_slider_value_changed(value: float) -> void:
 	force_ball.mass = value
-	mass_label.text = "Ball Mass: %.2f" % value
+	mass_label.text = "Mass: %.2fkg" % value
 	
 func _on_ps_slider_value_changed(value: float) -> void:
 	force_ball.fire_impulse_strength = value
-	push_strength_label.text = "Throw Impulse: %.2f" % value
+	push_strength_label.text = "Throw Impulse: %.2fN/s" % value
 	
 func _on_time_scale_slider_value_changed(value: float) -> void:
 	Engine.time_scale = value
@@ -53,8 +54,9 @@ func _on_time_scale_slider_value_changed(value: float) -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if (force_ball.freeze):
-		ball_angle_label.text = "Ball Angle: %.2f°" % force_ball.rotation_degrees.x
+		ball_angle_label.text = "Angle: %.2f°" % force_ball.rotation_degrees.x
 	else:
+		ball_bounces_label.text = "Bounces: %d" % force_ball.bounces
 		var vel = force_ball.linear_velocity
 		if (abs(vel.y) < 0.001):
 			vel.y = 0.0
