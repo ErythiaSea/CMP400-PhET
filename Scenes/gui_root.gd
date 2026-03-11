@@ -17,6 +17,7 @@ extends CanvasLayer
 @export var ctrl_panel: PanelContainer
 @export var ball_panel: PanelContainer
 @export var world_panel: PanelContainer
+@export var equation_panel: PanelContainer
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -67,6 +68,9 @@ func _on_info_button_pressed() -> void:
 	
 func _on_world_button_pressed() -> void:
 	world_panel.visible = !world_panel.visible
+
+func _on_equation_button_pressed() -> void:
+	equation_panel.visible = !equation_panel.visible
 
 func _on_back_button_pressed() -> void:
 	get_tree().change_scene_to_file(GameManager.MAIN_MENU_SCENE)

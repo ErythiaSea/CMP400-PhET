@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=40 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://0l67gdedqmsj" path="res://Scenes/drag_panel.gd" id="15_idct1"]
 [ext_resource type="Texture2D" uid="uid://t0hh0d5dd3g5" path="res://GFX/ball_button.png" id="15_ir75a"]
 [ext_resource type="Texture2D" uid="uid://dkawvdfyptwev" path="res://GFX/world_button.png" id="16_f10g4"]
+[ext_resource type="Texture2D" uid="uid://wrn2ch2l71nh" path="res://GFX/formulae/cor.png" id="16_idct1"]
 [ext_resource type="Texture2D" uid="uid://c6rayo87as3ny" path="res://GFX/paper_button.png" id="17_idct1"]
 [ext_resource type="Texture2D" uid="uid://b4ixases7qjlv" path="res://GFX/back_button.png" id="18_0liue"]
 
@@ -236,7 +237,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122710645, 0.287, -21.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -21.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "ball_angle_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "ball_angle_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("WorldPanel/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer")
@@ -252,6 +253,7 @@ force_ball = NodePath("../ForceBall")
 ctrl_panel = NodePath("ControlsPanel")
 ball_panel = NodePath("BallPanel")
 world_panel = NodePath("WorldPanel")
+equation_panel = NodePath("FormulaPanel")
 
 [node name="ControlsPanel" type="PanelContainer" parent="GUIRoot"]
 offset_left = 851.0
@@ -308,7 +310,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "Ball Angle: 0°"
 
-[node name="Button" type="Button" parent="GUIRoot/BallPanel/VBoxContainer/ResetBallContainer"]
+[node name="ResetButton" type="Button" parent="GUIRoot/BallPanel/VBoxContainer/ResetBallContainer"]
 layout_mode = 2
 focus_mode = 0
 text = "Reset Ball"
@@ -386,6 +388,30 @@ max_value = 1.0
 step = 0.01
 value = 1.0
 
+[node name="FormulaPanel" type="PanelContainer" parent="GUIRoot"]
+offset_left = 964.0
+offset_top = 293.0
+offset_right = 1167.159
+offset_bottom = 389.0
+theme_override_styles/panel = ExtResource("14_f10g4")
+script = ExtResource("15_idct1")
+
+[node name="MarginContainer" type="MarginContainer" parent="GUIRoot/FormulaPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="CORFormula" type="TextureRect" parent="GUIRoot/FormulaPanel/MarginContainer"]
+layout_mode = 2
+tooltip_text = "e = Coefficient of Restitution
+v = final velocity
+u = initial velocity"
+texture = ExtResource("16_idct1")
+expand_mode = 3
+stretch_mode = 4
+
 [node name="InfoButton" type="TextureButton" parent="GUIRoot"]
 anchors_preset = 1
 anchor_left = 1.0
@@ -452,8 +478,10 @@ texture_normal = ExtResource("18_0liue")
 ignore_texture_size = true
 stretch_mode = 4
 
+[connection signal="pressed" from="GUIRoot/BallPanel/VBoxContainer/ResetBallContainer/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/TSSliderContainer/TimeScaleSlider" to="GUIRoot" method="_on_time_scale_slider_value_changed"]
 [connection signal="pressed" from="GUIRoot/InfoButton" to="GUIRoot" method="_on_info_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BallButton" to="GUIRoot" method="_on_ball_button_pressed"]
 [connection signal="pressed" from="GUIRoot/WorldButton" to="GUIRoot" method="_on_world_button_pressed"]
+[connection signal="pressed" from="GUIRoot/EquationButton" to="GUIRoot" method="_on_equation_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BackButton" to="GUIRoot" method="_on_back_button_pressed"]

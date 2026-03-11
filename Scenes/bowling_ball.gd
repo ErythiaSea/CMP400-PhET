@@ -29,9 +29,11 @@ func fire() -> void:
 
 func reset() -> void:
 	force_diag.hide()
-	position = last_pos
-	rotation = last_rot
 	freeze = true
+	
+	# i cannot understand why this is necessary but it is
+	(func(): position = last_pos).call_deferred()
+	(func(): rotation = last_rot).call_deferred()
 	
 func full_reset() -> void:
 	last_pos = init_pos

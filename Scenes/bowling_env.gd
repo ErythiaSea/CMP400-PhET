@@ -26,15 +26,25 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ball_fire"):
 		fired = !fired
-		_traj_line.toggle_aim(!fired)
 		if fired:
 			_bowling_ball.fire()
 			_gizmo.deselect(_bowling_ball)
+			_traj_line.toggle_aim(false)
 		else:
-			_bowling_ball.reset()
-			_gizmo.select(_bowling_ball)
-			for pin in $Pins.get_children() as Array[RigidBody3D]:
-				pin.position = pin_pos[pin]
-				pin.linear_velocity = Vector3.ZERO
-				pin.angular_velocity = Vector3.ZERO
-				pin.rotation = Vector3.ZERO
+			reset_scene(false)
+
+func reset_scene(full: bool = false) -> void:
+	if (full): 
+		_bowling_ball.full_reset()
+		fired = false
+	else: _bowling_ball.reset()
+	_gizmo.select(_bowling_ball)
+	_traj_line.toggle_aim(true)
+	for pin in $Pins.get_children() as Array[RigidBody3D]:
+		pin.position = pin_pos[pin]
+		pin.linear_velocity = Vector3.ZERO
+		pin.angular_velocity = Vector3.ZERO
+		pin.rotation = Vector3.ZERO
+
+func _on_reset_button_pressed() -> void:
+	reset_scene(true)
