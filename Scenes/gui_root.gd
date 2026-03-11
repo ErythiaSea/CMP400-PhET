@@ -19,6 +19,7 @@ extends CanvasLayer
 @export var ball_panel: PanelContainer
 @export var world_panel: PanelContainer
 @export var equation_panel: PanelContainer
+var panel_init_pos: Array[Vector2]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -27,6 +28,11 @@ func _ready() -> void:
 	if (mass_slider):
 		mass_slider.value_changed.connect(_on_mass_slider_value_changed)
 	push_strength_slider.value_changed.connect(_on_ps_slider_value_changed)
+	
+	panel_init_pos.append(ctrl_panel.position)
+	panel_init_pos.append(ball_panel.position)
+	panel_init_pos.append(world_panel.position)
+	panel_init_pos.append(equation_panel.position)
 	pass # Replace with function body.
 
 # holy hardcoding batman!
@@ -76,3 +82,9 @@ func _on_equation_button_pressed() -> void:
 
 func _on_back_button_pressed() -> void:
 	get_tree().change_scene_to_file(GameManager.MAIN_MENU_SCENE)
+
+func _on_reset_windows_button_pressed() -> void:
+	ctrl_panel.position = panel_init_pos[0]
+	ball_panel.position = panel_init_pos[1]
+	world_panel.position = panel_init_pos[2]
+	equation_panel.position = panel_init_pos[3]

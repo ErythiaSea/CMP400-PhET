@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=43 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -19,8 +19,11 @@
 [ext_resource type="Texture2D" uid="uid://t0hh0d5dd3g5" path="res://GFX/ball_button.png" id="15_ir75a"]
 [ext_resource type="Texture2D" uid="uid://dkawvdfyptwev" path="res://GFX/world_button.png" id="16_f10g4"]
 [ext_resource type="Texture2D" uid="uid://wrn2ch2l71nh" path="res://GFX/formulae/cor.png" id="16_idct1"]
+[ext_resource type="Texture2D" uid="uid://bpn8upbcv2lgd" path="res://GFX/formulae/suvat.png" id="17_0liue"]
 [ext_resource type="Texture2D" uid="uid://c6rayo87as3ny" path="res://GFX/paper_button.png" id="17_idct1"]
+[ext_resource type="Texture2D" uid="uid://dg2viabvy562a" path="res://GFX/formulae/cons_momentum.png" id="17_p1fxj"]
 [ext_resource type="Texture2D" uid="uid://b4ixases7qjlv" path="res://GFX/back_button.png" id="18_0liue"]
+[ext_resource type="Texture2D" uid="uid://dh25x1koml73p" path="res://GFX/reset_button.png" id="23_insud"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
 panorama = ExtResource("1_deeac")
@@ -277,10 +280,12 @@ WASD to move camera, Q/E for up/down
 Space to throw/reset ball"
 
 [node name="BallPanel" type="PanelContainer" parent="GUIRoot"]
+visible = false
 offset_left = 850.0
 offset_top = 139.0
 offset_right = 1170.0
 offset_bottom = 234.0
+size_flags_vertical = 3
 theme_override_styles/panel = ExtResource("14_f10g4")
 script = ExtResource("15_idct1")
 
@@ -415,10 +420,11 @@ step = 0.01
 value = 1.0
 
 [node name="FormulaPanel" type="PanelContainer" parent="GUIRoot"]
-offset_left = 964.0
+visible = false
+offset_left = 931.0
 offset_top = 293.0
 offset_right = 1167.159
-offset_bottom = 389.0
+offset_bottom = 537.0
 theme_override_styles/panel = ExtResource("14_f10g4")
 script = ExtResource("15_idct1")
 
@@ -429,13 +435,52 @@ theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="CORFormula" type="TextureRect" parent="GUIRoot/FormulaPanel/MarginContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="GUIRoot/FormulaPanel/MarginContainer"]
 layout_mode = 2
-tooltip_text = "e = Coefficient of Restitution
-v = final velocity
-u = initial velocity"
+
+[node name="HBoxContainer" type="VBoxContainer" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer"]
+layout_mode = 2
+
+[node name="CORLabel" type="Label" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+text = "Coefficient of Restitution:"
+
+[node name="CORFormula" type="TextureRect" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "e = coefficient of restitution
+v = final velocity (m/s)
+u = initial velocity (m/s)"
 texture = ExtResource("16_idct1")
-expand_mode = 3
+expand_mode = 5
+stretch_mode = 4
+
+[node name="CMLabel" type="Label" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Conservation of Momentum:"
+
+[node name="CORFormula2" type="TextureRect" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "m = mass (kg)
+u = initial velocity (m/s)
+v = final velocity (m/s)"
+texture = ExtResource("17_p1fxj")
+expand_mode = 5
+stretch_mode = 4
+
+[node name="PMLabel" type="Label" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+text = "Projectile Motion:"
+
+[node name="SUVATFormulae" type="TextureRect" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer"]
+layout_mode = 2
+tooltip_text = "s = displacement (m)
+u = initial velocity (m/s)
+v = final velocity (m/s)
+a = acceleration (m/s²)
+t = time (s)"
+texture = ExtResource("17_0liue")
+expand_mode = 5
 stretch_mode = 4
 
 [node name="InfoButton" type="TextureButton" parent="GUIRoot"]
@@ -447,6 +492,7 @@ offset_top = 15.0
 offset_right = -13.0
 offset_bottom = 102.0
 grow_horizontal = 0
+tooltip_text = "Controls"
 focus_mode = 0
 texture_normal = ExtResource("14_glwuy")
 ignore_texture_size = true
@@ -461,6 +507,7 @@ offset_top = 109.0
 offset_right = -13.0
 offset_bottom = 196.0
 grow_horizontal = 0
+tooltip_text = "Ball data/settings"
 focus_mode = 0
 texture_normal = ExtResource("15_ir75a")
 ignore_texture_size = true
@@ -475,6 +522,7 @@ offset_top = 205.0
 offset_right = -13.0
 offset_bottom = 292.0
 grow_horizontal = 0
+tooltip_text = "World settings"
 focus_mode = 0
 texture_normal = ExtResource("16_f10g4")
 ignore_texture_size = true
@@ -489,8 +537,24 @@ offset_top = 301.0
 offset_right = -13.0
 offset_bottom = 388.0
 grow_horizontal = 0
+tooltip_text = "Formula sheet"
 focus_mode = 0
 texture_normal = ExtResource("17_idct1")
+ignore_texture_size = true
+stretch_mode = 4
+
+[node name="ResetWindowsButton" type="TextureButton" parent="GUIRoot"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -56.0
+offset_top = 395.0
+offset_right = -13.0
+offset_bottom = 438.5
+grow_horizontal = 0
+tooltip_text = "Reset window positions"
+focus_mode = 0
+texture_normal = ExtResource("23_insud")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -499,6 +563,7 @@ offset_left = 20.0
 offset_top = 15.0
 offset_right = 106.0
 offset_bottom = 102.0
+tooltip_text = "Back to main menu"
 focus_mode = 0
 texture_normal = ExtResource("18_0liue")
 ignore_texture_size = true
@@ -511,4 +576,5 @@ stretch_mode = 4
 [connection signal="pressed" from="GUIRoot/BallButton" to="GUIRoot" method="_on_ball_button_pressed"]
 [connection signal="pressed" from="GUIRoot/WorldButton" to="GUIRoot" method="_on_world_button_pressed"]
 [connection signal="pressed" from="GUIRoot/EquationButton" to="GUIRoot" method="_on_equation_button_pressed"]
+[connection signal="pressed" from="GUIRoot/ResetWindowsButton" to="GUIRoot" method="_on_reset_windows_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BackButton" to="GUIRoot" method="_on_back_button_pressed"]
