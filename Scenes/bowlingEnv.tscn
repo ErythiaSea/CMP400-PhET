@@ -1,4 +1,4 @@
-[gd_scene load_steps=43 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=46 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://dg2viabvy562a" path="res://GFX/formulae/cons_momentum.png" id="17_p1fxj"]
 [ext_resource type="Texture2D" uid="uid://b4ixases7qjlv" path="res://GFX/back_button.png" id="18_0liue"]
 [ext_resource type="Texture2D" uid="uid://dh25x1koml73p" path="res://GFX/reset_button.png" id="23_insud"]
+[ext_resource type="Texture2D" uid="uid://eyiqgejloe2e" path="res://GFX/play_button.png" id="25_eysce"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
 panorama = ExtResource("1_deeac")
@@ -80,7 +81,7 @@ size = Vector3(17.5, 0.185, 0.1)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_4hcwo"]
 friction = 0.08
-bounce = 1.0
+bounce = 0.4
 
 [sub_resource type="BoxMesh" id="BoxMesh_fxvee"]
 material = ExtResource("11_4hcwo")
@@ -93,6 +94,12 @@ size = Vector3(17.5, 0.185, 0.1)
 [sub_resource type="BoxMesh" id="BoxMesh_glwuy"]
 material = ExtResource("11_4hcwo")
 size = Vector3(17.5, 0.185, 1.1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_insud"]
+size = Vector3(1, 3, 0.05)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_eysce"]
+points = PackedVector3Array(-0.5, -1.5, -0.025, -0.5, -1.5, 0.025, -0.5, 1.5, -0.025, 0.5, -1.5, -0.025, 0.5, -1.5, 0.025, -0.5, 1.5, 0.025, 0.5, 1.5, -0.025, 0.5, 1.5, 0.025)
 
 [node name="BowlingEnv" type="Node3D"]
 script = ExtResource("1_0fhea")
@@ -209,38 +216,50 @@ shape = SubResource("BoxShape3D_fxcs8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
 shape = SubResource("BoxShape3D_fxcs8")
 
+[node name="barrier" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0.093, -7.5)
+physics_material_override = SubResource("PhysicsMaterial_4hcwo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="barrier"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
+mesh = SubResource("BoxMesh_insud")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="barrier"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
+shape = SubResource("ConvexPolygonShape3D_eysce")
+
 [node name="Pins" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
 
 [node name="BowlingPin" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2874456, -21.155258)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.287, -15.155)
 
 [node name="BowlingPin2" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.11149472, 0.2874456, -21.320173)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.111, 0.287, -15.32)
 
 [node name="BowlingPin6" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111, 0.287, -21.32)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.111, 0.287, -15.32)
 
 [node name="BowlingPin3" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.287, -21.475)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.287, -15.475)
 
 [node name="BowlingPin4" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22476788, 0.287, -21.475)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.225, 0.287, -15.475)
 
 [node name="BowlingPin7" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.33107448, 0.287, -21.646578)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.331, 0.287, -15.647)
 
 [node name="BowlingPin8" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.118700385, 0.287, -21.646578)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.119, 0.287, -15.647)
 
 [node name="BowlingPin9" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.331, 0.287, -21.647)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.331, 0.287, -15.647)
 
 [node name="BowlingPin10" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122710645, 0.287, -21.647)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123, 0.287, -15.647)
 
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -21.475)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -15.475)
 
 [node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel")]
 script = ExtResource("10_w56ka")
@@ -607,6 +626,17 @@ texture_normal = ExtResource("18_0liue")
 ignore_texture_size = true
 stretch_mode = 4
 
+[node name="PlayButton" type="TextureButton" parent="GUIRoot"]
+offset_left = 20.0
+offset_top = 104.0
+offset_right = 106.0
+offset_bottom = 191.0
+tooltip_text = "Back to main menu"
+focus_mode = 0
+texture_normal = ExtResource("25_eysce")
+ignore_texture_size = true
+stretch_mode = 4
+
 [connection signal="body_entered" from="ForceBall" to="ForceBall" method="_on_body_entered"]
 [connection signal="pressed" from="GUIRoot/BallPanel/VBoxContainer/ResetBallContainer/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/TSSliderContainer/TimeScaleSlider" to="GUIRoot" method="_on_time_scale_slider_value_changed"]
@@ -620,3 +650,4 @@ stretch_mode = 4
 [connection signal="pressed" from="GUIRoot/EquationButton" to="GUIRoot" method="_on_equation_button_pressed"]
 [connection signal="pressed" from="GUIRoot/ResetWindowsButton" to="GUIRoot" method="_on_reset_windows_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BackButton" to="GUIRoot" method="_on_back_button_pressed"]
+[connection signal="pressed" from="GUIRoot/PlayButton" to="." method="_on_play_button_pressed"]
