@@ -8,14 +8,14 @@
 [ext_resource type="Script" uid="uid://e3f1ox6y6cvg" path="res://addons/Gizmo3DScript/gizmo3D.gd" id="6_wp4vv"]
 [ext_resource type="Texture2D" uid="uid://b8ydn45666nk7" path="res://GFX/bowling_ball.png" id="7_fxcs8"]
 [ext_resource type="Script" uid="uid://cigrabbeusvkm" path="res://Scenes/trajectory_line.gd" id="8_hymiy"]
-[ext_resource type="PackedScene" uid="uid://dy1n73wqdiydt" path="res://Scenes/bowling_lane.tscn" id="9_aomcl"]
+[ext_resource type="PackedScene" uid="uid://b0xdw4bce824e" path="res://Scenes/bowling_lane.tscn" id="9_aomcl"]
 [ext_resource type="PackedScene" uid="uid://4oeyivm4nvdn" path="res://Scenes/bowling_pin.tscn" id="9_lt5hn"]
 [ext_resource type="Material" uid="uid://i0skkgbqocpn" path="res://res/lane_mat_cloth.tres" id="10_fxcs8"]
 [ext_resource type="Script" uid="uid://c1l5soefw1mvj" path="res://Scenes/gui_root.gd" id="10_w56ka"]
 [ext_resource type="Material" uid="uid://bdqpj5wm15e50" path="res://res/lane_mat_rubber.tres" id="11_4hcwo"]
 [ext_resource type="StyleBox" uid="uid://cj3bxi8rmmo3e" path="res://res/panelstyle.tres" id="14_f10g4"]
 [ext_resource type="Texture2D" uid="uid://e21difm402tw" path="res://GFX/info_button.png" id="14_glwuy"]
-[ext_resource type="Script" uid="uid://0l67gdedqmsj" path="res://Scenes/drag_panel.gd" id="15_idct1"]
+[ext_resource type="Script" path="res://Scenes/drag_panel.gd" id="15_idct1"]
 [ext_resource type="Texture2D" uid="uid://t0hh0d5dd3g5" path="res://GFX/ball_button.png" id="15_ir75a"]
 [ext_resource type="Texture2D" uid="uid://dkawvdfyptwev" path="res://GFX/world_button.png" id="16_f10g4"]
 [ext_resource type="Texture2D" uid="uid://wrn2ch2l71nh" path="res://GFX/formulae/cor.png" id="16_idct1"]
@@ -242,7 +242,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.122710645, 0.287, -21.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -21.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("WorldPanel/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer")
@@ -254,6 +254,9 @@ push_strength_slider = NodePath("BallPanel/VBoxContainer/PSSliderContainer/PushS
 push_strength_label = NodePath("BallPanel/VBoxContainer/PSSliderContainer/PSSliderLabel")
 time_scale_slider = NodePath("WorldPanel/VBoxContainer/TSSliderContainer/TimeScaleSlider")
 time_scale_label = NodePath("WorldPanel/VBoxContainer/TSSliderContainer/TSSliderLabel")
+pin_mass_slider = NodePath("WorldPanel/VBoxContainer/PinMassContainer/PinMassSlider")
+pin_mass_label = NodePath("WorldPanel/VBoxContainer/PinMassContainer/PinMassLabel")
+wood_e_label = NodePath("WorldPanel/VBoxContainer/WoodEContainer/WoodELabel")
 ball_angle_label = NodePath("BallPanel/VBoxContainer/ResetBallContainer/AngleLabel")
 ball_bounces_label = NodePath("BallPanel/VBoxContainer/BouncesLabel")
 ball_vel_label = NodePath("BallPanel/VBoxContainer/VelocityFoldable/VelocityLabel")
@@ -360,7 +363,6 @@ Y: 0.00
 Z: 0.00"
 
 [node name="WorldPanel" type="PanelContainer" parent="GUIRoot"]
-visible = false
 offset_left = 849.0
 offset_top = 218.0
 offset_right = 1173.0
@@ -418,6 +420,42 @@ size_flags_stretch_ratio = 0.5
 max_value = 1.0
 step = 0.01
 value = 1.0
+
+[node name="PinMassContainer" type="HBoxContainer" parent="GUIRoot/WorldPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="PinMassLabel" type="Label" parent="GUIRoot/WorldPanel/VBoxContainer/PinMassContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Pin Mass: 1.5kg"
+
+[node name="PinMassSlider" type="HSlider" parent="GUIRoot/WorldPanel/VBoxContainer/PinMassContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+min_value = 0.01
+max_value = 25.0
+step = 0.01
+value = 1.5
+
+[node name="WoodEContainer" type="HBoxContainer" parent="GUIRoot/WorldPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="WoodELabel" type="Label" parent="GUIRoot/WorldPanel/VBoxContainer/WoodEContainer"]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Wood Lane e: 0.4"
+
+[node name="WoodESlider" type="HSlider" parent="GUIRoot/WorldPanel/VBoxContainer/WoodEContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+size_flags_stretch_ratio = 0.5
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 0.4
 
 [node name="FormulaPanel" type="PanelContainer" parent="GUIRoot"]
 visible = false
@@ -572,6 +610,10 @@ stretch_mode = 4
 [connection signal="body_entered" from="ForceBall" to="ForceBall" method="_on_body_entered"]
 [connection signal="pressed" from="GUIRoot/BallPanel/VBoxContainer/ResetBallContainer/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/TSSliderContainer/TimeScaleSlider" to="GUIRoot" method="_on_time_scale_slider_value_changed"]
+[connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/PinMassContainer/PinMassSlider" to="." method="_on_pin_mass_slider_value_changed"]
+[connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/PinMassContainer/PinMassSlider" to="GUIRoot" method="_on_pin_mass_slider_value_changed"]
+[connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/WoodEContainer/WoodESlider" to="." method="_on_wood_e_slider_value_changed"]
+[connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/WoodEContainer/WoodESlider" to="GUIRoot" method="_on_wood_e_slider_value_changed"]
 [connection signal="pressed" from="GUIRoot/InfoButton" to="GUIRoot" method="_on_info_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BallButton" to="GUIRoot" method="_on_ball_button_pressed"]
 [connection signal="pressed" from="GUIRoot/WorldButton" to="GUIRoot" method="_on_world_button_pressed"]

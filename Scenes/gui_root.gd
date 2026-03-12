@@ -10,6 +10,9 @@ extends CanvasLayer
 @export var push_strength_label: Label
 @export var time_scale_slider: HSlider
 @export var time_scale_label: Label
+@export var pin_mass_slider: HSlider
+@export var pin_mass_label: Label
+@export var wood_e_label: Label
 @export var ball_angle_label: Label
 @export var ball_bounces_label: Label
 @export var ball_vel_label: Label
@@ -88,3 +91,9 @@ func _on_reset_windows_button_pressed() -> void:
 	ball_panel.position = panel_init_pos[1]
 	world_panel.position = panel_init_pos[2]
 	equation_panel.position = panel_init_pos[3]
+
+func _on_pin_mass_slider_value_changed(value: float) -> void:
+	pin_mass_label.text = "Pin Mass: %.2fkg" % value
+
+func _on_wood_e_slider_value_changed(value: float) -> void:
+	wood_e_label.text = "Wood Lane e: %.2f" % value

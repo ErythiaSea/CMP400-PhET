@@ -1,10 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://dy1n73wqdiydt"]
+[gd_scene load_steps=8 format=3 uid="uid://b0xdw4bce824e"]
 
 [ext_resource type="Material" uid="uid://dhv24qs0yiphl" path="res://res/lane_mat_wood.tres" id="1_aktxr"]
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hymiy"]
-friction = 0.08
-bounce = 0.4
+[ext_resource type="PhysicsMaterial" uid="uid://c8xffs462r80o" path="res://res/bowling_lane_phys_mat.tres" id="1_ytl8i"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_w56ka"]
 lightmap_size_hint = Vector2i(129, 132)
@@ -27,7 +24,7 @@ size = Vector3(17.5, 0.185, 0.1)
 
 [node name="lane" type="StaticBody3D"]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
-physics_material_override = SubResource("PhysicsMaterial_hymiy")
+physics_material_override = ExtResource("1_ytl8i")
 
 [node name="Rbarrier" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)

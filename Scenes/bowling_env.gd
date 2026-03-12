@@ -48,3 +48,10 @@ func reset_scene(full: bool = false) -> void:
 
 func _on_reset_button_pressed() -> void:
 	reset_scene(true)
+
+func _on_pin_mass_slider_value_changed(value: float) -> void:
+	for pin in $Pins.get_children() as Array[RigidBody3D]:
+		pin.mass = value
+
+func _on_wood_e_slider_value_changed(value: float) -> void:
+	_lane_wood.physics_material_override.bounce = value
