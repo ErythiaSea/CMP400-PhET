@@ -4,6 +4,7 @@ extends MeshInstance3D
 @export var projectile: Node3D
 
 var show_aim = true
+var short = false
 var base_line_thickness := 0.03
 
 var expected_init_vel: float

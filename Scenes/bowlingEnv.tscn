@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=49 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -25,8 +25,9 @@
 [ext_resource type="Texture2D" uid="uid://dg2viabvy562a" path="res://GFX/formulae/cons_momentum.png" id="17_p1fxj"]
 [ext_resource type="Texture2D" uid="uid://b4ixases7qjlv" path="res://GFX/back_button.png" id="18_0liue"]
 [ext_resource type="Texture2D" uid="uid://d0u55huwocfos" path="res://GFX/formulae/ehh coeff.png" id="18_y0auy"]
+[ext_resource type="Script" uid="uid://b3qrdh1ct0w5" path="res://Scenes/number_box.gd" id="21_y0auy"]
 [ext_resource type="Texture2D" uid="uid://dh25x1koml73p" path="res://GFX/reset_button.png" id="23_insud"]
-[ext_resource type="Texture2D" uid="uid://eyiqgejloe2e" path="res://GFX/play_button.png" id="25_eysce"]
+[ext_resource type="Texture2D" uid="uid://dl6ic7b5d82n7" path="res://GFX/question_button.png" id="28_22p0g"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
 panorama = ExtResource("1_deeac")
@@ -47,18 +48,18 @@ reflected_light_source = 1
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_lt5hn"]
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65q5m"]
-friction = 0.2
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
-radius = 0.107
-
 [sub_resource type="SphereMesh" id="SphereMesh_b17vh"]
 radius = 0.107
 height = 0.214
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unano"]
 albedo_texture = ExtResource("7_fxcs8")
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65q5m"]
+friction = 0.2
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
+radius = 0.107
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fxcs8"]
 friction = 0.08
@@ -133,6 +134,13 @@ mesh = SubResource("ImmediateMesh_lt5hn")
 skeleton = NodePath("../ForceBall")
 script = ExtResource("8_hymiy")
 projectile = NodePath("../ForceBall")
+
+[node name="GhostBall" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+mesh = SubResource("SphereMesh_b17vh")
+skeleton = NodePath("../ForceBall")
+surface_material_override/0 = SubResource("StandardMaterial3D_unano")
 
 [node name="ForceBall" type="RigidBody3D" parent="." node_paths=PackedStringArray("traj_line")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -218,15 +226,27 @@ shape = SubResource("BoxShape3D_fxcs8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
 shape = SubResource("BoxShape3D_fxcs8")
 
-[node name="barrier" type="StaticBody3D" parent="."]
+[node name="barrier0" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0.093, -7.5)
 physics_material_override = SubResource("PhysicsMaterial_4hcwo")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="barrier"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="barrier0"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
 mesh = SubResource("BoxMesh_insud")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="barrier"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="barrier0"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
+shape = SubResource("ConvexPolygonShape3D_eysce")
+
+[node name="barrier1" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0.093, -7.5)
+physics_material_override = SubResource("PhysicsMaterial_4hcwo")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="barrier1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
+mesh = SubResource("BoxMesh_insud")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="barrier1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
 shape = SubResource("ConvexPolygonShape3D_eysce")
 
@@ -563,6 +583,69 @@ texture = ExtResource("17_0liue")
 expand_mode = 5
 stretch_mode = 4
 
+[node name="QuestionPanel" type="PanelContainer" parent="GUIRoot"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -92.0
+offset_right = 705.0
+grow_vertical = 0
+theme_override_styles/panel = ExtResource("14_f10g4")
+script = ExtResource("15_idct1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUIRoot/QuestionPanel"]
+layout_mode = 2
+
+[node name="QuestionLabel" type="Label" parent="GUIRoot/QuestionPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Here's some big yappy question with some parameters.
+Solve my riddles, etc."
+
+[node name="PLChContainer" type="HBoxContainer" parent="GUIRoot/QuestionPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ParamContainer" type="HBoxContainer" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Param1Label" type="Label" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer"]
+layout_mode = 2
+text = "Param1:"
+
+[node name="Param1Box" type="LineEdit" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+expand_to_text_length = true
+emoji_menu_enabled = false
+virtual_keyboard_type = 3
+script = ExtResource("21_y0auy")
+
+[node name="Param2Label" type="Label" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer"]
+layout_mode = 2
+text = ", Param2:"
+
+[node name="Param2Box" type="LineEdit" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+expand_to_text_length = true
+emoji_menu_enabled = false
+virtual_keyboard_type = 3
+script = ExtResource("21_y0auy")
+
+[node name="CheckContainer" type="HBoxContainer" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer"]
+layout_mode = 2
+alignment = 2
+
+[node name="CheckButton" type="Button" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/CheckContainer"]
+layout_mode = 2
+text = "Check"
+
+[node name="SkipButton" type="Button" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/CheckContainer"]
+layout_mode = 2
+text = "Skip
+"
+
 [node name="InfoButton" type="TextureButton" parent="GUIRoot"]
 anchors_preset = 1
 anchor_left = 1.0
@@ -656,7 +739,7 @@ offset_right = 106.0
 offset_bottom = 191.0
 tooltip_text = "Back to main menu"
 focus_mode = 0
-texture_normal = ExtResource("25_eysce")
+texture_normal = ExtResource("28_22p0g")
 ignore_texture_size = true
 stretch_mode = 4
 

@@ -22,7 +22,16 @@ extends CanvasLayer
 @export var ball_panel: PanelContainer
 @export var world_panel: PanelContainer
 @export var equation_panel: PanelContainer
+@export var question_panel: PanelContainer
 var panel_init_pos: Array[Vector2]
+
+@export var question_label: Label
+@export var param1_label: Label
+@export var param1_box: LineEdit
+@export var param2_label: Label
+@export var param2_box: LineEdit
+@export var check_button: Button
+@export var skip_button: Button
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -31,6 +40,8 @@ func _ready() -> void:
 	if (mass_slider):
 		mass_slider.value_changed.connect(_on_mass_slider_value_changed)
 	push_strength_slider.value_changed.connect(_on_ps_slider_value_changed)
+	
+	GameManager.new_question_type.connect(_on_new_q_type)
 	
 	panel_init_pos.append(ctrl_panel.position)
 	panel_init_pos.append(ball_panel.position)
@@ -97,3 +108,6 @@ func _on_pin_mass_slider_value_changed(value: float) -> void:
 
 func _on_wood_e_slider_value_changed(value: float) -> void:
 	wood_e_label.text = "Wood Lane e: %.2f" % value
+	
+func _on_new_q_type(type: GameManager.q_type) -> void:
+	pass

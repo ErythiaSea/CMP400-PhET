@@ -7,13 +7,16 @@ extends Node3D
 @onready var _lane_wood: StaticBody3D = $laneWood
 @onready var _lane_cloth: StaticBody3D = $laneCloth
 @onready var _lane_rubber: StaticBody3D = $laneRubber
-@onready var _barrier: StaticBody3D = $barrier
+@onready var _barrier: StaticBody3D = $barrier0
+@onready var _top_barrier: StaticBody3D = $barrier1
 
 var pin_pos: Dictionary[RigidBody3D, Vector3]
 var fired: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	GameManager.new_question_type.connect(_on_new_q_type)
+	
 	_barrier.hide()
 	_barrier.process_mode = Node.PROCESS_MODE_DISABLED
 		
@@ -72,6 +75,36 @@ func _construct_lob_setup() -> void:
 	_bowling_ball.position.y = 0.2
 	$Pins.get_child(0).position.z = _barrier.position.z - dist
 	_traj_line.hide()
+	
+func _construct_needle_setup() -> void:
+	var dist = randf_range(0.5, 6.0)
+	var barrier_y_scale = randf_range(0.3, 1.5)
+	
+	_barrier.scale.y = barrier_y_scale
+	_bowling_ball.position.z = _barrier.position.z + dist
+	_bowling_ball.position.y = 0.2
+	$Pins.get_child(0).position.z = _barrier.position.z - dist
+	_traj_line.hide()
+	
+func _construct_drop_setup() -> void:
+	var dist = randf_range(0.4, 2.0)
+	var barrier_y_scale = randf_range(0.3, 1.5)
+	
+	_barrier.scale.y = barrier_y_scale
+	_bowling_ball.position.z = _barrier.position.z + dist
+	_bowling_ball.position.y = 0.2
+	$Pins.get_child(0).position.z = _barrier.position.z - dist
+	_traj_line.hide()
+	
+func _construct_collision_setup() -> void:
+	var dist = randf_range(0.4, 2.0)
+	var barrier_y_scale = randf_range(0.3, 1.5)
+	
+	_barrier.scale.y = barrier_y_scale
+	_bowling_ball.position.z = _barrier.position.z + dist
+	_bowling_ball.position.y = 0.2
+	$Pins.get_child(0).position.z = _barrier.position.z - dist
+	_traj_line.hide()
 
 func _on_reset_button_pressed() -> void:
 	reset_scene(true)
@@ -88,3 +121,6 @@ func _on_play_button_pressed() -> void:
 		_construct_lob_setup()
 	else:
 		push_warning("no function for this button in this mode yet!")
+		
+func _on_new_q_type(type: GameManager.q_type) -> void:
+	pass
