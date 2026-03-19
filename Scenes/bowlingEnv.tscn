@@ -149,7 +149,6 @@ skeleton = NodePath("../ForceBall")
 surface_material_override/0 = SubResource("StandardMaterial3D_22p0g")
 
 [node name="ForceBall" type="RigidBody3D" parent="." node_paths=PackedStringArray("traj_line")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 mass = 7.0
 physics_material_override = SubResource("PhysicsMaterial_65q5m")
 can_sleep = false
@@ -173,15 +172,15 @@ mesh = SubResource("SphereMesh_b17vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_unano")
 
 [node name="ArrowRoot" parent="ForceBall" instance=ExtResource("4_0fhea")]
-transform = Transform3D(0.0001, 0, 0, 0, 0.0001, 0, 0, 0, 0.0001, 0, 1, 0)
+transform = Transform3D(0.0001, 0, 0, 0, 0.0001, 0, 0, 0, 0.0001, 0, 0, 0)
 length_scale = 0.5
 distance_from_center = 0.75
 
 [node name="laneWood" parent="." instance=ExtResource("9_aomcl")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, -7.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.2, -7.5)
 
 [node name="laneCloth" type="StaticBody3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2, 0, -7.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 2, -0.2, -7.5)
 physics_material_override = SubResource("PhysicsMaterial_fxcs8")
 
 [node name="Rbarrier" type="MeshInstance3D" parent="laneCloth"]
@@ -207,7 +206,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
 shape = SubResource("BoxShape3D_fxcs8")
 
 [node name="laneRubber" type="StaticBody3D" parent="."]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, -7.5)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, -0.2, -7.5)
 physics_material_override = SubResource("PhysicsMaterial_4hcwo")
 
 [node name="Rbarrier" type="MeshInstance3D" parent="laneRubber"]
@@ -532,7 +531,7 @@ theme_override_constants/margin_bottom = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="GUIRoot/FormulaPanel/MarginContainer"]
 layout_mode = 2
-scroll_vertical = 265
+scroll_vertical = 94
 
 [node name="HBoxContainer" type="VBoxContainer" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer"]
 layout_mode = 2
@@ -775,10 +774,11 @@ stretch_mode = 4
 [connection signal="value_changed" from="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param1Box" to="." method="_on_param_1_value_changed"]
 [connection signal="value_changed" from="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param2Box" to="." method="_on_param_2_value_changed"]
 [connection signal="pressed" from="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/CheckContainer/CheckButton" to="." method="_on_check_button_pressed"]
+[connection signal="pressed" from="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/CheckContainer/SkipButton" to="." method="_on_skip_button_pressed"]
 [connection signal="pressed" from="GUIRoot/InfoButton" to="GUIRoot" method="_on_info_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BallButton" to="GUIRoot" method="_on_ball_button_pressed"]
 [connection signal="pressed" from="GUIRoot/WorldButton" to="GUIRoot" method="_on_world_button_pressed"]
 [connection signal="pressed" from="GUIRoot/EquationButton" to="GUIRoot" method="_on_equation_button_pressed"]
 [connection signal="pressed" from="GUIRoot/ResetWindowsButton" to="GUIRoot" method="_on_reset_windows_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BackButton" to="GUIRoot" method="_on_back_button_pressed"]
-[connection signal="pressed" from="GUIRoot/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="GUIRoot/PlayButton" to="GUIRoot" method="_on_play_button_pressed"]

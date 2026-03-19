@@ -148,3 +148,6 @@ func format_question(args: Dictionary[String, float]) -> void:
 		GameManager.q_type.col_init_ballspeed, GameManager.q_type.col_final_ballspeed, GameManager.q_type.col_final_pinspeed: 
 			param1_label.text = "Velocity: "
 			param2_label.text = "m/s"
+
+func _on_play_button_pressed() -> void:
+	question_panel.visible = !question_panel.visible

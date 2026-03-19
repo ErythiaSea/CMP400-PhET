@@ -37,8 +37,9 @@ func reset() -> void:
 	bounces = 0
 	
 	# i cannot understand why this is necessary but it is
-	(func(): position = last_pos).call_deferred()
-	(func(): rotation = last_rot).call_deferred()
+	if (GameManager.current_gamemode == GameManager.mode.freeplay):
+		(func(): position = last_pos).call_deferred()
+		(func(): rotation = last_rot).call_deferred()
 	
 func full_reset() -> void:
 	last_pos = init_pos

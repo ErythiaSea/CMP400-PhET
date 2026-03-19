@@ -18,6 +18,8 @@ var pin_pos: Dictionary[RigidBody3D, Vector3]
 var fired: bool = false
 var can_fire: bool = true
 
+var checking = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	GameManager.new_question_type.connect(_on_new_q_type)
@@ -54,6 +56,11 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if (checking):
+		if (GameManager.current_gamemode == GameManager.mode.e_coeff):
+			if _bowling_ball.linear_velocity.y < 0.01 and _bowling_ball.bounces > 0:
+				_bowling_ball.freeze = true
+	
 	if Input.is_action_just_pressed("ball_fire") and can_fire:
 		fired = !fired
 		if fired:
@@ -147,14 +154,12 @@ func _on_pin_mass_slider_value_changed(value: float) -> void:
 func _on_wood_e_slider_value_changed(value: float) -> void:
 	_lane_wood.physics_material_override.bounce = value
 
-func _on_play_button_pressed() -> void:
+func _on_skip_button_pressed() -> void:
+	checking = false
 	GameManager.generate_q_type()
-	if (GameManager.current_gamemode == GameManager.mode.proj_mtn):
-		_construct_lob_setup()
-	else:
-		push_warning("no function for this button in this mode yet!")
 		
 func _on_new_q_type(type: GameManager.q_type) -> void:
+	_bowling_ball.reset()
 	if (GameManager.current_gamemode == GameManager.mode.e_coeff):
 		_construct_drop_setup()
 	if (GameManager.current_gamemode == GameManager.mode.collision):
@@ -178,4 +183,5 @@ func _on_param_2_value_changed(value: float) -> void:
 	pass # Replace with function body.
 
 func _on_check_button_pressed() -> void:
-	pass # Replace with function body.
+	_bowling_ball.fire()
+	checking = true
