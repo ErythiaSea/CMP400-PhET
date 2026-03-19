@@ -26,14 +26,14 @@ func _on_back_pressed() -> void:
 
 
 func _on_projmot_pressed() -> void:
-	GameManager.current_gamemode = GameManager.proj_mtn
+	GameManager.current_gamemode = GameManager.mode.proj_mtn
 	_open_bowling()
 
 func _on_cor_pressed() -> void:
-	GameManager.current_gamemode = GameManager.e_coeff
+	GameManager.current_gamemode = GameManager.mode.e_coeff
 	_open_bowling()
 
 
 func _on_collision_pressed() -> void:
-	GameManager.current_gamemode = GameManager.collision
+	GameManager.current_gamemode = GameManager.mode.collision
 	_open_bowling()

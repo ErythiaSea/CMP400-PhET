@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=51 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -13,6 +13,7 @@
 [ext_resource type="Material" uid="uid://i0skkgbqocpn" path="res://res/lane_mat_cloth.tres" id="10_fxcs8"]
 [ext_resource type="Script" uid="uid://c1l5soefw1mvj" path="res://Scenes/gui_root.gd" id="10_w56ka"]
 [ext_resource type="Material" uid="uid://bdqpj5wm15e50" path="res://res/lane_mat_rubber.tres" id="11_4hcwo"]
+[ext_resource type="Resource" uid="uid://dy2x784w4lpuo" path="res://res/q_text.tres" id="14_22p0g"]
 [ext_resource type="StyleBox" uid="uid://cj3bxi8rmmo3e" path="res://res/panelstyle.tres" id="14_f10g4"]
 [ext_resource type="Texture2D" uid="uid://e21difm402tw" path="res://GFX/info_button.png" id="14_glwuy"]
 [ext_resource type="Script" path="res://Scenes/drag_panel.gd" id="15_idct1"]
@@ -52,7 +53,9 @@ reflected_light_source = 1
 radius = 0.107
 height = 0.214
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unano"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_22p0g"]
+transparency = 1
+albedo_color = Color(1, 1, 0, 0.5882353)
 albedo_texture = ExtResource("7_fxcs8")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65q5m"]
@@ -60,6 +63,9 @@ friction = 0.2
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
 radius = 0.107
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_unano"]
+albedo_texture = ExtResource("7_fxcs8")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_fxcs8"]
 friction = 0.08
@@ -136,11 +142,11 @@ script = ExtResource("8_hymiy")
 projectile = NodePath("../ForceBall")
 
 [node name="GhostBall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -7.5)
 visible = false
 mesh = SubResource("SphereMesh_b17vh")
 skeleton = NodePath("../ForceBall")
-surface_material_override/0 = SubResource("StandardMaterial3D_unano")
+surface_material_override/0 = SubResource("StandardMaterial3D_22p0g")
 
 [node name="ForceBall" type="RigidBody3D" parent="." node_paths=PackedStringArray("traj_line")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -283,7 +289,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123, 0.287, -15.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -15.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel", "question_panel", "question_label", "param1_label", "param1_box", "param2_label", "param2_box", "param2_units", "check_button", "skip_button")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("WorldPanel/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer")
@@ -306,6 +312,16 @@ ctrl_panel = NodePath("ControlsPanel")
 ball_panel = NodePath("BallPanel")
 world_panel = NodePath("WorldPanel")
 equation_panel = NodePath("FormulaPanel")
+question_panel = NodePath("QuestionPanel")
+question_label = NodePath("QuestionPanel/VBoxContainer/QuestionLabel")
+param1_label = NodePath("QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param1Label")
+param1_box = NodePath("QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param1Box")
+param2_label = NodePath("QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param2Label")
+param2_box = NodePath("QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param2Box")
+param2_units = NodePath("QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param2Units")
+check_button = NodePath("QuestionPanel/VBoxContainer/PLChContainer/CheckContainer/CheckButton")
+skip_button = NodePath("QuestionPanel/VBoxContainer/PLChContainer/CheckContainer/SkipButton")
+q_txt_res = ExtResource("14_22p0g")
 
 [node name="ControlsPanel" type="PanelContainer" parent="GUIRoot"]
 offset_left = 851.0
@@ -584,11 +600,12 @@ expand_mode = 5
 stretch_mode = 4
 
 [node name="QuestionPanel" type="PanelContainer" parent="GUIRoot"]
+custom_minimum_size = Vector2(561, 92)
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_top = -92.0
-offset_right = 705.0
+offset_right = 561.0
 grow_vertical = 0
 theme_override_styles/panel = ExtResource("14_f10g4")
 script = ExtResource("15_idct1")
@@ -601,6 +618,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "Here's some big yappy question with some parameters.
 Solve my riddles, etc."
+autowrap_mode = 2
 
 [node name="PLChContainer" type="HBoxContainer" parent="GUIRoot/QuestionPanel/VBoxContainer"]
 layout_mode = 2
@@ -632,6 +650,10 @@ expand_to_text_length = true
 emoji_menu_enabled = false
 virtual_keyboard_type = 3
 script = ExtResource("21_y0auy")
+
+[node name="Param2Units" type="Label" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer"]
+layout_mode = 2
+text = ", Param2:"
 
 [node name="CheckContainer" type="HBoxContainer" parent="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer"]
 layout_mode = 2
@@ -750,6 +772,9 @@ stretch_mode = 4
 [connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/PinMassContainer/PinMassSlider" to="GUIRoot" method="_on_pin_mass_slider_value_changed"]
 [connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/WoodEContainer/WoodESlider" to="." method="_on_wood_e_slider_value_changed"]
 [connection signal="value_changed" from="GUIRoot/WorldPanel/VBoxContainer/WoodEContainer/WoodESlider" to="GUIRoot" method="_on_wood_e_slider_value_changed"]
+[connection signal="value_changed" from="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param1Box" to="." method="_on_param_1_value_changed"]
+[connection signal="value_changed" from="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param2Box" to="." method="_on_param_2_value_changed"]
+[connection signal="pressed" from="GUIRoot/QuestionPanel/VBoxContainer/PLChContainer/CheckContainer/CheckButton" to="." method="_on_check_button_pressed"]
 [connection signal="pressed" from="GUIRoot/InfoButton" to="GUIRoot" method="_on_info_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BallButton" to="GUIRoot" method="_on_ball_button_pressed"]
 [connection signal="pressed" from="GUIRoot/WorldButton" to="GUIRoot" method="_on_world_button_pressed"]

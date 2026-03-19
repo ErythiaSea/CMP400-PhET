@@ -1,3 +1,4 @@
+class_name SceneGui
 extends CanvasLayer
 
 @export var air_resistance_toggle: CheckButton
@@ -30,8 +31,12 @@ var panel_init_pos: Array[Vector2]
 @export var param1_box: LineEdit
 @export var param2_label: Label
 @export var param2_box: LineEdit
+@export var param2_units: Label
 @export var check_button: Button
 @export var skip_button: Button
+
+@export var q_txt_res: Resource
+@onready var question_texts: Array[String] = q_txt_res.question_texts
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -41,7 +46,7 @@ func _ready() -> void:
 		mass_slider.value_changed.connect(_on_mass_slider_value_changed)
 	push_strength_slider.value_changed.connect(_on_ps_slider_value_changed)
 	
-	GameManager.new_question_type.connect(_on_new_q_type)
+	#GameManager.new_question_type.connect(_on_new_q_type)
 	
 	panel_init_pos.append(ctrl_panel.position)
 	panel_init_pos.append(ball_panel.position)
@@ -109,5 +114,37 @@ func _on_pin_mass_slider_value_changed(value: float) -> void:
 func _on_wood_e_slider_value_changed(value: float) -> void:
 	wood_e_label.text = "Wood Lane e: %.2f" % value
 	
-func _on_new_q_type(type: GameManager.q_type) -> void:
-	pass
+func format_question(args: Dictionary[String, float]) -> void:
+	param2_box.hide()
+	param2_label.show()
+	param2_units.hide()
+	match GameManager.current_q_type:
+		GameManager.q_type.e_initheight:
+			question_label.text = question_texts[GameManager.current_q_type] % [args["e"], args["final"]]
+			param1_label.text = "Height: "
+			param2_label.text = "m"
+		GameManager.q_type.e_finalheight:
+			question_label.text = question_texts[GameManager.current_q_type] % [args["init"], args["e"]]
+			param1_label.text = "Height: "
+			param2_label.text = "m"
+		GameManager.q_type.e_findcoeff:
+			param1_label.text = "Coefficient of restitution: "
+			param2_label.hide()
+			question_label.text = question_texts[GameManager.current_q_type] % [args["init"], args["final"]]
+		GameManager.q_type.suvat_lob:
+			param2_box.show()
+			param2_units.show()
+			param1_label.text = "Velocity: "
+			param2_label.text = "m/s, Angle:"
+			param2_units.text = ""
+		GameManager.q_type.suvat_needle_dist:
+			param1_label.text = "Distance: "
+			param2_label.text = "m"
+		GameManager.q_type.suvat_needle_maxheight:
+			pass
+		GameManager.q_type.col_ballmass, GameManager.q_type.col_pinmass:
+			param1_label.text = "Mass: "
+			param2_label.text = "kg"
+		GameManager.q_type.col_init_ballspeed, GameManager.q_type.col_final_ballspeed, GameManager.q_type.col_final_pinspeed: 
+			param1_label.text = "Velocity: "
+			param2_label.text = "m/s"
