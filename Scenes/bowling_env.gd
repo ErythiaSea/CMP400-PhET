@@ -14,11 +14,11 @@ extends Node3D
 @onready var _gui_root: SceneGui = $GUIRoot
 
 var pin_pos: Dictionary[RigidBody3D, Vector3]
-@export var q_args: Dictionary[String, float] # only export so i can cheat :p 
 var fired: bool = false
 var can_fire: bool = true
 
 var checking = false
+signal check_done
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -56,11 +56,6 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if (checking):
-		if (GameManager.current_gamemode == GameManager.mode.e_coeff):
-			if _bowling_ball.linear_velocity.y < 0.01 and _bowling_ball.bounces > 0:
-				_bowling_ball.freeze = true
-	
 	if Input.is_action_just_pressed("ball_fire") and can_fire:
 		fired = !fired
 		if fired:
@@ -70,6 +65,13 @@ func _process(delta: float) -> void:
 			_traj_line.show()
 		else:
 			reset_scene(false)
+			
+func _physics_process(delta: float) -> void:
+	if (checking):
+		if (GameManager.current_gamemode == GameManager.mode.e_coeff):
+			if _bowling_ball.linear_velocity.y < 0.01 and _bowling_ball.bounces > 0:
+				_bowling_ball.freeze = true
+				_end_checking()
 
 func reset_scene(full: bool = false) -> void:
 	if (full): 
@@ -106,10 +108,10 @@ func _construct_needle_setup() -> void:
 	
 func _construct_drop_setup() -> void:
 	var init_height = randf_range(1.0, 8.0)
-	var e_coeff = randf_range(0,1)
+	var e_coeff = randf_range(0.01,1)
 	var final_height = init_height * e_coeff * e_coeff
 	
-	q_args = {
+	GameManager.q_args = {
 		"init": init_height,
 		"final": final_height,
 		"e": e_coeff
@@ -131,7 +133,7 @@ func _construct_drop_setup() -> void:
 	
 	_traj_line.hide()
 	_ghost_ball.show()
-	_gui_root.format_question(q_args)
+	_gui_root.format_question(GameManager.q_args)
 	_gizmo.clear_selection()
 	
 func _construct_collision_setup() -> void:
@@ -185,3 +187,6 @@ func _on_param_2_value_changed(value: float) -> void:
 func _on_check_button_pressed() -> void:
 	_bowling_ball.fire()
 	checking = true
+
+func _end_checking() -> void:
+	check_done.emit()

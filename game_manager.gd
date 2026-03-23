@@ -1,6 +1,7 @@
 extends Node
 
 const MAIN_MENU_SCENE = "res://Scenes/main_menu.tscn"
+@export var q_args: Dictionary[String, float] # only export so i can cheat :p 
 signal new_question_type
 
 enum mode {

@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="CMP400 PhET"
+config/name="CMP400 PhET (4.5)"
 config/version="v0.2.1"
 run/main_scene="uid://dg0lyw2wu0nwg"
 config/features=PackedStringArray("4.5", "GL Compatibility")
@@ -118,6 +118,7 @@ mouselook_hold={
 
 [physics]
 
+common/physics_ticks_per_second=240
 3d/physics_engine="Jolt Physics"
 3d/default_linear_damp=0.0
 3d/default_angular_damp=0.0

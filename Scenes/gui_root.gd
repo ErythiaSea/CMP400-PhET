@@ -37,6 +37,7 @@ var panel_init_pos: Array[Vector2]
 
 @export var q_txt_res: Resource
 @onready var question_texts: Array[String] = q_txt_res.question_texts
+@onready var bowling_env: Node3D = get_parent()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -47,6 +48,7 @@ func _ready() -> void:
 	push_strength_slider.value_changed.connect(_on_ps_slider_value_changed)
 	
 	#GameManager.new_question_type.connect(_on_new_q_type)
+	bowling_env.check_done.connect(_on_check_done)
 	
 	panel_init_pos.append(ctrl_panel.position)
 	panel_init_pos.append(ball_panel.position)
@@ -118,6 +120,7 @@ func format_question(args: Dictionary[String, float]) -> void:
 	param2_box.hide()
 	param2_label.show()
 	param2_units.hide()
+	skip_button.text = "Skip"
 	match GameManager.current_q_type:
 		GameManager.q_type.e_initheight:
 			question_label.text = question_texts[GameManager.current_q_type] % [args["e"], args["final"]]
@@ -151,3 +154,27 @@ func format_question(args: Dictionary[String, float]) -> void:
 
 func _on_play_button_pressed() -> void:
 	question_panel.visible = !question_panel.visible
+	
+func _within_tolerance(input: float, answer: float) -> bool:
+	if (abs(input - answer) < 0.01): return true
+	return false
+
+func _on_check_done() -> void:
+	var correct: bool = false
+	var arg: float
+	match GameManager.current_q_type:
+		GameManager.q_type.e_initheight:
+			arg = GameManager.q_args["init"]
+		GameManager.q_type.e_finalheight:
+			arg = GameManager.q_args["final"]
+		GameManager.q_type.e_findcoeff:
+			arg = GameManager.q_args["e"]
+			
+	if _within_tolerance(param1_box.text as float, arg):
+		correct = true
+		
+	if correct:
+		question_label.text = "Correct! Well done!"
+	else:
+		question_label.text = "Not quite, the answer was %.2f" % arg
+	skip_button.text = "Continue"
