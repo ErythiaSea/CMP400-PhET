@@ -27,10 +27,14 @@ signal check_done
 func _ready() -> void:
 	GameManager.new_question_type.connect(_on_new_q_type)
 	
+	for pin in $Pins.get_children() as Array[RigidBody3D]:
+		pin_pos[pin] = pin.position
+	
 	_barrier.hide()
 	_barrier.process_mode = Node.PROCESS_MODE_DISABLED
 	_top_barrier.hide()
 	_top_barrier.process_mode = Node.PROCESS_MODE_DISABLED
+	_lock_pin_rot(true)
 		
 	_gizmo.select(_bowling_ball)
 	if (GameManager.current_gamemode != GameManager.mode.freeplay):
@@ -58,9 +62,6 @@ func _ready() -> void:
 		_gizmo.hide()
 		_construct_drop_setup()
 		$Pins.queue_free()
-			
-	for pin in $Pins.get_children() as Array[RigidBody3D]:
-		pin_pos[pin] = pin.position
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -71,7 +72,7 @@ func _process(delta: float) -> void:
 			_gizmo.deselect(_bowling_ball)
 			_traj_line.toggle_aim(false)
 			_traj_line.show()
-			_toggle_pin_rot(true)
+			_lock_pin_rot(false)
 		else:
 			reset_scene(false)
 			
@@ -89,7 +90,7 @@ func reset_scene(full: bool = false) -> void:
 	else: _bowling_ball.reset()
 	_gizmo.select(_bowling_ball)
 	_traj_line.toggle_aim(true)
-	_toggle_pin_rot(false)
+	_lock_pin_rot(true)
 	_reset_pins()
 
 func _reset_pins():
@@ -100,27 +101,31 @@ func _reset_pins():
 		pin.rotation = Vector3.ZERO
 
 func _construct_lob_setup() -> void:
-	var dist = randf_range(0.4, 2.0)
+	var dist = randf_range(0.6, 2.5)
 	var barrier_height = 1 + randf_range(0, 4)
 	var angle = 0
 	var vel = 0
 	var air_time = 0
+	_bowling_ball.freeze = true
 	_barrier_root.position.y = barrier_height - 2.5
-	_bowling_ball.position.z = _barrier.position.z + dist
+	_bowling_ball.position.z = _barrier_root.position.z + dist
 	_bowling_ball.position.y = 0
-	$Pins.get_child(0).position.z = _barrier.position.z - dist
+	_bowling_ball.rotation = Vector3.ZERO
+	_reset_pins()
+	$Pins.get_child(0).position.z = _barrier_root.position.z - dist
+	$Pins.get_child(0).position.x = 0
 	_traj_line.hide()
 	
 	if (GameManager.current_q_type != GameManager.q_type.suvat_lob_powerangle):
-		var req_y_vel = sqrt(2 * 9.8 * barrier_height + 0.3) #0.3 for some leeway
+		var req_y_vel = sqrt(2 * 9.8 * (barrier_height + 0.2)) #0.2 for some leeway
 		air_time = 2 * (req_y_vel/9.8)
-		var req_x_vel = dist/air_time
+		var req_x_vel = dist*2/air_time
 		vel = sqrt(pow(req_y_vel, 2) + pow(req_x_vel, 2))
 		angle = atan2(req_y_vel, req_x_vel)
 		angle = rad_to_deg(angle)
 		
 		_bowling_ball.fire_impulse_strength = vel
-		_bowling_ball.rotation_degrees.y = angle
+		_bowling_ball.rotation_degrees.x = angle
 	
 	GameManager.q_args = {
 		"wall_height": barrier_height,
@@ -192,7 +197,9 @@ func _on_wood_e_slider_value_changed(value: float) -> void:
 
 func _on_skip_button_pressed() -> void:
 	checking = false
-	GameManager.generate_q_type()
+	_bowling_ball.freeze = true
+	_reset_pins()
+	GameManager.generate_q_type.call_deferred()
 		
 func _on_new_q_type(type: GameManager.q_type) -> void:
 	_bowling_ball.reset()
@@ -219,13 +226,14 @@ func _on_param_2_value_changed(value: float) -> void:
 	pass # Replace with function body.
 
 func _on_check_button_pressed() -> void:
-	_bowling_ball.fire()
+	_bowling_ball.fire(true)
+	_lock_pin_rot(false)
 	checking = true
 
 func _end_checking() -> void:
 	check_done.emit()
 	
-func _toggle_pin_rot(on: bool) -> void:
+func _lock_pin_rot(on: bool) -> void:
 	for pin in $Pins.get_children() as Array[RigidBody3D]:
 		pin.axis_lock_angular_x = on
 		pin.axis_lock_angular_y = on
