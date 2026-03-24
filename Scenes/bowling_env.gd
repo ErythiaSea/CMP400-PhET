@@ -8,10 +8,13 @@ extends Node3D
 @onready var _lane_wood: StaticBody3D = $laneWood
 @onready var _lane_cloth: StaticBody3D = $laneCloth
 @onready var _lane_rubber: StaticBody3D = $laneRubber
-@onready var _barrier: StaticBody3D = $barrier0
-@onready var _top_barrier: StaticBody3D = $barrier1
+@onready var _barrier_root: Node3D = $barrierRoot
+@onready var _barrier: StaticBody3D = $barrierRoot/barrier0
+@onready var _top_barrier: StaticBody3D = $barrierRoot/barrier1
 
 @onready var _gui_root: SceneGui = $GUIRoot
+
+const _center_cam_pos: Vector3 = Vector3(-6.5, 4, -7.5)
 
 var pin_pos: Dictionary[RigidBody3D, Vector3]
 var fired: bool = false
@@ -32,11 +35,13 @@ func _ready() -> void:
 	_gizmo.select(_bowling_ball)
 	if (GameManager.current_gamemode != GameManager.mode.freeplay):
 		can_fire = false
-	if (GameManager.current_gamemode != GameManager.mode.freeplay and GameManager.current_gamemode != GameManager.mode.e_coeff):
 		_lane_cloth.hide();
 		_lane_cloth.process_mode = Node.PROCESS_MODE_DISABLED
 		_lane_rubber.hide();
 		_lane_rubber.process_mode = Node.PROCESS_MODE_DISABLED
+		$Camera3D.position = _center_cam_pos
+		GameManager.generate_q_type()
+		
 	if (GameManager.current_gamemode == GameManager.mode.proj_mtn):
 		_barrier.show()
 		_barrier.process_mode = Node.PROCESS_MODE_INHERIT
@@ -48,8 +53,11 @@ func _ready() -> void:
 				con = true
 				continue
 			pin.queue_free()
+			
 	if (GameManager.current_gamemode == GameManager.mode.e_coeff):
 		_gizmo.hide()
+		_construct_drop_setup()
+		$Pins.queue_free()
 			
 	for pin in $Pins.get_children() as Array[RigidBody3D]:
 		pin_pos[pin] = pin.position
@@ -63,6 +71,7 @@ func _process(delta: float) -> void:
 			_gizmo.deselect(_bowling_ball)
 			_traj_line.toggle_aim(false)
 			_traj_line.show()
+			_toggle_pin_rot(true)
 		else:
 			reset_scene(false)
 			
@@ -80,31 +89,56 @@ func reset_scene(full: bool = false) -> void:
 	else: _bowling_ball.reset()
 	_gizmo.select(_bowling_ball)
 	_traj_line.toggle_aim(true)
+	_toggle_pin_rot(false)
+	_reset_pins()
+
+func _reset_pins():
 	for pin in $Pins.get_children() as Array[RigidBody3D]:
 		pin.position = pin_pos[pin]
 		pin.linear_velocity = Vector3.ZERO
 		pin.angular_velocity = Vector3.ZERO
 		pin.rotation = Vector3.ZERO
-		
+
 func _construct_lob_setup() -> void:
 	var dist = randf_range(0.4, 2.0)
-	var barrier_y_scale = randf_range(0.3, 1.5)
-	
-	_barrier.scale.y = barrier_y_scale
+	var barrier_height = 1 + randf_range(0, 4)
+	var angle = 0
+	var vel = 0
+	var air_time = 0
+	_barrier_root.position.y = barrier_height - 2.5
 	_bowling_ball.position.z = _barrier.position.z + dist
-	_bowling_ball.position.y = 0.2
+	_bowling_ball.position.y = 0
 	$Pins.get_child(0).position.z = _barrier.position.z - dist
 	_traj_line.hide()
+	
+	if (GameManager.current_q_type != GameManager.q_type.suvat_lob_powerangle):
+		var req_y_vel = sqrt(2 * 9.8 * barrier_height + 0.3) #0.3 for some leeway
+		air_time = 2 * (req_y_vel/9.8)
+		var req_x_vel = dist/air_time
+		vel = sqrt(pow(req_y_vel, 2) + pow(req_x_vel, 2))
+		angle = atan2(req_y_vel, req_x_vel)
+		angle = rad_to_deg(angle)
+		
+		_bowling_ball.fire_impulse_strength = vel
+		_bowling_ball.rotation_degrees.y = angle
+	
+	GameManager.q_args = {
+		"wall_height": barrier_height,
+		"wall_dist": dist,
+		"pin_dist": dist*2,
+		"angle": angle,
+		"vel": vel,
+		"air_time": air_time
+	}
+	
+	_top_barrier.hide()
+	_top_barrier.process_mode = Node.PROCESS_MODE_DISABLED
+	_gui_root.format_question(GameManager.q_args)
 	
 func _construct_needle_setup() -> void:
-	var dist = randf_range(0.5, 6.0)
-	var barrier_y_scale = randf_range(0.3, 1.5)
-	
-	_barrier.scale.y = barrier_y_scale
-	_bowling_ball.position.z = _barrier.position.z + dist
-	_bowling_ball.position.y = 0.2
-	$Pins.get_child(0).position.z = _barrier.position.z - dist
-	_traj_line.hide()
+	_construct_lob_setup()
+	_top_barrier.show()
+	_top_barrier.process_mode = Node.PROCESS_MODE_INHERIT
 	
 func _construct_drop_setup() -> void:
 	var init_height = randf_range(1.0, 8.0)
@@ -167,7 +201,7 @@ func _on_new_q_type(type: GameManager.q_type) -> void:
 	if (GameManager.current_gamemode == GameManager.mode.collision):
 		_construct_collision_setup()
 	if (GameManager.current_gamemode == GameManager.mode.proj_mtn):
-		if (type == GameManager.q_type.suvat_lob):
+		if (type < GameManager.q_type.suvat_needle_maxheight):
 			_construct_lob_setup()
 		else:
 			_construct_needle_setup()
@@ -190,3 +224,9 @@ func _on_check_button_pressed() -> void:
 
 func _end_checking() -> void:
 	check_done.emit()
+	
+func _toggle_pin_rot(on: bool) -> void:
+	for pin in $Pins.get_children() as Array[RigidBody3D]:
+		pin.axis_lock_angular_x = on
+		pin.axis_lock_angular_y = on
+		pin.axis_lock_angular_z = on

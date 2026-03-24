@@ -1,4 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://4oeyivm4nvdn"]
+[gd_scene load_steps=5 format=3 uid="uid://4oeyivm4nvdn"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_va20v"]
+absorbent = true
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_va20v"]
 radius = 0.03
@@ -8,8 +11,12 @@ height = 0.38
 radius = 0.029785156
 height = 0.37005615
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_va20v"]
+size = Vector3(0.05, 0.005, 0.05)
+
 [node name="BowlingPin" type="RigidBody3D"]
 mass = 1.5
+physics_material_override = SubResource("PhysicsMaterial_va20v")
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.05, 0)
 
@@ -19,3 +26,8 @@ skeleton = NodePath("../CollisionShape3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_va20v")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.184, 0)
+shape = SubResource("BoxShape3D_va20v")
+disabled = true

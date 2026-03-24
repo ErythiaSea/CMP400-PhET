@@ -18,6 +18,7 @@ extends CanvasLayer
 @export var ball_bounces_label: Label
 @export var ball_vel_label: Label
 @export var force_ball: RigidBody3D
+@export var ghost_ball: MeshInstance3D
 
 @export var ctrl_panel: PanelContainer
 @export var ball_panel: PanelContainer
@@ -54,7 +55,10 @@ func _ready() -> void:
 	panel_init_pos.append(ball_panel.position)
 	panel_init_pos.append(world_panel.position)
 	panel_init_pos.append(equation_panel.position)
-	pass # Replace with function body.
+	panel_init_pos.append(question_panel.position)
+	
+	if (GameManager.current_gamemode == GameManager.mode.freeplay):
+		question_panel.visible = false
 
 # holy hardcoding batman!
 func _on_arcslider_value_changed(value: float) -> void:
@@ -120,37 +124,51 @@ func format_question(args: Dictionary[String, float]) -> void:
 	param2_box.hide()
 	param2_label.show()
 	param2_units.hide()
+	var used_args: Array[float]
 	skip_button.text = "Skip"
 	match GameManager.current_q_type:
 		GameManager.q_type.e_initheight:
-			question_label.text = question_texts[GameManager.current_q_type] % [args["e"], args["final"]]
+			used_args = [args["e"], args["final"]]
 			param1_label.text = "Height: "
 			param2_label.text = "m"
 		GameManager.q_type.e_finalheight:
-			question_label.text = question_texts[GameManager.current_q_type] % [args["init"], args["e"]]
+			used_args = [args["init"], args["e"]]
 			param1_label.text = "Height: "
 			param2_label.text = "m"
 		GameManager.q_type.e_findcoeff:
 			param1_label.text = "Coefficient of restitution: "
 			param2_label.hide()
-			question_label.text = question_texts[GameManager.current_q_type] % [args["init"], args["final"]]
-		GameManager.q_type.suvat_lob:
+			used_args = [args["init"], args["final"]]
+		GameManager.q_type.suvat_lob_powerangle:
 			param2_box.show()
 			param2_units.show()
 			param1_label.text = "Velocity: "
 			param2_label.text = "m/s, Angle:"
 			param2_units.text = ""
+			used_args = [args["wall_height"], args["wall_dist"], args["pin_dist"]]
+		GameManager.q_type.suvat_lob_angle_time:
+			used_args = [args["vel"], args["angle"]]
+			param1_label.text = "Time: "
+			param2_label.text = "s"
+		GameManager.q_type.suvat_lob_dist_time:
+			used_args = [args["vel"], args["wall_height"], args["wall_dist"]]
+			param1_label.text = "Time: "
+			param2_label.text = "s"
 		GameManager.q_type.suvat_needle_dist:
-			param1_label.text = "Distance: "
+			used_args = [args["wall_dist"], args["vel"], args["angle"]]
+			param1_label.text = "Height: "
 			param2_label.text = "m"
 		GameManager.q_type.suvat_needle_maxheight:
-			pass
+			used_args = [args["wall_height"], args["vel"], args["angle"]]
+			param1_label.text = "Distance: "
+			param2_label.text = "m"
 		GameManager.q_type.col_ballmass, GameManager.q_type.col_pinmass:
 			param1_label.text = "Mass: "
 			param2_label.text = "kg"
 		GameManager.q_type.col_init_ballspeed, GameManager.q_type.col_final_ballspeed, GameManager.q_type.col_final_pinspeed: 
 			param1_label.text = "Velocity: "
 			param2_label.text = "m/s"
+	question_label.text = question_texts[GameManager.current_q_type] % used_args
 
 func _on_play_button_pressed() -> void:
 	question_panel.visible = !question_panel.visible
@@ -175,6 +193,7 @@ func _on_check_done() -> void:
 		
 	if correct:
 		question_label.text = "Correct! Well done!"
+		ghost_ball.hide()
 	else:
 		question_label.text = "Not quite, the answer was %.2f" % arg
 	skip_button.text = "Continue"

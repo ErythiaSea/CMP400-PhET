@@ -10,6 +10,7 @@ var fire_impulse_strength: float = 50
 var bounces: int = 0
 var bounce_timer: float = 0
 const BOUNCE_WAIT: float = 0.03
+var time_flying: float = 0
 
 var init_pos := Vector3(0, 1, 0)
 var last_pos := init_pos
@@ -20,13 +21,16 @@ var last_rot := init_rot
 func _ready() -> void:
 	pass # Replace with function body.
 
-func fire() -> void:
+func fire(use_velocity: bool = false) -> void:
 	last_pos = position
 	last_rot = rotation
 	freeze = false
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
-	apply_central_impulse(-transform.basis.z * fire_impulse_strength)
+	if (use_velocity):
+		set_velocity(fire_impulse_strength)
+	else:
+		apply_central_impulse(-transform.basis.z * fire_impulse_strength)
 	force_diag.show()
 	force_diag.scale = Vector3(0.25, 0.25, 0.25)
 
@@ -46,12 +50,16 @@ func full_reset() -> void:
 	last_rot = init_rot
 	reset()
 
+func set_velocity(total: float) -> void:
+	linear_velocity = (total * -transform.basis.z)
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if !freeze:
 		force_diag.accel = get_gravity()/mass
 		force_diag.vel = linear_velocity
 		bounce_timer -= delta
+		time_flying += delta
 		return
 	
 	if Input.is_action_pressed("ball_left"):
@@ -75,3 +83,4 @@ func _on_body_entered(body: Node) -> void:
 		bounces += 1
 		print(bounces)
 		bounce_timer = BOUNCE_WAIT
+		print(time_flying)

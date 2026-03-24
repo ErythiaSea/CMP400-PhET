@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=53 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -105,11 +105,17 @@ size = Vector3(17.5, 0.185, 0.1)
 material = ExtResource("11_4hcwo")
 size = Vector3(17.5, 0.185, 1.1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_insud"]
-size = Vector3(1, 3, 0.05)
+[sub_resource type="BoxMesh" id="BoxMesh_2qt1l"]
+size = Vector3(1, 10, 0.05)
 
-[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_eysce"]
-points = PackedVector3Array(-0.5, -1.5, -0.025, -0.5, -1.5, 0.025, -0.5, 1.5, -0.025, 0.5, -1.5, -0.025, 0.5, -1.5, 0.025, -0.5, 1.5, 0.025, 0.5, 1.5, -0.025, 0.5, 1.5, 0.025)
+[sub_resource type="BoxShape3D" id="BoxShape3D_edsgw"]
+size = Vector3(1, 10, 0.05)
+
+[sub_resource type="BoxMesh" id="BoxMesh_22p0g"]
+size = Vector3(1, 5, 0.05)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a32rq"]
+size = Vector3(1, 5, 0.05)
 
 [node name="BowlingEnv" type="Node3D"]
 script = ExtResource("1_0fhea")
@@ -234,29 +240,27 @@ shape = SubResource("BoxShape3D_fxcs8")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.086, 0.565)
 shape = SubResource("BoxShape3D_fxcs8")
 
-[node name="barrier0" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0.093, -7.5)
+[node name="barrierRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -7.5)
+
+[node name="barrier1" type="StaticBody3D" parent="barrierRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.909605, 0)
 physics_material_override = SubResource("PhysicsMaterial_4hcwo")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="barrier0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
-mesh = SubResource("BoxMesh_insud")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="barrierRoot/barrier1"]
+mesh = SubResource("BoxMesh_2qt1l")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="barrier0"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
-shape = SubResource("ConvexPolygonShape3D_eysce")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="barrierRoot/barrier1"]
+shape = SubResource("BoxShape3D_edsgw")
 
-[node name="barrier1" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.1, 0, 0, 0, 1, 0, 0.093, -7.5)
+[node name="barrier0" type="StaticBody3D" parent="barrierRoot"]
 physics_material_override = SubResource("PhysicsMaterial_4hcwo")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="barrier1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
-mesh = SubResource("BoxMesh_insud")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="barrierRoot/barrier0"]
+mesh = SubResource("BoxMesh_22p0g")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="barrier1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5955117, 0)
-shape = SubResource("ConvexPolygonShape3D_eysce")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="barrierRoot/barrier0"]
+shape = SubResource("BoxShape3D_a32rq")
 
 [node name="Pins" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
@@ -291,7 +295,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123, 0.287, -15.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -15.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel", "question_panel", "question_label", "param1_label", "param1_box", "param2_label", "param2_box", "param2_units", "check_button", "skip_button")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ghost_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel", "question_panel", "question_label", "param1_label", "param1_box", "param2_label", "param2_box", "param2_units", "check_button", "skip_button")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("WorldPanel/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer")
@@ -310,6 +314,7 @@ ball_angle_label = NodePath("BallPanel/VBoxContainer/ResetBallContainer/AngleLab
 ball_bounces_label = NodePath("BallPanel/VBoxContainer/BouncesLabel")
 ball_vel_label = NodePath("BallPanel/VBoxContainer/VelocityFoldable/VelocityLabel")
 force_ball = NodePath("../ForceBall")
+ghost_ball = NodePath("../GhostBall")
 ctrl_panel = NodePath("ControlsPanel")
 ball_panel = NodePath("BallPanel")
 world_panel = NodePath("WorldPanel")
@@ -757,6 +762,7 @@ ignore_texture_size = true
 stretch_mode = 4
 
 [node name="PlayButton" type="TextureButton" parent="GUIRoot"]
+visible = false
 offset_left = 20.0
 offset_top = 104.0
 offset_right = 106.0

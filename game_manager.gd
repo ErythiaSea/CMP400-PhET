@@ -15,19 +15,22 @@ enum q_type {
 	e_initheight,            #0
 	e_finalheight,           #1
 	e_findcoeff,             #2
-	suvat_lob,               #3
-	suvat_needle_maxheight,  #4
-	suvat_needle_dist,       #5
-	col_ballmass,            #6
-	col_pinmass,             #7
-	col_init_ballspeed,      #8
-	col_final_ballspeed,     #9
-	col_final_pinspeed,      #10
+	suvat_lob_powerangle,    #3
+	suvat_lob_angle_time,    #4
+	suvat_lob_dist_time,     #5
+	suvat_needle_maxheight,  #6
+	suvat_needle_dist,       #7
+	col_ballmass,            #8
+	col_pinmass,             #9
+	col_init_ballspeed,      #10
+	col_final_ballspeed,     #11
+	col_final_pinspeed,      #12
 	q_type_count
 }
 
 var current_gamemode: int = mode.freeplay
 var current_q_type: q_type = q_type.q_type_count;
+var correct: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -42,8 +45,8 @@ func generate_q_type() -> q_type:
 		current_q_type = (0 + i) as q_type
 		
 	if current_gamemode == mode.proj_mtn:
-		var i = randi_range(0, 2)
-		current_q_type = (q_type.suvat_lob + i) as q_type
+		var i = randi_range(0, 4)
+		current_q_type = (q_type.suvat_lob_powerangle + i) as q_type
 		
 	if current_gamemode == mode.collision:
 		var i = randi_range(0, 4)
