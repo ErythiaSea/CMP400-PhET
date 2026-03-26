@@ -82,6 +82,16 @@ func _physics_process(delta: float) -> void:
 			if _bowling_ball.linear_velocity.y < 0.01 and _bowling_ball.bounces > 0:
 				_bowling_ball.freeze = true
 				_end_checking()
+		if (GameManager.current_gamemode == GameManager.mode.proj_mtn):
+			if _bowling_ball.bounces > 0 or _bowling_ball.pins_hit > 0:
+				if _bowling_ball.position.z < -7.6:
+					GameManager.q_args["barrier_passed"] = 1
+				if _bowling_ball.pins_hit > 0:
+					GameManager.q_args["pins_hit"] = _bowling_ball.pins_hit
+				if _bowling_ball.barrier_hit:
+					GameManager.q_args["barrier_hit"] = 1
+					
+				_end_checking()
 
 func reset_scene(full: bool = false) -> void:
 	if (full): 
@@ -110,6 +120,7 @@ func _construct_lob_setup() -> void:
 	_barrier_root.position.y = barrier_height - 2.5
 	_bowling_ball.position.z = _barrier_root.position.z + dist
 	_bowling_ball.position.y = 0
+	_bowling_ball.position.x = 0
 	_bowling_ball.rotation = Vector3.ZERO
 	_reset_pins()
 	$Pins.get_child(0).position.z = _barrier_root.position.z - dist
@@ -133,8 +144,22 @@ func _construct_lob_setup() -> void:
 		"pin_dist": dist*2,
 		"angle": angle,
 		"vel": vel,
-		"air_time": air_time
+		"air_time": air_time,
+		"barrier_passed": 0,
+		"pins_hit": 0,
+		"barrier_hit": 0
 	}
+	
+	# scramble params so success is not guaranteed by hitting check
+	match GameManager.current_q_type:
+		GameManager.q_type.suvat_lob_powerangle:
+			_bowling_ball.fire_impulse_strength = randf_range(0, 10)
+			_bowling_ball.rotation_degrees.x = randf_range(10, 80)
+		GameManager.q_type.suvat_needle_maxheight:
+			_barrier_root.position.y = randf_range(1, 5) - 2.5
+		GameManager.q_type.suvat_needle_dist:
+			_bowling_ball.position.z = _barrier_root.position.z + 3
+			$Pins.get_child(0).position.z = _barrier_root.position.z - 3
 	
 	_top_barrier.hide()
 	_top_barrier.process_mode = Node.PROCESS_MODE_DISABLED
@@ -221,11 +246,18 @@ func _on_param_1_value_changed(value: float) -> void:
 			_ghost_ball.position.y = value
 		GameManager.q_type.e_findcoeff:
 			_lane_wood.physics_material_override.bounce = max(value, 0)
+		GameManager.q_type.suvat_lob_powerangle:
+			_bowling_ball.fire_impulse_strength = value
+		GameManager.q_type.suvat_needle_maxheight:
+			_barrier_root.position.y = value - 2.5
+		GameManager.q_type.suvat_needle_dist:
+			_bowling_ball.position.z = _barrier_root.position.z + value
 
 func _on_param_2_value_changed(value: float) -> void:
-	pass # Replace with function body.
+	_bowling_ball.rotation_degrees.x = value
 
 func _on_check_button_pressed() -> void:
+	if (checking): return
 	_bowling_ball.fire(true)
 	_lock_pin_rot(false)
 	checking = true

@@ -25,6 +25,7 @@ extends CanvasLayer
 @export var world_panel: PanelContainer
 @export var equation_panel: PanelContainer
 @export var question_panel: PanelContainer
+@export var spy_panel: PanelContainer
 var panel_init_pos: Array[Vector2]
 
 @export var question_label: Label
@@ -56,6 +57,7 @@ func _ready() -> void:
 	panel_init_pos.append(world_panel.position)
 	panel_init_pos.append(equation_panel.position)
 	panel_init_pos.append(question_panel.position)
+	panel_init_pos.append(spy_panel)
 	
 	if (GameManager.current_gamemode == GameManager.mode.freeplay):
 		question_panel.visible = false
@@ -126,6 +128,7 @@ func format_question(args: Dictionary[String, float]) -> void:
 	param2_units.hide()
 	var used_args: Array[float]
 	skip_button.text = "Skip"
+	check_button.disabled = false
 	match GameManager.current_q_type:
 		GameManager.q_type.e_initheight:
 			used_args = [args["e"], args["final"]]
@@ -155,12 +158,12 @@ func format_question(args: Dictionary[String, float]) -> void:
 			param1_label.text = "Time: "
 			param2_label.text = "s"
 		GameManager.q_type.suvat_needle_dist:
-			used_args = [args["wall_dist"], args["vel"], args["angle"]]
-			param1_label.text = "Height: "
+			used_args = [args["wall_height"], args["vel"], args["angle"]]
+			param1_label.text = "Distance "
 			param2_label.text = "m"
 		GameManager.q_type.suvat_needle_maxheight:
-			used_args = [args["wall_height"], args["vel"], args["angle"]]
-			param1_label.text = "Distance: "
+			used_args = [args["wall_dist"], args["vel"], args["angle"]]
+			param1_label.text = "Height: "
 			param2_label.text = "m"
 		GameManager.q_type.col_ballmass, GameManager.q_type.col_pinmass:
 			param1_label.text = "Mass: "
@@ -173,13 +176,13 @@ func format_question(args: Dictionary[String, float]) -> void:
 func _on_play_button_pressed() -> void:
 	question_panel.visible = !question_panel.visible
 	
-func _within_tolerance(input: float, answer: float) -> bool:
-	if (abs(input - answer) < 0.01): return true
+func _within_tolerance(input: float, answer: float, tolerance: float = 0.01) -> bool:
+	if (abs(input - answer) < tolerance): return true
 	return false
 
 func _on_check_done() -> void:
 	var correct: bool = false
-	var arg: float
+	var arg: float = -1
 	match GameManager.current_q_type:
 		GameManager.q_type.e_initheight:
 			arg = GameManager.q_args["init"]
@@ -187,13 +190,44 @@ func _on_check_done() -> void:
 			arg = GameManager.q_args["final"]
 		GameManager.q_type.e_findcoeff:
 			arg = GameManager.q_args["e"]
-			
-	if _within_tolerance(param1_box.text as float, arg):
+		GameManager.q_type.suvat_lob_powerangle:
+			print (GameManager.q_args["pins_hit"])
+			if GameManager.q_args["pins_hit"] >= 0 && GameManager.q_args["barrier_hit"] < 1:
+				correct = true
+		GameManager.q_type.suvat_lob_angle_time:
+			arg = GameManager.q_args["air_time"]
+		GameManager.q_type.suvat_lob_dist_time:
+			arg = GameManager.q_args["air_time"]
+		GameManager.q_type.suvat_needle_maxheight:
+			arg = GameManager.q_args["wall_height"]
+			print("bp: ", GameManager.q_args["barrier_passed"], " true: ", GameManager.q_args["barrier_passed"] > 0)
+			if GameManager.q_args["barrier_passed"] > 0:
+				correct = true
+		GameManager.q_type.suvat_needle_dist:
+			arg = GameManager.q_args["wall_dist"]
+			if GameManager.q_args["barrier_passed"] > 0:
+				correct = true
+		GameManager.q_type.col_ballmass:
+			arg = GameManager.q_args["ball_mass"]
+		GameManager.q_type.col_pinmass:
+			arg = GameManager.q_args["pin_mass"]
+		GameManager.q_type.col_init_ballspeed:
+			arg = GameManager.q_args["ball_u"]
+		GameManager.q_type.col_final_ballspeed:
+			arg = GameManager.q_args["ball_v"]
+		GameManager.q_type.col_final_pinspeed:
+			arg = GameManager.q_args["pin_v"]
+
+	if _within_tolerance(param1_box.text as float, arg) and arg >= 0:
 		correct = true
 		
 	if correct:
 		question_label.text = "Correct! Well done!"
 		ghost_ball.hide()
 	else:
-		question_label.text = "Not quite, the answer was %.2f" % arg
+		if (arg == -1):
+			question_label.text = "Not quite!"
+		else:
+			question_label.text = "Not quite, the answer was %.2f" % arg
 	skip_button.text = "Continue"
+	check_button.disabled = true

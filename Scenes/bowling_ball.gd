@@ -8,6 +8,8 @@ extends RigidBody3D
 
 var fire_impulse_strength: float = 50
 var bounces: int = 0
+var pins_hit: int = 0
+var barrier_hit: bool = false
 var bounce_timer: float = 0
 const BOUNCE_WAIT: float = 0.03
 var time_flying: float = 0
@@ -39,6 +41,8 @@ func reset() -> void:
 	freeze = true
 	bounce_timer = BOUNCE_WAIT
 	bounces = 0
+	pins_hit = 0
+	barrier_hit = false
 	
 	# i cannot understand why this is necessary but it is
 	if (GameManager.current_gamemode == GameManager.mode.freeplay):
@@ -79,8 +83,17 @@ func _process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node) -> void:
-	if (body is StaticBody3D and bounce_timer < 0):
-		bounces += 1
-		print(bounces)
-		bounce_timer = BOUNCE_WAIT
-		print(time_flying)
+	if (body is StaticBody3D):
+		print("body entered")
+		if (body.name.contains("barrier")):
+			barrier_hit = true
+			print("hit barrier!")
+			bounces += 1
+			bounce_timer = BOUNCE_WAIT
+		if (bounce_timer < 0):
+			bounces += 1
+			print(bounces)
+			bounce_timer = BOUNCE_WAIT
+			print(time_flying)
+	elif (body is RigidBody3D):
+		pins_hit += 1

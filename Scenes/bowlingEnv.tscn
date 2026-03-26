@@ -1,4 +1,4 @@
-[gd_scene load_steps=53 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=55 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -28,7 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://d0u55huwocfos" path="res://GFX/formulae/ehh coeff.png" id="18_y0auy"]
 [ext_resource type="Script" uid="uid://b3qrdh1ct0w5" path="res://Scenes/number_box.gd" id="21_y0auy"]
 [ext_resource type="Texture2D" uid="uid://dh25x1koml73p" path="res://GFX/reset_button.png" id="23_insud"]
-[ext_resource type="Texture2D" uid="uid://dl6ic7b5d82n7" path="res://GFX/question_button.png" id="28_22p0g"]
+[ext_resource type="Texture2D" uid="uid://c78o2owvhp814" path="res://GFX/glass_button.png" id="29_22p0g"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
 panorama = ExtResource("1_deeac")
@@ -105,13 +105,21 @@ size = Vector3(17.5, 0.185, 0.1)
 material = ExtResource("11_4hcwo")
 size = Vector3(17.5, 0.185, 1.1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a32rq"]
+albedo_color = Color(0.827451, 0, 0, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_2qt1l"]
+material = SubResource("StandardMaterial3D_a32rq")
 size = Vector3(1, 10, 0.05)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_edsgw"]
 size = Vector3(1, 10, 0.05)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2qt1l"]
+albedo_color = Color(0.20392157, 1, 0.6039216, 1)
+
 [sub_resource type="BoxMesh" id="BoxMesh_22p0g"]
+material = SubResource("StandardMaterial3D_2qt1l")
 size = Vector3(1, 5, 0.05)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a32rq"]
@@ -295,7 +303,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123, 0.287, -15.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -15.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ghost_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel", "question_panel", "question_label", "param1_label", "param1_box", "param2_label", "param2_box", "param2_units", "check_button", "skip_button")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ghost_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel", "question_panel", "spy_panel", "question_label", "param1_label", "param1_box", "param2_label", "param2_box", "param2_units", "check_button", "skip_button")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("WorldPanel/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer")
@@ -320,6 +328,7 @@ ball_panel = NodePath("BallPanel")
 world_panel = NodePath("WorldPanel")
 equation_panel = NodePath("FormulaPanel")
 question_panel = NodePath("QuestionPanel")
+spy_panel = NodePath("SpyPanel")
 question_label = NodePath("QuestionPanel/VBoxContainer/QuestionLabel")
 param1_label = NodePath("QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param1Label")
 param1_box = NodePath("QuestionPanel/VBoxContainer/PLChContainer/ParamContainer/Param1Box")
@@ -539,7 +548,6 @@ theme_override_constants/margin_bottom = 3
 
 [node name="ScrollContainer" type="ScrollContainer" parent="GUIRoot/FormulaPanel/MarginContainer"]
 layout_mode = 2
-scroll_vertical = 94
 
 [node name="HBoxContainer" type="VBoxContainer" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer"]
 layout_mode = 2
@@ -675,6 +683,37 @@ layout_mode = 2
 text = "Skip
 "
 
+[node name="SpyPanel" type="PanelContainer" parent="GUIRoot"]
+offset_left = 122.0
+offset_top = 4.0
+offset_right = 442.0
+offset_bottom = 70.0
+size_flags_vertical = 3
+theme_override_styles/panel = ExtResource("14_f10g4")
+script = ExtResource("15_idct1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GUIRoot/SpyPanel"]
+layout_mode = 2
+size_flags_vertical = 0
+size_flags_stretch_ratio = 0.78
+
+[node name="BouncesLabel" type="Label" parent="GUIRoot/SpyPanel/VBoxContainer"]
+layout_mode = 2
+text = "Bounces: 0"
+
+[node name="VelocityFoldable" type="FoldableContainer" parent="GUIRoot/SpyPanel/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+folded = true
+title = "Velocity"
+
+[node name="VelocityLabel" type="Label" parent="GUIRoot/SpyPanel/VBoxContainer/VelocityFoldable"]
+visible = false
+layout_mode = 2
+text = "X: 0.00
+Y: 0.00
+Z: 0.00"
+
 [node name="InfoButton" type="TextureButton" parent="GUIRoot"]
 anchors_preset = 1
 anchor_left = 1.0
@@ -761,7 +800,7 @@ texture_normal = ExtResource("18_0liue")
 ignore_texture_size = true
 stretch_mode = 4
 
-[node name="PlayButton" type="TextureButton" parent="GUIRoot"]
+[node name="SpyButton" type="TextureButton" parent="GUIRoot"]
 visible = false
 offset_left = 20.0
 offset_top = 104.0
@@ -769,7 +808,7 @@ offset_right = 106.0
 offset_bottom = 191.0
 tooltip_text = "Back to main menu"
 focus_mode = 0
-texture_normal = ExtResource("28_22p0g")
+texture_normal = ExtResource("29_22p0g")
 ignore_texture_size = true
 stretch_mode = 4
 
@@ -790,4 +829,4 @@ stretch_mode = 4
 [connection signal="pressed" from="GUIRoot/EquationButton" to="GUIRoot" method="_on_equation_button_pressed"]
 [connection signal="pressed" from="GUIRoot/ResetWindowsButton" to="GUIRoot" method="_on_reset_windows_button_pressed"]
 [connection signal="pressed" from="GUIRoot/BackButton" to="GUIRoot" method="_on_back_button_pressed"]
-[connection signal="pressed" from="GUIRoot/PlayButton" to="GUIRoot" method="_on_play_button_pressed"]
+[connection signal="pressed" from="GUIRoot/SpyButton" to="GUIRoot" method="_on_play_button_pressed"]
