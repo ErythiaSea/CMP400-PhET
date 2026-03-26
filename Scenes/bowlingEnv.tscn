@@ -60,6 +60,7 @@ albedo_texture = ExtResource("7_fxcs8")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65q5m"]
 friction = 0.2
+bounce = 1.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
 margin = 0.0

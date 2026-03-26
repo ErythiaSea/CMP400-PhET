@@ -1,6 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://4oeyivm4nvdn"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_va20v"]
+friction = 0.0
+bounce = 1.0
 absorbent = true
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_va20v"]

@@ -57,7 +57,7 @@ func _ready() -> void:
 	panel_init_pos.append(world_panel.position)
 	panel_init_pos.append(equation_panel.position)
 	panel_init_pos.append(question_panel.position)
-	panel_init_pos.append(spy_panel)
+	panel_init_pos.append(spy_panel.position)
 	
 	if (GameManager.current_gamemode == GameManager.mode.freeplay):
 		question_panel.visible = false
@@ -165,10 +165,24 @@ func format_question(args: Dictionary[String, float]) -> void:
 			used_args = [args["wall_dist"], args["vel"], args["angle"]]
 			param1_label.text = "Height: "
 			param2_label.text = "m"
-		GameManager.q_type.col_ballmass, GameManager.q_type.col_pinmass:
+		GameManager.q_type.col_ballmass:
+			used_args = [args["ball_u"], args["pin_mass"], args["ball_v"], args["pin_v"]]
 			param1_label.text = "Mass: "
 			param2_label.text = "kg"
-		GameManager.q_type.col_init_ballspeed, GameManager.q_type.col_final_ballspeed, GameManager.q_type.col_final_pinspeed: 
+		GameManager.q_type.col_pinmass:
+			used_args = [args["ball_mass"], args["ball_u"], args["ball_v"], args["pin_v"]]
+			param1_label.text = "Mass: "
+			param2_label.text = "kg"
+		GameManager.q_type.col_init_ballspeed:
+			used_args = [args["ball_mass"], args["pin_mass"], args["ball_v"], args["pin_v"]]
+			param1_label.text = "Velocity: "
+			param2_label.text = "m/s"
+		GameManager.q_type.col_final_ballspeed:
+			used_args = [args["ball_mass"], args["ball_u"], args["pin_mass"], args["pin_v"]]
+			param1_label.text = "Velocity: "
+			param2_label.text = "m/s"
+		GameManager.q_type.col_final_pinspeed:
+			used_args = [args["ball_mass"], args["ball_u"], args["pin_mass"], args["ball_v"]]
 			param1_label.text = "Velocity: "
 			param2_label.text = "m/s"
 	question_label.text = question_texts[GameManager.current_q_type] % used_args

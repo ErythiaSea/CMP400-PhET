@@ -60,8 +60,19 @@ func _ready() -> void:
 			
 	if (GameManager.current_gamemode == GameManager.mode.e_coeff):
 		_gizmo.hide()
-		_construct_drop_setup()
 		$Pins.queue_free()
+		
+	if (GameManager.current_gamemode == GameManager.mode.collision):
+		# disable friction for the bowling ball so it does not lose speed on the lane
+		_bowling_ball.physics_material_override.friction = 0
+		_bowling_ball.physics_material_override.rough = true
+		
+		var con = false;
+		for pin in $Pins.get_children() as Array[RigidBody3D]:
+			if (!con):
+				con = true
+				continue
+			pin.queue_free()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -90,7 +101,9 @@ func _physics_process(delta: float) -> void:
 					GameManager.q_args["pins_hit"] = _bowling_ball.pins_hit
 				if _bowling_ball.barrier_hit:
 					GameManager.q_args["barrier_hit"] = 1
-					
+				_end_checking()
+		if (GameManager.current_gamemode == GameManager.mode.collision):
+			if _bowling_ball.pins_hit > 0:
 				_end_checking()
 
 func reset_scene(full: bool = false) -> void:
@@ -104,6 +117,7 @@ func reset_scene(full: bool = false) -> void:
 	_reset_pins()
 
 func _reset_pins():
+	if !$Pins: return
 	for pin in $Pins.get_children() as Array[RigidBody3D]:
 		pin.position = pin_pos[pin]
 		pin.linear_velocity = Vector3.ZERO
@@ -201,14 +215,40 @@ func _construct_drop_setup() -> void:
 	_gizmo.clear_selection()
 	
 func _construct_collision_setup() -> void:
-	var dist = randf_range(0.4, 2.0)
-	var barrier_y_scale = randf_range(0.3, 1.5)
+	var dist = randf_range(2.4, 2.8)
+	var actual_dist = dist*2
 	
-	_barrier.scale.y = barrier_y_scale
-	_bowling_ball.position.z = _barrier.position.z + dist
-	_bowling_ball.position.y = 0.2
-	$Pins.get_child(0).position.z = _barrier.position.z - dist
+	_bowling_ball.freeze = true
+	_bowling_ball.position.z = _barrier_root.position.z + dist
+	_bowling_ball.position.y = 0
+	_bowling_ball.position.x = 0
+	_bowling_ball.rotation = Vector3.ZERO
+	_reset_pins()
+	$Pins.get_child(0).position.z = _barrier_root.position.z - dist
+	$Pins.get_child(0).position.x = 0
+	
+	var ball_mass = snappedf(randf_range(3, 20), 0.1)
+	var pin_mass = snappedf(randf_range(1, 10), 0.1)
+	var ball_u = snappedf(randf_range(2, 10), 0.1)
+	var ball_v = ball_u * ((ball_mass - pin_mass)/(ball_mass+pin_mass))
+	var pin_v = ball_u * ((2*ball_mass)/(ball_mass+pin_mass))
+	
+	_bowling_ball.fire_impulse_strength = ball_u
+	_bowling_ball.mass = 1
+	$Pins.get_child(0).mass = 1
+	
+	GameManager.q_args = {
+		"dist": actual_dist,
+		"ball_mass": ball_mass,
+		"pin_mass": pin_mass,
+		"ball_u": ball_u,
+		"ball_v": ball_v,
+		"pin_v": pin_v
+	}
+	
 	_traj_line.hide()
+	_gui_root.format_question(GameManager.q_args)
+	_gizmo.clear_selection()
 
 func _on_reset_button_pressed() -> void:
 	reset_scene(true)
@@ -266,6 +306,7 @@ func _end_checking() -> void:
 	check_done.emit()
 	
 func _lock_pin_rot(on: bool) -> void:
+	if !$Pins: return
 	for pin in $Pins.get_children() as Array[RigidBody3D]:
 		pin.axis_lock_angular_x = on
 		pin.axis_lock_angular_y = on
