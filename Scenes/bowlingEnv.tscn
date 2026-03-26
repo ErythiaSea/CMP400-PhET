@@ -604,7 +604,7 @@ stretch_mode = 4
 layout_mode = 2
 text = "Projectile Motion:"
 
-[node name="SUVATFormulae" type="TextureRect" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer"]
+[node name="PMFormula" type="TextureRect" parent="GUIRoot/FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer"]
 layout_mode = 2
 tooltip_text = "s = displacement (m)
 u = initial velocity (m/s)
@@ -698,9 +698,21 @@ layout_mode = 2
 size_flags_vertical = 0
 size_flags_stretch_ratio = 0.78
 
-[node name="BouncesLabel" type="Label" parent="GUIRoot/SpyPanel/VBoxContainer"]
+[node name="AirtimeLabel" type="Label" parent="GUIRoot/SpyPanel/VBoxContainer"]
+visible = false
 layout_mode = 2
-text = "Bounces: 0"
+text = "Air time: 0s"
+
+[node name="BouncesFoldable" type="FoldableContainer" parent="GUIRoot/SpyPanel/VBoxContainer"]
+layout_mode = 2
+focus_mode = 0
+folded = true
+title = "Bounces: 0"
+
+[node name="BouncesLabel" type="Label" parent="GUIRoot/SpyPanel/VBoxContainer/BouncesFoldable"]
+visible = false
+layout_mode = 2
+text = "Initial: 0m"
 
 [node name="VelocityFoldable" type="FoldableContainer" parent="GUIRoot/SpyPanel/VBoxContainer"]
 layout_mode = 2

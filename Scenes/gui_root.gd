@@ -28,6 +28,8 @@ extends CanvasLayer
 @export var spy_panel: PanelContainer
 var panel_init_pos: Array[Vector2]
 
+@onready var formula_hbox = $FormulaPanel/MarginContainer/ScrollContainer/HBoxContainer
+
 @export var question_label: Label
 @export var param1_label: Label
 @export var param1_box: LineEdit
@@ -61,6 +63,20 @@ func _ready() -> void:
 	
 	if (GameManager.current_gamemode == GameManager.mode.freeplay):
 		question_panel.visible = false
+	else:
+		pass
+		
+	var formula_node_prefix: String = ""
+	if (GameManager.current_gamemode == GameManager.mode.e_coeff):
+		formula_node_prefix = "COR"
+	elif (GameManager.current_gamemode == GameManager.mode.proj_mtn):
+		formula_node_prefix = "PM"
+	elif (GameManager.current_gamemode == GameManager.mode.collision):
+		formula_node_prefix = "CM"
+	if formula_node_prefix != "":
+		for n in formula_hbox.get_children():
+			if formula_node_prefix not in n.name:
+				n.hide()
 
 # holy hardcoding batman!
 func _on_arcslider_value_changed(value: float) -> void:
