@@ -221,7 +221,7 @@ func format_question(args: Dictionary[String, float]) -> void:
 	question_label.text = question_texts[GameManager.current_q_type] % used_args
 
 func _on_play_button_pressed() -> void:
-	question_panel.visible = !question_panel.visible
+	spy_panel.visible = !spy_panel.visible
 	
 func _within_tolerance(input: float, answer: float, tolerance: float = 0.01) -> bool:
 	if (abs(input - answer) < tolerance): return true

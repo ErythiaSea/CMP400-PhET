@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dlgiq4w8u6an6"]
+[gd_scene load_steps=7 format=3 uid="uid://dlgiq4w8u6an6"]
 
 [ext_resource type="Script" uid="uid://cgx51als5phaa" path="res://Scenes/main_menu.gd" id="1_1ehe0"]
 [ext_resource type="Texture2D" uid="uid://uiovn8h6xyro" path="res://GFX/menu_bg_temp.png" id="1_28flt"]
@@ -8,9 +8,6 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_48xlc"]
 font_size = 50
-
-[sub_resource type="LabelSettings" id="LabelSettings_1ehe0"]
-font_size = 32
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -38,15 +35,16 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -99.0
-offset_top = 74.0
-offset_right = 100.0
-offset_bottom = 97.0
+offset_left = -217.0
+offset_top = 54.0
+offset_right = 218.0
+offset_bottom = 123.0
 grow_horizontal = 2
 text = "Game Name/Logo"
 label_settings = SubResource("LabelSettings_48xlc")
 
 [node name="MainButtons" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -73,42 +71,33 @@ theme_override_font_sizes/font_size = 32
 text = "Options"
 
 [node name="SceneSelect" type="PanelContainer" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -208.0
-offset_top = -100.0
-offset_right = 208.0
-offset_bottom = 175.0
+offset_left = -405.0
+offset_top = -182.0
+offset_right = 405.0
+offset_bottom = 329.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="SceneSelect"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="SceneSelect/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 0
-size_flags_stretch_ratio = 1.05
-text = "Select a scene..."
-label_settings = SubResource("LabelSettings_1ehe0")
-horizontal_alignment = 1
-
-[node name="MarginContainer" type="MarginContainer" parent="SceneSelect/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="SceneSelect"]
 layout_mode = 2
 theme_override_constants/margin_left = 5
 theme_override_constants/margin_top = 5
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 5
 
-[node name="SceneButtons" type="HBoxContainer" parent="SceneSelect/VBoxContainer/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="SceneSelect/MarginContainer"]
 layout_mode = 2
 
-[node name="ProjMot" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+[node name="SceneButtons" type="HBoxContainer" parent="SceneSelect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ProjMot" type="Button" parent="SceneSelect/MarginContainer/VBoxContainer/SceneButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -119,7 +108,7 @@ icon = ExtResource("3_n45e2")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="COR" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+[node name="COR" type="Button" parent="SceneSelect/MarginContainer/VBoxContainer/SceneButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -130,7 +119,7 @@ icon = ExtResource("4_opfnp")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="Collision" type="Button" parent="SceneSelect/VBoxContainer/MarginContainer/SceneButtons"]
+[node name="Collision" type="Button" parent="SceneSelect/MarginContainer/VBoxContainer/SceneButtons"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -140,9 +129,15 @@ icon = ExtResource("5_cp0ys")
 icon_alignment = 1
 vertical_icon_alignment = 0
 
-[node name="Back" type="Button" parent="SceneSelect/VBoxContainer"]
+[node name="Freeplay" type="Button" parent="SceneSelect/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Back"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 32
+text = "Freeplay
+"
+icon_alignment = 1
+vertical_icon_alignment = 0
 
 [node name="Version" type="Label" parent="."]
 layout_mode = 1
@@ -157,7 +152,7 @@ grow_horizontal = 0
 grow_vertical = 0
 
 [connection signal="pressed" from="MainButtons/Play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/ProjMot" to="." method="_on_projmot_pressed"]
-[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/COR" to="." method="_on_cor_pressed"]
-[connection signal="pressed" from="SceneSelect/VBoxContainer/MarginContainer/SceneButtons/Collision" to="." method="_on_collision_pressed"]
-[connection signal="pressed" from="SceneSelect/VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="SceneSelect/MarginContainer/VBoxContainer/SceneButtons/ProjMot" to="." method="_on_projmot_pressed"]
+[connection signal="pressed" from="SceneSelect/MarginContainer/VBoxContainer/SceneButtons/COR" to="." method="_on_cor_pressed"]
+[connection signal="pressed" from="SceneSelect/MarginContainer/VBoxContainer/SceneButtons/Collision" to="." method="_on_collision_pressed"]
+[connection signal="pressed" from="SceneSelect/MarginContainer/VBoxContainer/Freeplay" to="." method="_on_freeplay_pressed"]

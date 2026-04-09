@@ -24,7 +24,6 @@ func _on_back_pressed() -> void:
 	$MainButtons.show()
 	$SceneSelect.hide()
 
-
 func _on_projmot_pressed() -> void:
 	GameManager.current_gamemode = GameManager.mode.proj_mtn
 	_open_bowling()
@@ -33,7 +32,10 @@ func _on_cor_pressed() -> void:
 	GameManager.current_gamemode = GameManager.mode.e_coeff
 	_open_bowling()
 
-
 func _on_collision_pressed() -> void:
 	GameManager.current_gamemode = GameManager.mode.collision
+	_open_bowling()
+	
+func _on_freeplay_pressed() -> void:
+	GameManager.current_gamemode = GameManager.mode.freeplay
 	_open_bowling()
