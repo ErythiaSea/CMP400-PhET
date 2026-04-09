@@ -7,17 +7,21 @@ extends CanvasLayer
 @export var air_resistance_coefficient_label: Label
 @export var mass_slider: HSlider
 @export var mass_label: Label
+@export var reset_button: Button
 @export var push_strength_slider: HSlider
 @export var push_strength_label: Label
 @export var time_scale_slider: HSlider
 @export var time_scale_label: Label
 @export var pin_mass_slider: HSlider
 @export var pin_mass_label: Label
+@export var wood_e_slider: HSlider
 @export var wood_e_label: Label
 @export var ball_angle_label: Label
 @export var ball_bounces_label: Label
+@export var ball_bounces_foldable: FoldableContainer
 @export var ball_vel_label: Label
-@export var force_ball: RigidBody3D
+@export var ball_vel_foldable: FoldableContainer
+@export var force_ball: BowlingBall
 @export var ghost_ball: MeshInstance3D
 
 @export var ctrl_panel: PanelContainer
@@ -105,10 +109,19 @@ func _process(delta: float) -> void:
 	if (force_ball.freeze):
 		ball_angle_label.text = "Angle: %.2f°" % force_ball.rotation_degrees.x
 	else:
-		ball_bounces_label.text = "Bounces: %d" % force_ball.bounces
+		ball_bounces_foldable.title = "Bounces: %d" % force_ball.bounces
+		var bounce_init: String = "Initial: %.2fm, height: %.2fm" % [force_ball.last_pos.y, force_ball.position.y]
+		var bounce_text: String = ""
+		for i in range(0, force_ball.bounces):
+			bounce_text += "\n%d - time: %.2fs, max: %.2fm" % [i, force_ball.flight_time_history[i], force_ball.max_height_history[i]]
+		if force_ball.in_air:
+			bounce_text += "\n%d - time: %.2fs, max: %.2fm" % [force_ball.bounces, force_ball.time_flying, force_ball.max_height]
+		bounce_init += bounce_text
+		ball_bounces_label.text = bounce_init
 		var vel = force_ball.linear_velocity
 		if (abs(vel.y) < 0.001):
 			vel.y = 0.0
+		ball_vel_foldable.title = "Velocity: %.2fm/s" % abs(vel.length())
 		ball_vel_label.text = "X: %.3fm/s\nY: %.3fm/s\nZ: %.3fm/s" % [abs(vel.x), vel.y, abs(vel.z)]
 
 func _on_ball_button_pressed() -> void:
@@ -131,6 +144,8 @@ func _on_reset_windows_button_pressed() -> void:
 	ball_panel.position = panel_init_pos[1]
 	world_panel.position = panel_init_pos[2]
 	equation_panel.position = panel_init_pos[3]
+	question_panel.position = panel_init_pos[4]
+	spy_panel.position = panel_init_pos[5]
 
 func _on_pin_mass_slider_value_changed(value: float) -> void:
 	pin_mass_label.text = "Pin Mass: %.2fkg" % value
@@ -142,6 +157,8 @@ func format_question(args: Dictionary[String, float]) -> void:
 	param2_box.hide()
 	param2_label.show()
 	param2_units.hide()
+	param1_box.text = ""
+	param2_box.text = ""
 	var used_args: Array[float]
 	skip_button.text = "Skip"
 	check_button.disabled = false
@@ -272,3 +289,11 @@ func _on_check_done() -> void:
 			question_label.text = "Not quite, the answer was %.2f" % arg
 	skip_button.text = "Continue"
 	check_button.disabled = true
+
+func toggle_sliders(enabled: bool):
+	mass_slider.editable = enabled
+	wood_e_slider.editable = enabled
+	pin_mass_slider.editable = enabled
+	time_scale_slider.editable = enabled
+	push_strength_slider.editable = enabled
+	reset_button.disabled = !enabled

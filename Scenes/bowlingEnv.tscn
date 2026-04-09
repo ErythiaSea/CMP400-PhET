@@ -63,7 +63,6 @@ albedo_texture = ExtResource("7_fxcs8")
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_65q5m"]
 friction = 0.2
-bounce = 1.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1d3fa"]
 margin = 0.0
@@ -130,8 +129,9 @@ size = Vector3(1, 5, 0.05)
 size = Vector3(1, 5, 0.05)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_va20v"]
-friction = 0.0
-bounce = 1.0
+friction = 0.2
+rough = true
+bounce = 0.4
 absorbent = true
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_aaojq"]
@@ -326,7 +326,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.123, 0.287, -15.647)
 [node name="BowlingPin5" parent="Pins" instance=ExtResource("9_lt5hn")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.225, 0.287, -15.475)
 
-[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_vel_label", "force_ball", "ghost_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel", "question_panel", "spy_panel", "question_label", "param1_label", "param1_box", "param2_label", "param2_box", "param2_units", "check_button", "skip_button")]
+[node name="GUIRoot" type="CanvasLayer" parent="." node_paths=PackedStringArray("air_resistance_toggle", "air_resistance_slider_container", "air_resistance_coefficient_slider", "air_resistance_coefficient_label", "mass_slider", "mass_label", "reset_button", "push_strength_slider", "push_strength_label", "time_scale_slider", "time_scale_label", "pin_mass_slider", "pin_mass_label", "wood_e_slider", "wood_e_label", "ball_angle_label", "ball_bounces_label", "ball_bounces_foldable", "ball_vel_label", "ball_vel_foldable", "force_ball", "ghost_ball", "ctrl_panel", "ball_panel", "world_panel", "equation_panel", "question_panel", "spy_panel", "question_label", "param1_label", "param1_box", "param2_label", "param2_box", "param2_units", "check_button", "skip_button")]
 script = ExtResource("10_w56ka")
 air_resistance_toggle = NodePath("WorldPanel/VBoxContainer/ButtonContainer/AirResistanceButton")
 air_resistance_slider_container = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer")
@@ -334,16 +334,20 @@ air_resistance_coefficient_slider = NodePath("WorldPanel/VBoxContainer/ARCSlider
 air_resistance_coefficient_label = NodePath("WorldPanel/VBoxContainer/ARCSliderContainer/ARCSliderLabel")
 mass_slider = NodePath("BallPanel/VBoxContainer/MassSliderContainer/MassSlider")
 mass_label = NodePath("BallPanel/VBoxContainer/MassSliderContainer/MassLabel")
+reset_button = NodePath("BallPanel/VBoxContainer/ResetBallContainer/ResetButton")
 push_strength_slider = NodePath("BallPanel/VBoxContainer/PSSliderContainer/PushStrengthSlider")
 push_strength_label = NodePath("BallPanel/VBoxContainer/PSSliderContainer/PSSliderLabel")
 time_scale_slider = NodePath("WorldPanel/VBoxContainer/TSSliderContainer/TimeScaleSlider")
 time_scale_label = NodePath("WorldPanel/VBoxContainer/TSSliderContainer/TSSliderLabel")
 pin_mass_slider = NodePath("WorldPanel/VBoxContainer/PinMassContainer/PinMassSlider")
 pin_mass_label = NodePath("WorldPanel/VBoxContainer/PinMassContainer/PinMassLabel")
+wood_e_slider = NodePath("WorldPanel/VBoxContainer/WoodEContainer/WoodESlider")
 wood_e_label = NodePath("WorldPanel/VBoxContainer/WoodEContainer/WoodELabel")
 ball_angle_label = NodePath("BallPanel/VBoxContainer/ResetBallContainer/AngleLabel")
-ball_bounces_label = NodePath("BallPanel/VBoxContainer/BouncesLabel")
-ball_vel_label = NodePath("BallPanel/VBoxContainer/VelocityFoldable/VelocityLabel")
+ball_bounces_label = NodePath("SpyPanel/VBoxContainer/BouncesFoldable/BouncesLabel")
+ball_bounces_foldable = NodePath("SpyPanel/VBoxContainer/BouncesFoldable")
+ball_vel_label = NodePath("SpyPanel/VBoxContainer/VelocityFoldable/VelocityLabel")
+ball_vel_foldable = NodePath("SpyPanel/VBoxContainer/VelocityFoldable")
 force_ball = NodePath("../ForceBall")
 ghost_ball = NodePath("../GhostBall")
 ctrl_panel = NodePath("ControlsPanel")
@@ -441,23 +445,6 @@ layout_mode = 2
 focus_mode = 0
 text = "Reset Ball"
 
-[node name="BouncesLabel" type="Label" parent="GUIRoot/BallPanel/VBoxContainer"]
-layout_mode = 2
-text = "Bounces: 0"
-
-[node name="VelocityFoldable" type="FoldableContainer" parent="GUIRoot/BallPanel/VBoxContainer"]
-layout_mode = 2
-focus_mode = 0
-folded = true
-title = "Velocity"
-
-[node name="VelocityLabel" type="Label" parent="GUIRoot/BallPanel/VBoxContainer/VelocityFoldable"]
-visible = false
-layout_mode = 2
-text = "X: 0.00
-Y: 0.00
-Z: 0.00"
-
 [node name="WorldPanel" type="PanelContainer" parent="GUIRoot"]
 offset_left = 849.0
 offset_top = 218.0
@@ -470,6 +457,7 @@ script = ExtResource("15_idct1")
 layout_mode = 2
 
 [node name="ButtonContainer" type="HBoxContainer" parent="GUIRoot/WorldPanel/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="ButtonLabel" type="Label" parent="GUIRoot/WorldPanel/VBoxContainer/ButtonContainer"]
@@ -849,6 +837,7 @@ stretch_mode = 4
 
 [node name="ColTest" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.677821, 0)
+visible = false
 script = ExtResource("30_edsgw")
 
 [node name="BowlingPin" type="RigidBody3D" parent="ColTest"]
@@ -864,6 +853,7 @@ max_contacts_reported = 1
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ColTest/BowlingPin"]
 transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+visible = false
 mesh = ExtResource("31_edsgw")
 skeleton = NodePath("")
 
@@ -887,6 +877,7 @@ angular_damp_mode = 1
 shape = SubResource("SphereShape3D_1d3fa")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ColTest/ForceBall"]
+visible = false
 mesh = SubResource("SphereMesh_b17vh")
 surface_material_override/0 = SubResource("StandardMaterial3D_unano")
 
@@ -900,6 +891,7 @@ physics_material_override = SubResource("PhysicsMaterial_2qt1l")
 mesh = SubResource("BoxMesh_aomcl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ColTest/laneWood"]
+visible = false
 shape = SubResource("BoxShape3D_xvsac")
 
 [connection signal="body_entered" from="ForceBall" to="ForceBall" method="_on_body_entered"]

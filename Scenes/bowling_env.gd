@@ -1,7 +1,7 @@
 extends Node3D
 
 @onready var _gizmo: Gizmo3D = $Gizmo3D
-@onready var _bowling_ball: RigidBody3D = $ForceBall
+@onready var _bowling_ball: BowlingBall = $ForceBall
 @onready var _ghost_ball: MeshInstance3D = $GhostBall
 @onready var _traj_line: TrajectoryLine = $TrajectoryLine
 
@@ -47,6 +47,7 @@ func _ready() -> void:
 		_lane_rubber.process_mode = Node.PROCESS_MODE_DISABLED
 		$Camera3D.position = _center_cam_pos
 		GameManager.generate_q_type()
+		_gui_root.toggle_sliders(false)
 		
 	if (GameManager.current_gamemode == GameManager.mode.proj_mtn):
 		_barrier.show()
@@ -75,6 +76,8 @@ func _ready() -> void:
 				con = true
 				continue
 			pin.queue_free()
+	else:
+		_col_test.queue_free() # not useful otherwise
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -127,8 +130,8 @@ func _reset_pins():
 		pin.rotation = Vector3.ZERO
 
 func _construct_lob_setup() -> void:
-	var dist = randf_range(0.6, 2.5)
-	var barrier_height = 1 + randf_range(0, 4)
+	var dist = snappedf(randf_range(0.6, 2.5),0.1)
+	var barrier_height = 1 + (snappedf(randf_range(0, 4),0.1))
 	var angle = 0
 	var vel = 0
 	var air_time = 0
@@ -169,10 +172,10 @@ func _construct_lob_setup() -> void:
 	# scramble params so success is not guaranteed by hitting check
 	match GameManager.current_q_type:
 		GameManager.q_type.suvat_lob_powerangle:
-			_bowling_ball.fire_impulse_strength = randf_range(0, 10)
-			_bowling_ball.rotation_degrees.x = randf_range(10, 80)
+			_bowling_ball.fire_impulse_strength = snappedf(randf_range(0, 10),0.1)
+			_bowling_ball.rotation_degrees.x = snappedf(randf_range(10, 80),0.1)
 		GameManager.q_type.suvat_needle_maxheight:
-			_barrier_root.position.y = randf_range(1, 5) - 2.5
+			_barrier_root.position.y = snappedf(randf_range(1, 5),0.1) - 2.5
 		GameManager.q_type.suvat_needle_dist:
 			_bowling_ball.position.z = _barrier_root.position.z + 3
 			$Pins.get_child(0).position.z = _barrier_root.position.z - 3
@@ -187,8 +190,8 @@ func _construct_needle_setup() -> void:
 	_top_barrier.process_mode = Node.PROCESS_MODE_INHERIT
 	
 func _construct_drop_setup() -> void:
-	var init_height = randf_range(1.0, 8.0)
-	var e_coeff = randf_range(0.01,1)
+	var init_height = snappedf(randf_range(1.0, 8.0), 0.1)
+	var e_coeff = snappedf(randf_range(0.01,1), 0.1)
 	var final_height = init_height * e_coeff * e_coeff
 	
 	GameManager.q_args = {

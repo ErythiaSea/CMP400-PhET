@@ -1,4 +1,5 @@
 extends RigidBody3D
+class_name BowlingBall
 
 @export var apply_air_resistance: bool = false
 @export var air_resistance_coeff: float = 0.03
@@ -13,6 +14,10 @@ var barrier_hit: bool = false
 var bounce_timer: float = 0
 const BOUNCE_WAIT: float = 0.03
 var time_flying: float = 0
+var flight_time_history: Array[float]
+var max_height: float = 0
+var max_height_history: Array[float]
+var in_air: bool = false
 
 var init_pos := Vector3(0, 1, 0)
 var last_pos := init_pos
@@ -43,6 +48,12 @@ func reset() -> void:
 	bounces = 0
 	pins_hit = 0
 	barrier_hit = false
+	print(max_height_history)
+	print(flight_time_history)
+	max_height_history.clear()
+	flight_time_history.clear()
+	time_flying = 0
+	max_height = 0
 	
 	# i cannot understand why this is necessary but it is
 	if (GameManager.current_gamemode == GameManager.mode.freeplay):
@@ -64,6 +75,9 @@ func _process(delta: float) -> void:
 		force_diag.vel = linear_velocity
 		bounce_timer -= delta
 		time_flying += delta
+		if (position.y > max_height):
+			max_height = position.y
+		in_air = (position.y > 0.00)
 		return
 	
 	if Input.is_action_pressed("ball_left"):
@@ -95,5 +109,10 @@ func _on_body_entered(body: Node) -> void:
 			print(bounces)
 			bounce_timer = BOUNCE_WAIT
 			print(time_flying)
+			flight_time_history.append(time_flying)
+			max_height_history.append(max_height)
+			max_height = 0
+			time_flying = 0
+			
 	elif (body is RigidBody3D):
 		pins_hit += 1
