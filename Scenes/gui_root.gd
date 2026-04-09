@@ -213,6 +213,7 @@ func _within_tolerance(input: float, answer: float, tolerance: float = 0.01) -> 
 func _on_check_done() -> void:
 	var correct: bool = false
 	var arg: float = -1
+	var tolerance: float = 0.01
 	match GameManager.current_q_type:
 		GameManager.q_type.e_initheight:
 			arg = GameManager.q_args["init"]
@@ -239,16 +240,26 @@ func _on_check_done() -> void:
 				correct = true
 		GameManager.q_type.col_ballmass:
 			arg = GameManager.q_args["ball_mass"]
+			tolerance = 0.1
 		GameManager.q_type.col_pinmass:
 			arg = GameManager.q_args["pin_mass"]
+			tolerance = 0.1
 		GameManager.q_type.col_init_ballspeed:
 			arg = GameManager.q_args["ball_u"]
+			tolerance = 0.1
 		GameManager.q_type.col_final_ballspeed:
 			arg = GameManager.q_args["ball_v"]
+			tolerance = 0.1
 		GameManager.q_type.col_final_pinspeed:
 			arg = GameManager.q_args["pin_v"]
-
-	if _within_tolerance(param1_box.text as float, arg) and arg >= 0:
+			tolerance = 0.1
+			
+	var answer: float
+	if (param1_box.text as float == null):
+		answer = 0
+	else:
+		answer = param1_box.text as float
+	if _within_tolerance(param1_box.text as float, arg, tolerance) and arg >= 0:
 		correct = true
 		
 	if correct:

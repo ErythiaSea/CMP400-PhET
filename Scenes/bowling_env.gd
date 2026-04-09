@@ -12,6 +12,8 @@ extends Node3D
 @onready var _barrier: StaticBody3D = $barrierRoot/barrier0
 @onready var _top_barrier: StaticBody3D = $barrierRoot/barrier1
 
+@onready var _col_test: Node3D = $ColTest
+
 @onready var _gui_root: SceneGui = $GUIRoot
 
 const _center_cam_pos: Vector3 = Vector3(-6.5, 4, -7.5)
@@ -230,8 +232,10 @@ func _construct_collision_setup() -> void:
 	var ball_mass = snappedf(randf_range(3, 20), 0.1)
 	var pin_mass = snappedf(randf_range(1, 10), 0.1)
 	var ball_u = snappedf(randf_range(2, 10), 0.1)
-	var ball_v = ball_u * ((ball_mass - pin_mass)/(ball_mass+pin_mass))
-	var pin_v = ball_u * ((2*ball_mass)/(ball_mass+pin_mass))
+	_col_test.simulate_collision(ball_mass, pin_mass, ball_u)
+	var res: Dictionary = await _col_test.collision_complete
+	#var ball_v = ball_u * ((ball_mass - pin_mass)/(ball_mass+pin_mass))
+	#var pin_v = ball_u * ((2*ball_mass)/(ball_mass+pin_mass))
 	
 	_bowling_ball.fire_impulse_strength = ball_u
 	_bowling_ball.mass = 1
@@ -242,8 +246,10 @@ func _construct_collision_setup() -> void:
 		"ball_mass": ball_mass,
 		"pin_mass": pin_mass,
 		"ball_u": ball_u,
-		"ball_v": ball_v,
-		"pin_v": pin_v
+		#"ball_v": ball_v,
+		#"pin_v": pin_v
+		"ball_v": res["ball_vel"],
+		"pin_v": res["pin_vel"]
 	}
 	
 	_traj_line.hide()

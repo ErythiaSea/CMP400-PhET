@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://dg0lyw2wu0nwg"]
+[gd_scene load_steps=63 format=3 uid="uid://dg0lyw2wu0nwg"]
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
@@ -29,6 +29,9 @@
 [ext_resource type="Script" uid="uid://b3qrdh1ct0w5" path="res://Scenes/number_box.gd" id="21_y0auy"]
 [ext_resource type="Texture2D" uid="uid://dh25x1koml73p" path="res://GFX/reset_button.png" id="23_insud"]
 [ext_resource type="Texture2D" uid="uid://c78o2owvhp814" path="res://GFX/glass_button.png" id="29_22p0g"]
+[ext_resource type="Script" uid="uid://b188gxlo27umb" path="res://Scenes/col_test.gd" id="30_edsgw"]
+[ext_resource type="ArrayMesh" uid="uid://c3xh1ogv1axhx" path="res://mdl/model.obj" id="31_edsgw"]
+[ext_resource type="Material" uid="uid://dhv24qs0yiphl" path="res://res/lane_mat_wood.tres" id="32_8723f"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
 panorama = ExtResource("1_deeac")
@@ -125,6 +128,25 @@ size = Vector3(1, 5, 0.05)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_a32rq"]
 size = Vector3(1, 5, 0.05)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_va20v"]
+friction = 0.0
+bounce = 1.0
+absorbent = true
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_aaojq"]
+points = PackedVector3Array(-0.1871932, -0.28502363, -3.6656857e-05, -0.1621266, -0.28502363, 0.09355989, -0.18536085, -0.16502553, -3.6656857e-05, -0.1621266, -0.28502363, -0.0936332, -0.15629973, -0.3951157, -3.6656857e-05, -0.09363325, -0.28502363, 0.16208985, -0.16051415, -0.16502553, 0.09264371, -0.1353376, -0.3951157, 0.07809484, -0.07816818, -0.3951157, 0.13530087, -0.16051415, -0.16502553, -0.09268038, -0.091067955, 0.48494542, 0.05255185, -0.105140425, 0.48494542, -3.6656857e-05, -0.091067955, 0.48494542, -0.052588508, -0.09363325, -0.28502363, -0.16212651, -0.1353376, -0.3951157, -0.07816815, -0.0779483, -0.5750003, -0.04500258, -0.09000519, -0.5750003, -1.4901161e-08, -0.0779483, -0.5750003, 0.044965908, -3.6641955e-05, -0.28502363, 0.18719307, -0.092680424, -0.16502553, 0.16047737, -3.6641955e-05, -0.3951157, 0.15626296, -0.045002595, -0.5750003, 0.077911615, -0.092680424, -0.16502553, -0.16051406, -0.052588537, 0.48494542, 0.0909946, -0.047311366, 0.5549631, 0.08190614, -0.081942834, 0.5549631, 0.04727468, -0.09462272, 0.5549631, -3.6656857e-05, -0.081942834, 0.5549631, -0.047311336, -0.052588537, 0.48494542, -0.0910679, -3.6641955e-05, -0.16502553, -0.18536074, -3.6641955e-05, -0.28502363, -0.1871931, -3.6641955e-05, -0.3951157, -0.15629964, -0.07816818, -0.3951157, -0.13533753, -0.045002595, -0.5750003, -0.077948265, 0.093559936, -0.28502363, 0.16208985, 0.09264378, -0.16502553, 0.16047737, -3.6641955e-05, -0.16502553, 0.18528745, -3.6641955e-05, 0.48494542, 0.1051037, 0.078094885, -0.3951157, 0.13530087, -3.6641955e-05, -0.5750003, 0.08996847, 0.044965938, -0.5750003, 0.077911615, -3.6641955e-05, 0.5549631, 0.094586015, -0.031076714, 0.5750003, 0.053724557, -0.053761244, 0.5750003, 0.031003386, -0.06208013, 0.5750003, -3.6656857e-05, -0.053761244, 0.5750003, -0.0310767, -0.047311366, 0.5549631, -0.0819428, -3.6641955e-05, 0.5549631, -0.09462267, -3.6641955e-05, 0.48494542, -0.10514037, 0.09264378, -0.16502553, -0.16051406, 0.093559936, -0.28502363, -0.16212651, 0.05255188, 0.48494542, -0.0910679, 0.078094885, -0.3951157, -0.13533753, 0.044965938, -0.5750003, -0.077948265, -3.6641955e-05, -0.5750003, -0.090005144, 0.16208996, -0.28502363, 0.09355989, 0.16047747, -0.16502553, 0.09264371, 0.05255188, 0.48494542, 0.0909946, 0.04727471, 0.5549631, 0.08190614, 0.13530095, -0.3951157, 0.07809484, 0.07791166, -0.5750003, 0.044965908, 0.031003416, 0.57488775, 0.053724557, -3.6641955e-05, 0.57488775, 0.06204343, 0.053724587, 0.57488775, 0.031003386, 0.062043473, 0.57488775, -3.6656857e-05, -0.031076714, 0.5750003, -0.053761214, -3.6641955e-05, 0.57488775, -0.0620801, 0.031003416, 0.57488775, -0.053761214, 0.04727471, 0.5549631, -0.0819428, 0.16047747, -0.16502553, -0.09268038, 0.16208996, -0.28502363, -0.0936332, 0.13530095, -0.3951157, -0.07816815, 0.081906185, 0.5549631, -0.047311336, 0.09099464, 0.48494542, -0.052588508, 0.07791166, -0.5750003, -0.04500258, 0.15626307, -0.3951157, -3.6656857e-05, 0.1871932, -0.28502363, -3.6656857e-05, 0.18528755, -0.16502553, -3.6656857e-05, 0.105103776, 0.48494542, -3.6656857e-05, 0.09099464, 0.48494542, 0.05255185, 0.081906185, 0.5549631, 0.04727468, 0.08996855, -0.5750003, -1.4901161e-08, 0.09458606, 0.5549631, -3.6656857e-05, 0.053724587, 0.57488775, -0.0310767)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_2qt1l"]
+friction = 0.0
+bounce = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_aomcl"]
+material = ExtResource("32_8723f")
+size = Vector3(17.5, 0.185, 1.1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xvsac"]
+size = Vector3(17.5, 0.185, 1.1)
 
 [node name="BowlingEnv" type="Node3D"]
 script = ExtResource("1_0fhea")
@@ -824,6 +846,61 @@ focus_mode = 0
 texture_normal = ExtResource("29_22p0g")
 ignore_texture_size = true
 stretch_mode = 4
+
+[node name="ColTest" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.677821, 0)
+script = ExtResource("30_edsgw")
+
+[node name="BowlingPin" type="RigidBody3D" parent="ColTest"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05287361, -7.1322303)
+collision_layer = 8
+collision_mask = 8
+mass = 1.5
+physics_material_override = SubResource("PhysicsMaterial_va20v")
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.05, 0)
+contact_monitor = true
+max_contacts_reported = 1
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ColTest/BowlingPin"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = ExtResource("31_edsgw")
+skeleton = NodePath("")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="ColTest/BowlingPin"]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_aaojq")
+
+[node name="ForceBall" type="RigidBody3D" parent="ColTest"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -6.378167)
+collision_layer = 8
+collision_mask = 8
+mass = 7.0
+physics_material_override = SubResource("PhysicsMaterial_65q5m")
+can_sleep = false
+continuous_cd = true
+max_contacts_reported = 1
+linear_damp_mode = 1
+angular_damp_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ColTest/ForceBall"]
+shape = SubResource("SphereShape3D_1d3fa")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="ColTest/ForceBall"]
+mesh = SubResource("SphereMesh_b17vh")
+surface_material_override/0 = SubResource("StandardMaterial3D_unano")
+
+[node name="laneWood" type="StaticBody3D" parent="ColTest"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.214, -7.5)
+collision_layer = 8
+collision_mask = 8
+physics_material_override = SubResource("PhysicsMaterial_2qt1l")
+
+[node name="Floor" type="MeshInstance3D" parent="ColTest/laneWood"]
+mesh = SubResource("BoxMesh_aomcl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ColTest/laneWood"]
+shape = SubResource("BoxShape3D_xvsac")
 
 [connection signal="body_entered" from="ForceBall" to="ForceBall" method="_on_body_entered"]
 [connection signal="pressed" from="GUIRoot/BallPanel/VBoxContainer/ResetBallContainer/ResetButton" to="." method="_on_reset_button_pressed"]
