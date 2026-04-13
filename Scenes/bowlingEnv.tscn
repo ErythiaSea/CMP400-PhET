@@ -2,9 +2,9 @@
 
 [ext_resource type="Script" uid="uid://cc5q1cb24qhcx" path="res://Scenes/bowling_env.gd" id="1_0fhea"]
 [ext_resource type="Script" uid="uid://b2k2ymxk2hqwc" path="res://Scenes/mouselook_cam.gd" id="1_08dfx"]
-[ext_resource type="Texture2D" uid="uid://c606rf1fe35sf" path="res://GFX/lcsky.png" id="1_deeac"]
 [ext_resource type="Script" uid="uid://d2vpsis0wq81n" path="res://Scenes/bowling_ball.gd" id="3_0fhea"]
 [ext_resource type="PackedScene" uid="uid://bvlr2qb0wnb5" path="res://Scenes/forceDiagComponent.tscn" id="4_0fhea"]
+[ext_resource type="Texture2D" uid="uid://c44wvxkablqeq" path="res://GFX/newsky.png" id="4_edsgw"]
 [ext_resource type="Script" uid="uid://e3f1ox6y6cvg" path="res://addons/Gizmo3DScript/gizmo3D.gd" id="6_wp4vv"]
 [ext_resource type="Texture2D" uid="uid://b8ydn45666nk7" path="res://GFX/bowling_ball.png" id="7_fxcs8"]
 [ext_resource type="Script" uid="uid://cigrabbeusvkm" path="res://Scenes/trajectory_line.gd" id="8_hymiy"]
@@ -33,18 +33,16 @@
 [ext_resource type="ArrayMesh" uid="uid://c3xh1ogv1axhx" path="res://mdl/model.obj" id="31_edsgw"]
 [ext_resource type="Material" uid="uid://dhv24qs0yiphl" path="res://res/lane_mat_wood.tres" id="32_8723f"]
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_hymiy"]
-panorama = ExtResource("1_deeac")
-energy_multiplier = 2.0
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_qw02s"]
+panorama = ExtResource("4_edsgw")
+energy_multiplier = 1.08
 
 [sub_resource type="Sky" id="Sky_vl7ro"]
-sky_material = SubResource("PanoramaSkyMaterial_hymiy")
+sky_material = SubResource("PanoramaSkyMaterial_qw02s")
 process_mode = 3
 
 [sub_resource type="Environment" id="Environment_lt5hn"]
 background_mode = 2
-background_color = Color(0.23529412, 0.6431373, 0.6431373, 1)
-background_energy_multiplier = 1.2
 sky = SubResource("Sky_vl7ro")
 ambient_light_source = 2
 ambient_light_color = Color(0.7666196, 0.76661956, 0.76661956, 1)
@@ -162,7 +160,7 @@ _selection_box_color = Color(1, 0.5019608, 0, 0)
 metadata/_custom_type_script = "uid://e3f1ox6y6cvg"
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.39256418, 0.6943696, -0.60311216, 0.3787903, 0.7196186, 0.581951, 0.83809984, 9.990927e-08, -0.5455169, 0, 16.050179, 0)
+transform = Transform3D(0.09917353, 0.82834125, -0.551376, 0.36664492, 0.48470345, 0.79412466, 0.92506015, -0.28091538, -0.2556373, 0, 16.050179, -5.219375)
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -403,16 +401,16 @@ layout_mode = 2
 [node name="PSSliderLabel" type="Label" parent="GUIRoot/BallPanel/VBoxContainer/PSSliderContainer"]
 layout_mode = 2
 size_flags_horizontal = 2
-text = "Throw Impulse: 50N/s"
+text = "Throw Strength: 10m/s"
 
 [node name="PushStrengthSlider" type="HSlider" parent="GUIRoot/BallPanel/VBoxContainer/PSSliderContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 size_flags_stretch_ratio = 0.5
-max_value = 300.0
+max_value = 50.0
 step = 0.01
-value = 50.0
+value = 10.0
 
 [node name="MassSliderContainer" type="HBoxContainer" parent="GUIRoot/BallPanel/VBoxContainer"]
 layout_mode = 2

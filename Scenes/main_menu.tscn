@@ -1,13 +1,11 @@
 [gd_scene load_steps=7 format=3 uid="uid://dlgiq4w8u6an6"]
 
 [ext_resource type="Script" uid="uid://cgx51als5phaa" path="res://Scenes/main_menu.gd" id="1_1ehe0"]
-[ext_resource type="Texture2D" uid="uid://uiovn8h6xyro" path="res://GFX/menu_bg_temp.png" id="1_28flt"]
+[ext_resource type="Texture2D" uid="uid://bgckxrqv03gjo" path="res://GFX/menu_bg.png" id="2_opfnp"]
 [ext_resource type="Texture2D" uid="uid://p72t8cc4rb3i" path="res://GFX/projmot_icon.png" id="3_n45e2"]
+[ext_resource type="Texture2D" uid="uid://rke8hjip8lky" path="res://GFX/logo.png" id="3_opfnp"]
 [ext_resource type="Texture2D" uid="uid://btumcuxh4swo6" path="res://GFX/bounce_icon.png" id="4_opfnp"]
 [ext_resource type="Texture2D" uid="uid://bltmecxinqcfb" path="res://GFX/collision_icon.png" id="5_cp0ys"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_48xlc"]
-font_size = 50
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -27,21 +25,22 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("1_28flt")
+texture = ExtResource("2_opfnp")
 expand_mode = 1
 
-[node name="Title" type="Label" parent="."]
+[node name="Title" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -217.0
-offset_top = 54.0
-offset_right = 218.0
-offset_bottom = 123.0
+offset_left = -233.0
+offset_top = 29.0
+offset_right = 233.5
+offset_bottom = 144.0
 grow_horizontal = 2
-text = "Game Name/Logo"
-label_settings = SubResource("LabelSettings_48xlc")
+texture = ExtResource("3_opfnp")
+expand_mode = 2
+stretch_mode = 4
 
 [node name="MainButtons" type="VBoxContainer" parent="."]
 visible = false

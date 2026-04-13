@@ -10,11 +10,10 @@ config_version=5
 
 [application]
 
-config/name="CMP400 PhET (4.5)"
+config/name="CMP400 PhET"
 config/version="v0.4"
-run/main_scene="uid://dg0lyw2wu0nwg"
+run/main_scene="uid://dlgiq4w8u6an6"
 config/features=PackedStringArray("4.5", "GL Compatibility")
-config/icon="res://GFX/icon.svg"
 
 [autoload]
 

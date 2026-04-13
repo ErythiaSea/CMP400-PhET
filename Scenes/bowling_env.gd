@@ -52,7 +52,7 @@ func _ready() -> void:
 	if (GameManager.current_gamemode == GameManager.mode.proj_mtn):
 		_barrier.show()
 		_barrier.process_mode = Node.PROCESS_MODE_INHERIT
-		_gizmo.mode -= _gizmo.ToolMode.MOVE
+		_gizmo.mode = 0
 		
 		var con = false;
 		for pin in $Pins.get_children() as Array[RigidBody3D]:
@@ -107,6 +107,8 @@ func _physics_process(delta: float) -> void:
 				if _bowling_ball.barrier_hit:
 					GameManager.q_args["barrier_hit"] = 1
 				_end_checking()
+			if _bowling_ball.position.y > 12.5:
+				_end_checking() # no cheating!
 		if (GameManager.current_gamemode == GameManager.mode.collision):
 			if _bowling_ball.pins_hit > 0:
 				_end_checking()
@@ -300,6 +302,7 @@ func _on_param_1_value_changed(value: float) -> void:
 		GameManager.q_type.suvat_needle_maxheight:
 			_barrier_root.position.y = value - 2.5
 		GameManager.q_type.suvat_needle_dist:
+			if (value < 0.1): value = 0.1
 			_bowling_ball.position.z = _barrier_root.position.z + value
 
 func _on_param_2_value_changed(value: float) -> void:

@@ -7,7 +7,7 @@ class_name BowlingBall
 @onready var force_diag = $ArrowRoot
 @export var traj_line: Node3D
 
-var fire_impulse_strength: float = 50
+var fire_impulse_strength: float = 10
 var bounces: int = 0
 var pins_hit: int = 0
 var barrier_hit: bool = false
@@ -28,7 +28,7 @@ var last_rot := init_rot
 func _ready() -> void:
 	pass # Replace with function body.
 
-func fire(use_velocity: bool = false) -> void:
+func fire(use_velocity: bool = true) -> void:
 	last_pos = position
 	last_rot = rotation
 	freeze = false

@@ -97,7 +97,7 @@ func _on_mass_slider_value_changed(value: float) -> void:
 	
 func _on_ps_slider_value_changed(value: float) -> void:
 	force_ball.fire_impulse_strength = value
-	push_strength_label.text = "Throw Impulse: %.2fN/s" % value
+	push_strength_label.text = "Throw Impulse: %.2fm/s" % value
 	
 func _on_time_scale_slider_value_changed(value: float) -> void:
 	Engine.time_scale = value
@@ -112,7 +112,7 @@ func _process(delta: float) -> void:
 		ball_bounces_foldable.title = "Bounces: %d" % force_ball.bounces
 		var bounce_init: String = "Initial: %.2fm, height: %.2fm" % [force_ball.last_pos.y, force_ball.position.y]
 		var bounce_text: String = ""
-		for i in range(0, force_ball.bounces):
+		for i in range(0, force_ball.flight_time_history.size()):
 			bounce_text += "\n%d - time: %.2fs, max: %.2fm" % [i, force_ball.flight_time_history[i], force_ball.max_height_history[i]]
 		if force_ball.in_air:
 			bounce_text += "\n%d - time: %.2fs, max: %.2fm" % [force_ball.bounces, force_ball.time_flying, force_ball.max_height]
