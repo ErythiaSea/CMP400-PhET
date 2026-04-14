@@ -175,6 +175,18 @@ func format_question(args: Dictionary[String, float]) -> void:
 			param1_label.text = "Coefficient of restitution: "
 			param2_label.hide()
 			used_args = [args["init"], args["final"]]
+		GameManager.q_type.e_finalvel:
+			param1_label.text = "Velocity: "
+			param2_label.text = "m/s"
+			used_args = [args["e"], args["u"]]
+		GameManager.q_type.e_initvel:
+			param1_label.text = "Velocity: "
+			param2_label.text = "m/s"
+			used_args = [args["e"], args["v"]]
+		GameManager.q_type.e_vel_coeff:
+			param1_label.text = "Coefficient of restitution: "
+			param2_label.hide()
+			used_args = [args["u"], args["v"]]
 		GameManager.q_type.suvat_lob_powerangle:
 			param2_box.show()
 			param2_units.show()
@@ -238,6 +250,12 @@ func _on_check_done() -> void:
 			arg = GameManager.q_args["final"]
 		GameManager.q_type.e_findcoeff:
 			arg = GameManager.q_args["e"]
+		GameManager.q_type.e_finalvel:
+			arg = GameManager.q_args["v"]
+		GameManager.q_type.e_initvel:
+			arg = GameManager.q_args["u"]
+		GameManager.q_type.e_vel_coeff:
+			arg = GameManager.q_args["e"]
 		GameManager.q_type.suvat_lob_powerangle:
 			print (GameManager.q_args["pins_hit"])
 			if GameManager.q_args["pins_hit"] >= 0 && GameManager.q_args["barrier_hit"] < 1:
@@ -272,6 +290,7 @@ func _on_check_done() -> void:
 			tolerance = 0.1
 			
 	var answer: float
+	arg = snappedf(arg, 0.01)
 	if (param1_box.text as float == null):
 		answer = 0
 	else:

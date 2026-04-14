@@ -194,13 +194,17 @@ func _construct_needle_setup() -> void:
 	
 func _construct_drop_setup() -> void:
 	var init_height = snappedf(randf_range(1.0, 8.0), 0.1)
-	var e_coeff = snappedf(randf_range(0.01,1), 0.1)
+	var e_coeff = snappedf(randf_range(0.01,1), 0.01)
 	var final_height = init_height * e_coeff * e_coeff
+	var init_vel = sqrt(2*9.8*init_height) # v2=u2+2as
+	var final_vel = e_coeff * init_vel
 	
 	GameManager.q_args = {
 		"init": init_height,
 		"final": final_height,
-		"e": e_coeff
+		"e": e_coeff,
+		"u": init_vel,
+		"v": final_vel
 	}
 	
 	_lane_wood.physics_material_override.bounce = 0.5
@@ -296,7 +300,7 @@ func _update_gui_labels() -> void:
 		else:
 			_gui_root.pin_mass_label.text = "Pin Mass: %.2fkg" % _pins.get_child(0).mass
 			
-	if GameManager.current_q_type == GameManager.q_type.e_findcoeff:
+	if GameManager.current_q_type in [GameManager.q_type.e_findcoeff, GameManager.q_type.e_vel_coeff]:
 		_gui_root.wood_e_label.text = "Wood Lane e: ??"
 	else:
 		_gui_root.wood_e_label.text = "Wood Lane e: %.2f" % _lane_wood.physics_material_override.bounce
@@ -322,6 +326,8 @@ func _on_param_1_value_changed(value: float) -> void:
 		GameManager.q_type.e_finalheight:
 			_ghost_ball.position.y = value
 		GameManager.q_type.e_findcoeff:
+			_lane_wood.physics_material_override.bounce = max(value, 0)
+		GameManager.q_type.e_vel_coeff:
 			_lane_wood.physics_material_override.bounce = max(value, 0)
 		GameManager.q_type.suvat_lob_powerangle:
 			_bowling_ball.fire_impulse_strength = value

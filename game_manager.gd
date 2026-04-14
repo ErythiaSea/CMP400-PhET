@@ -15,16 +15,19 @@ enum q_type {
 	e_initheight,            #0
 	e_finalheight,           #1
 	e_findcoeff,             #2
-	suvat_lob_powerangle,    #3
-	suvat_lob_angle_time,    #4
-	suvat_lob_dist_time,     #5
-	suvat_needle_maxheight,  #6
-	suvat_needle_dist,       #7
-	col_ballmass,            #8
-	col_pinmass,             #9
-	col_init_ballspeed,      #10
-	col_final_ballspeed,     #11
-	col_final_pinspeed,      #12
+	e_finalvel,              #3
+	e_initvel,               #4
+	e_vel_coeff,             #5
+	suvat_lob_powerangle,    #6
+	suvat_lob_angle_time,    #7
+	suvat_lob_dist_time,     #8
+	suvat_needle_maxheight,  #9
+	suvat_needle_dist,       #10
+	col_ballmass,            #11
+	col_pinmass,             #12
+	col_init_ballspeed,      #13
+	col_final_ballspeed,     #14
+	col_final_pinspeed,      #15
 	q_type_count
 }
 
@@ -41,7 +44,7 @@ func generate_q_type() -> q_type:
 		return q_type.q_type_count
 		
 	if current_gamemode == mode.e_coeff:
-		var i = randi_range(0, 2)
+		var i = randi_range(0, 5)
 		current_q_type = (0 + i) as q_type
 		
 	if current_gamemode == mode.proj_mtn:
