@@ -108,7 +108,7 @@ func _physics_process(delta: float) -> void:
 				if _bowling_ball.barrier_hit:
 					GameManager.q_args["barrier_hit"] = 1
 				_end_checking()
-			if _bowling_ball.position.y > 12.5:
+			if _bowling_ball.position.y > 12.5 and _top_barrier.visible:
 				_end_checking() # no cheating!
 		if (GameManager.current_gamemode == GameManager.mode.collision):
 			if _bowling_ball.pins_hit > 0:
