@@ -10,10 +10,11 @@ config_version=5
 
 [application]
 
-config/name="CMP400 PhET"
-config/version="v0.4"
+config/name="Physi-Bowl"
+config/version="0.4.9"
 run/main_scene="uid://dlgiq4w8u6an6"
 config/features=PackedStringArray("4.5", "GL Compatibility")
+config/windows_native_icon="res://GFX/icon.ico"
 
 [autoload]
 

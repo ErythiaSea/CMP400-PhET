@@ -15,6 +15,7 @@ extends Node3D
 @onready var _col_test: Node3D = $ColTest
 
 @onready var _gui_root: SceneGui = $GUIRoot
+@onready var _pins: Node3D = $Pins
 
 const _center_cam_pos: Vector3 = Vector3(-6.5, 4, -7.5)
 
@@ -29,7 +30,7 @@ signal check_done
 func _ready() -> void:
 	GameManager.new_question_type.connect(_on_new_q_type)
 	
-	for pin in $Pins.get_children() as Array[RigidBody3D]:
+	for pin in _pins.get_children() as Array[RigidBody3D]:
 		pin_pos[pin] = pin.position
 	
 	_barrier.hide()
@@ -55,7 +56,7 @@ func _ready() -> void:
 		_gizmo.mode = 0
 		
 		var con = false;
-		for pin in $Pins.get_children() as Array[RigidBody3D]:
+		for pin in _pins.get_children() as Array[RigidBody3D]:
 			if (!con):
 				con = true
 				continue
@@ -63,7 +64,7 @@ func _ready() -> void:
 			
 	if (GameManager.current_gamemode == GameManager.mode.e_coeff):
 		_gizmo.hide()
-		$Pins.queue_free()
+		_pins.queue_free()
 		
 	if (GameManager.current_gamemode == GameManager.mode.collision):
 		# disable friction for the bowling ball so it does not lose speed on the lane
@@ -71,7 +72,7 @@ func _ready() -> void:
 		_bowling_ball.physics_material_override.rough = true
 		
 		var con = false;
-		for pin in $Pins.get_children() as Array[RigidBody3D]:
+		for pin in _pins.get_children() as Array[RigidBody3D]:
 			if (!con):
 				con = true
 				continue
@@ -124,8 +125,8 @@ func reset_scene(full: bool = false) -> void:
 	_reset_pins()
 
 func _reset_pins():
-	if !$Pins: return
-	for pin in $Pins.get_children() as Array[RigidBody3D]:
+	if _pins == null: return
+	for pin in _pins.get_children() as Array[RigidBody3D]:
 		pin.position = pin_pos[pin]
 		pin.linear_velocity = Vector3.ZERO
 		pin.angular_velocity = Vector3.ZERO
@@ -144,8 +145,8 @@ func _construct_lob_setup() -> void:
 	_bowling_ball.position.x = 0
 	_bowling_ball.rotation = Vector3.ZERO
 	_reset_pins()
-	$Pins.get_child(0).position.z = _barrier_root.position.z - dist
-	$Pins.get_child(0).position.x = 0
+	_pins.get_child(0).position.z = _barrier_root.position.z - dist
+	_pins.get_child(0).position.x = 0
 	_traj_line.hide()
 	
 	if (GameManager.current_q_type != GameManager.q_type.suvat_lob_powerangle):
@@ -180,7 +181,7 @@ func _construct_lob_setup() -> void:
 			_barrier_root.position.y = snappedf(randf_range(1, 5),0.1) - 2.5
 		GameManager.q_type.suvat_needle_dist:
 			_bowling_ball.position.z = _barrier_root.position.z + 3
-			$Pins.get_child(0).position.z = _barrier_root.position.z - 3
+			_pins.get_child(0).position.z = _barrier_root.position.z - 3
 	
 	_top_barrier.hide()
 	_top_barrier.process_mode = Node.PROCESS_MODE_DISABLED
@@ -231,8 +232,8 @@ func _construct_collision_setup() -> void:
 	_bowling_ball.position.x = 0
 	_bowling_ball.rotation = Vector3.ZERO
 	_reset_pins()
-	$Pins.get_child(0).position.z = _barrier_root.position.z - dist
-	$Pins.get_child(0).position.x = 0
+	_pins.get_child(0).position.z = _barrier_root.position.z - dist
+	_pins.get_child(0).position.x = 0
 	
 	var ball_mass = snappedf(randf_range(3, 20), 0.1)
 	var pin_mass = snappedf(randf_range(1, 10), 0.1)
@@ -243,8 +244,8 @@ func _construct_collision_setup() -> void:
 	#var pin_v = ball_u * ((2*ball_mass)/(ball_mass+pin_mass))
 	
 	_bowling_ball.fire_impulse_strength = ball_u
-	_bowling_ball.mass = 1
-	$Pins.get_child(0).mass = 1
+	_bowling_ball.mass = ball_mass
+	_pins.get_child(0).mass = pin_mass
 	
 	GameManager.q_args = {
 		"dist": actual_dist,
@@ -260,12 +261,13 @@ func _construct_collision_setup() -> void:
 	_traj_line.hide()
 	_gui_root.format_question(GameManager.q_args)
 	_gizmo.clear_selection()
+	_update_gui_labels() # do it again here because async
 
 func _on_reset_button_pressed() -> void:
 	reset_scene(true)
 
 func _on_pin_mass_slider_value_changed(value: float) -> void:
-	for pin in $Pins.get_children() as Array[RigidBody3D]:
+	for pin in _pins.get_children() as Array[RigidBody3D]:
 		pin.mass = value
 
 func _on_wood_e_slider_value_changed(value: float) -> void:
@@ -277,6 +279,28 @@ func _on_skip_button_pressed() -> void:
 	_reset_pins()
 	GameManager.generate_q_type.call_deferred()
 		
+func _update_gui_labels() -> void:
+	if GameManager.current_q_type == GameManager.q_type.col_init_ballspeed:
+		_gui_root.push_strength_label.text = "Throw Strength: ??m/s"
+	else:
+		_gui_root.push_strength_label.text = "Throw Strength: %.2fm/s" % _bowling_ball.fire_impulse_strength
+		
+	if GameManager.current_q_type == GameManager.q_type.col_ballmass:
+		_gui_root.mass_label.text = "Mass: ??kg"
+	else:
+		_gui_root.mass_label.text = "Mass: %.2fkg" % _bowling_ball.mass
+		
+	if (_pins != null) and (_pins.get_children().size() > 0):
+		if GameManager.current_q_type == GameManager.q_type.col_pinmass:
+			_gui_root.pin_mass_label.text = "Pin Mass: ??kg"
+		else:
+			_gui_root.pin_mass_label.text = "Pin Mass: %.2fkg" % _pins.get_child(0).mass
+			
+	if GameManager.current_q_type == GameManager.q_type.e_findcoeff:
+		_gui_root.wood_e_label.text = "Wood Lane e: ??"
+	else:
+		_gui_root.wood_e_label.text = "Wood Lane e: %.2f" % _lane_wood.physics_material_override.bounce
+
 func _on_new_q_type(type: GameManager.q_type) -> void:
 	_bowling_ball.reset()
 	if (GameManager.current_gamemode == GameManager.mode.e_coeff):
@@ -288,6 +312,8 @@ func _on_new_q_type(type: GameManager.q_type) -> void:
 			_construct_lob_setup()
 		else:
 			_construct_needle_setup()
+	_update_gui_labels()
+
 
 func _on_param_1_value_changed(value: float) -> void:
 	match GameManager.current_q_type:
@@ -304,6 +330,14 @@ func _on_param_1_value_changed(value: float) -> void:
 		GameManager.q_type.suvat_needle_dist:
 			if (value < 0.1): value = 0.1
 			_bowling_ball.position.z = _barrier_root.position.z + value
+		GameManager.q_type.col_ballmass:
+			if (value < 0.1): value = 0.1
+			_bowling_ball.mass = value
+		GameManager.q_type.col_pinmass:
+			if (value < 0.1): value = 0.1
+			_pins.get_child(0).mass = value
+			
+	_update_gui_labels()
 
 func _on_param_2_value_changed(value: float) -> void:
 	_bowling_ball.rotation_degrees.x = value
@@ -318,8 +352,8 @@ func _end_checking() -> void:
 	check_done.emit()
 	
 func _lock_pin_rot(on: bool) -> void:
-	if !$Pins: return
-	for pin in $Pins.get_children() as Array[RigidBody3D]:
+	if !_pins: return
+	for pin in _pins.get_children() as Array[RigidBody3D]:
 		pin.axis_lock_angular_x = on
 		pin.axis_lock_angular_y = on
 		pin.axis_lock_angular_z = on
