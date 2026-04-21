@@ -1,3 +1,6 @@
+## The GameManager is responsible for storing the current scenario type
+## and for tracking and generating question types.
+
 extends Node
 
 const MAIN_MENU_SCENE = "res://Scenes/main_menu.tscn"

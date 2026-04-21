@@ -1,3 +1,7 @@
+## Note for CMP400 markers: I (Eryth Davidson, 2201593) did NOT make this code.
+## It was acquired from the Godot Asset Library and authored by Chris Charbonneau.
+## You can find the source here: https://github.com/chrisizeful/Gizmo3D
+
 class_name GizmoHelper
 extends Node
 ## A collection of helper methods translated from the C++ Godot source.

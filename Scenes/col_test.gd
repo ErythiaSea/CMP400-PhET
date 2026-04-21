@@ -1,3 +1,7 @@
+## Code for an invisible recreation of the bowling environment that exists
+## below the main one in the collision scenario only.
+## Used to test for resulting collision values before displaying these values in questions
+
 extends Node3D
 
 @onready var ball: RigidBody3D = $ForceBall

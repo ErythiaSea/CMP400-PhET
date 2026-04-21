@@ -1,3 +1,6 @@
+## The windows that appear in scenes
+## This code exists to move them with the mouse
+
 extends PanelContainer
 
 var is_being_held: bool = false

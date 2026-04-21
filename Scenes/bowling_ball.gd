@@ -24,10 +24,6 @@ var last_pos := init_pos
 var init_rot: Vector3 = Vector3.ZERO
 var last_rot := init_rot
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
 func fire(use_velocity: bool = true) -> void:
 	last_pos = position
 	last_rot = rotation
@@ -93,9 +89,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed("ball_down"):
 		move_and_collide(Vector3.DOWN * 3 * delta)
 		
-	traj_line.expected_init_vel = fire_impulse_strength / mass
+	traj_line.expected_init_vel = fire_impulse_strength
 
-
+## Called when the ball collides with something
 func _on_body_entered(body: Node) -> void:
 	if (body is StaticBody3D):
 		print("body entered")

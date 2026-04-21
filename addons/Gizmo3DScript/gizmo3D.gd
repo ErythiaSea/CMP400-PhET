@@ -1,3 +1,7 @@
+## Note for CMP400 markers: I (Eryth Davidson, 2201593) did NOT make this code.
+## It was acquired from the Godot Asset Library and authored by Chris Charbonneau.
+## You can find the source here: https://github.com/chrisizeful/Gizmo3D
+
 class_name Gizmo3D
 extends Node3D
 ## Gizmo3D encapsulates the Godot Engines 3D move/scale/rotation gizmos into a customizable node for use at runtime.

@@ -1,3 +1,7 @@
+## Note to CMP400 markers: I (Eryth Davidson, 2201593) did not author this code
+## It has been largely adapted from the following Reddit thread:
+## https://www.reddit.com/r/godot/comments/1k8nbfe/3d_trajectory_lines_a_humble_guide/
+
 class_name TrajectoryLine
 extends MeshInstance3D
 

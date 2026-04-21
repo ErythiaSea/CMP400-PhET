@@ -1,3 +1,7 @@
+## The bowling environment
+## Responsible for controlling a majority of its children, positioning pins, balls and barriers
+## depending on question parameters
+
 extends Node3D
 
 @onready var _gizmo: Gizmo3D = $Gizmo3D

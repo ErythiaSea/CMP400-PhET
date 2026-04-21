@@ -1,5 +1,8 @@
+## Basic camera script
+
 extends Camera3D
 var mlook: bool = false
+var skip_move_frames: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -23,18 +26,22 @@ func _process(delta: float) -> void:
 		position += Vector3(0, 1, 0) * delta * 5
 	if (Input.is_action_pressed("camera_down")):
 		position -= Vector3(0, 1, 0) * delta * 5
+		
+	if (skip_move_frames > 0):
+		(func(): skip_move_frames -= 1).call_deferred()
 
 func _input(event):
 	if event is InputEventMouseMotion and mlook:
-		rotation_degrees.y -= (event.relative.x * 0.2)
-		rotation_degrees.x -= (event.relative.y * 0.2)
+		# skip big movements caused by browser jump
+		if event.relative.length() > 50: return
+		rotation_degrees.y -= event.relative.x * 0.2
+		rotation_degrees.x -= event.relative.y * 0.2
 		rotation_degrees.x = clamp(rotation_degrees.x, -80, 90)
 		
 	if event is InputEventKey:
 		if event.is_action_pressed("cursor_toggle"):
 			mlook = !mlook
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED if mlook else Input.MOUSE_MODE_VISIBLE
-		
 
 	if event is InputEventMouseButton:
 		if event.is_action_pressed("mouselook_hold"):

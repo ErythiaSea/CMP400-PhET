@@ -1,3 +1,6 @@
+## The individual force diagram arrows
+## Mostly used to reposition the arrow heads to the end of the arrow
+
 @tool
 
 class_name ForceArrow

@@ -1,3 +1,5 @@
+## Used for validating answer input in the GUI
+
 class_name FloatBox
 extends LineEdit
 

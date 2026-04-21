@@ -1,3 +1,6 @@
+## The scene that is added to a node in order to give it force diagram arrows
+## Responsible for controlling arrow lengths based on provided values
+
 @tool
 
 extends Node3D

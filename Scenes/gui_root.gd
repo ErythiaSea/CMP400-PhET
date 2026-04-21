@@ -1,3 +1,5 @@
+## The gui that appears in a scene
+
 class_name SceneGui
 extends CanvasLayer
 
@@ -82,7 +84,6 @@ func _ready() -> void:
 			if formula_node_prefix not in n.name:
 				n.hide()
 
-# holy hardcoding batman!
 func _on_arcslider_value_changed(value: float) -> void:
 	force_ball.air_resistance_coeff = value
 	air_resistance_coefficient_label.text = "Air Resistance Coefficient: %.2f" % value
@@ -153,6 +154,8 @@ func _on_pin_mass_slider_value_changed(value: float) -> void:
 func _on_wood_e_slider_value_changed(value: float) -> void:
 	wood_e_label.text = "Wood Lane e: %.2f" % value
 	
+## formats the question text based on a dictionary of provided args
+## and the type of question being asked
 func format_question(args: Dictionary[String, float]) -> void:
 	param2_box.hide()
 	param2_label.show()
@@ -239,6 +242,7 @@ func _within_tolerance(input: float, answer: float, tolerance: float = 0.01) -> 
 	if (abs(input - answer) < tolerance): return true
 	return false
 
+## compare user input to correct answer and decide if correct
 func _on_check_done() -> void:
 	var correct: bool = false
 	var arg: float = -1
